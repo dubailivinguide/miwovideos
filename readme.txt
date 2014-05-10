@@ -12,7 +12,7 @@ MiwoVideos allows you to turn your site into a professional looking video-sharin
 
 == Description ==
 
-Introducing, MiwoVideos: The revolutionary video sharing plugin for WordPress.
+Introducing, [MiwoVideos](http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos): The revolutionary video sharing plugin for WordPress.
 
 MiwoVideos allows you to turn your site into a professional looking video-sharing website with user-interface and features similar to YouTube. Frames preview, custom fields, multi-channel, playlists, responsive design, template overrides and drag & drop video uploading are some of the great features that MiwoVideos ships with.
 
