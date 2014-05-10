@@ -13,7 +13,7 @@ MiwoVideos allows you to turn your site into a professional looking video-sharin
 == Description ==
 
 [Pro Version](http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos#pricing) |
-[Demo Shop](http://demo.miwisoft.com/wordpress/miwovideos) |
+[Demo Site](http://demo.miwisoft.com/wordpress/miwovideos) |
 [Documentation](http://miwisoft.com/support/docs/wordpress/miwovideos) |
 [Tickets Support](http://miwisoft.com/support/tickets) 
 
