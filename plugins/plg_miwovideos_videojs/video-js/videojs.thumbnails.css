@@ -1,0 +1,77 @@
+/* a wrapper element that tracks the mouse vertically */
+.vjs-thumbnail-holder {
+  position: relative;
+  z-index: 99;
+}
+
+/* the thumbnail image itself */
+.vjs-thumbnail {
+  position: absolute;
+  left: 0;
+  bottom: 1.3em;
+  opacity: 0;
+  transition: opacity .2s ease;
+  -webkit-transition: opacity .2s ease;
+  -moz-transition: opacity .2s ease;
+}
+
+/* fade in the thumbnail when hovering over the progress bar */
+.vjs-progress-control:hover .vjs-thumbnail {
+  opacity: 1;
+}
+
+/* ... but hide the thumbnail when hovering directly over it */
+.vjs-progress-control:hover .vjs-thumbnail:hover {
+  opacity: 0;
+}
+
+#vjs-tip-inner {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    padding: 5px 8px 4px 8px;
+    background: rgba(31,31,31,0.45);
+    color: white;
+    max-width: 200px;
+    text-align: center;
+    position: absolute;
+    top: -42px;
+    left: -25px;
+    font-size: 11px;
+    cursor: default;
+    visibility: hidden;
+}
+
+/* Resolutions
+-------------------------------------------------------------------------------- */
+
+@font-face{
+    font-family: 'VideoJS-Resolutions';
+    src: url('font/fonts/VideoJS-Resolutions.eot');
+    src: url('font/fonts/VideoJS-Resolutions.eot?#iefix') format('embedded-opentype'),
+    url('font/fonts/VideoJS-Resolutions.woff') format('woff'),
+    url('font/fonts/VideoJS-Resolutions.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.vjs-default-skin .vjs-resolutions-button {
+    width: 5em;
+    cursor: pointer !important;
+}
+
+/* Resolutions Icon */
+
+.vjs-default-skin .vjs-resolutions-button .vjs-control-content:before {
+    font-family: VideoJS-Resolutions;
+    font-size: 1.5em;
+    line-height: 2em;
+    content: "\e000"; /* Gear icon */
+    width: 17px;
+    height: 17px;
+    margin: 0.5em auto 0;
+}
+
+.vjs-default-skin .vjs-control-content:hover:before {
+    text-shadow: 0em 0em 1em #FFF;
+}
