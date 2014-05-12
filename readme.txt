@@ -80,7 +80,7 @@ MiwoVideos ships with a modern infrastucture with features such as MVC design (n
 
 = Documentation =
 
-Use the **[miwovideos]** shortcode to display the list of polls.
+Use the **[miwovideos]** shortcode to display the list of videos.
 
 Further documentation will be maintained on the [Miwisoft.com site](http://miwisoft.com/support).
 
