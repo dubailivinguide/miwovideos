@@ -97,6 +97,24 @@ class MiwovideosController extends MiwisoftController {
 		$view->display('edit');
 	}
 
+	public function getModel($name = '', $prefix = '', $config = array()) {
+		if (MiwoVideos::isDashboard()) {
+			$path = MPATH_MIWOVIDEOS_ADMIN.'/models/'.$name.'.php';
+
+			if (file_exists($path)) {
+				require_once $path;
+			}
+			else {
+				return null;
+			}
+
+			$model_name = 'MiwovideosModel'.ucfirst($name);
+			return new $model_name();
+		}
+
+		return parent::getModel($name, $prefix, $config);
+	}
+
     public function cancel() {
         $this->route();
     }

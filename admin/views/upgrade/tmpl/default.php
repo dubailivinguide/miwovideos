@@ -111,26 +111,10 @@ if (MiwoVideos::get('utility')->is30()) {
 	<tr>
 		<td width="50%">
 			<fieldset class="adminform">
-				<legend><?php echo MText::_('COM_MIWOVIDEOS_UPGRADE_FROM_SERVER'); ?></legend>
-				<?php
-                    $pid = MiwoVideos::getConfig()->get('pid');
-					
-					if (empty($pid)) {
-                ?>
-                    <table class="adminform">
-                        <tr>
-                            <th>
-                                <br/>
-                                <font color="red"><?php echo MText::_('COM_MIWOVIDEOS_UPGRADE_PERSONAL_ID'); ?></font>
-                                <br/><br/>
-                            </th>
-                        </tr>
-                    </table>
-                <?php
-                    } else {
-				?>
-				<form enctype="multipart/form-data" action="<?php echo MRoute::getActiveUrl(); ?>" method="post" name="upgradeFromServer">
-					<table class="adminform">
+				
+                <legend><?php echo MText::_('COM_MIWOVIDEOS_UPGRADE_FROM_SERVER'); ?></legend>
+                <form enctype="multipart/form-data" action="<?php echo MUri::root(); ?>wp-admin/update-core.php" method="post" name="upgradeFromServer">
+                <table class="adminform">
 						<tr>
 							<th>
 								<br/>
@@ -146,7 +130,42 @@ if (MiwoVideos::get('utility')->is30()) {
 					<input type="hidden" name="type" value="server" />
 					<?php echo MHtml::_('form.token'); ?>
 				</form>
-				<?php } ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			</fieldset>
 		</td>
 

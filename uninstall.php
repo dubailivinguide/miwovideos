@@ -207,6 +207,23 @@ class miwovideosUninstaller {
 		if (MFolder::exists(MPATH_MIWI.'/cli')) {
 			MFolder::delete(MPATH_MIWI.'/cli');
 		}
+
+        $tmpl = MFactory::getApplication()->getTemplate();
+		if (MFolder::exists(MPATH_THEMES.'/'.$tmpl.'/html/com_miwovideos')) {
+			MFolder::delete(MPATH_THEMES.'/'.$tmpl.'/html/com_miwovideos');
+		}
+
+		if (MFolder::exists(MPATH_THEMES.'/'.$tmpl.'/html/mod_miwovideos_videos_latest')) {
+			MFolder::delete(MPATH_THEMES.'/'.$tmpl.'/html/mod_miwovideos_videos_latest');
+		}
+
+		if (MFolder::exists(MPATH_THEMES.'/'.$tmpl.'/html/mod_miwovideos_videos_featured')) {
+			MFolder::delete(MPATH_THEMES.'/'.$tmpl.'/html/mod_miwovideos_videos_featured');
+		}
+
+		if (MFolder::exists(MPATH_THEMES.'/'.$tmpl.'/html/mod_miwovideos_videos_popular')) {
+			MFolder::delete(MPATH_THEMES.'/'.$tmpl.'/html/mod_miwovideos_videos_popular');
+		}
 		return null;
 	}
 

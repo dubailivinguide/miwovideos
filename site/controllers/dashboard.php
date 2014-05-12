@@ -68,7 +68,8 @@ class MiwovideosControllerDashboard extends MiwovideosController {
             return;
         }
 
-        $view->display('edit');
+	    $this->_admin_controller->edit();
+        //$view->display('edit');
     }
 
     public function support() {

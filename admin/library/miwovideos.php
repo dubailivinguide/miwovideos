@@ -65,9 +65,9 @@ abstract class MiwoVideos {
         return 'index.php?option=com_miwovideos&view=video&video_id='. $id;
     }
 
-    public static function getPlugin($name) {
-        return self::get('utility')->getPlugin($name);
-    }
+	public static function getPlugin($name, $folder = 'miwovideos') {
+		return self::get('utility')->getPlugin($name, $folder);
+	}
 
     public static function log($message, $priority = null) {
         return self::get('utility')->log($message, $priority);

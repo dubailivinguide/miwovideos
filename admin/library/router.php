@@ -7,7 +7,24 @@
 # No Permission
 defined('MIWI') or die('Restricted Access');
 
-class MiwovideosRouter {
+if (!class_exists('MiwisoftComponentRouterBase')) {
+	if (class_exists('JComponentRouterBase')) {
+		abstract class MiwisoftComponentRouterBase extends JComponentRouterBase {}
+	}
+	else {
+		class MiwisoftComponentRouterBase {}
+	}
+}
+
+class MiwoVideosRouter extends MiwisoftComponentRouterBase {
+
+	public function build(&$query) {
+		return $this->buildRoute($query);
+	}
+
+	public function parse(&$segments) {
+		return $this->parseRoute($segments);
+	}
 
     public function buildRoute(&$query) {
         $segments = array();
@@ -87,6 +104,10 @@ class MiwovideosRouter {
 
             unset($query['view']);
         }
+
+	    foreach($segments as $key => $segment) {
+		    $segments[$key] = str_replace(':', '-', $segment);
+	    }
 
         return $segments;
 

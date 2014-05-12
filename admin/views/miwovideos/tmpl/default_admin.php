@@ -110,9 +110,9 @@ defined('MIWI') or die('Restricted access');
                 <table class="wp-list-table widefat">
                     <?php
                         $rowspan = 5;
-                        if (empty($this->info['pid'])) {
-                            $rowspan = 6;
-                        }
+                        
+
+
                     ?>
                     <tr height="70">
                         <td width="%25">
@@ -148,18 +148,18 @@ defined('MIWI') or die('Restricted access');
                             </a>
                         </td>
                     </tr>
-                    <?php if (empty($this->info['pid'])) { ?>
-                    <tr height="40">
-                        <td>
-                            <?php echo '<b><font color="red">'.MText::_('COM_MIWOVIDEOS_PERSONAL_ID').'</font></b>';?>
-                        </td>
-                        <td>
-                            <input type="text" name="pid" id="pid" class="inputbox" size="18" style="width: 140px;" />
-                            &nbsp;
-                            <input type="button" class="button btn-danger" <?php if (MiwoVideos::is30()) { ?>style="margin-bottom: 10px;"<?php } ?> onclick="javascript: submitbutton('savePersonalID')" value="<?php echo MText::_('Save'); ?>" />
-                        </td>
-                    </tr>
-                    <?php } ?>
+                    
+
+
+
+
+
+
+
+
+
+
+
                     <tr height="40">
                         <td>
                             <?php

@@ -106,9 +106,24 @@ class MWordpress {
 	}
 
 	public function activate() {
-        if(is_dir( MPATH_WP_PLG.'/'.$this->context.'/miwi' )) {
-            rename(MPATH_WP_PLG.'/'.$this->context.'/miwi', MPATH_WP_CNT.'/miwi');
-        }
+		$src  = MPATH_WP_PLG.'/'.$this->context.'/miwi';
+		$dest = MPATH_WP_CNT.'/miwi';
+		if (!file_exists($dest)) {
+			rename($src, $dest);
+		}
+		elseif (file_exists($dest) and file_exists($src)) {
+			$src_version  = $this->getVersion($src.'/versions.xml');
+			$dest_version = $this->getVersion($dest.'/versions.xml');
+			if (version_compare($src_version, $dest_version, 'gt')) {
+				if (!@rename($src, $dest)) {
+					$this->copyMiwi($src, $dest);
+					$this->deleteMiwi($src);
+				}
+			}
+			else {
+				$this->deleteMiwi($src);
+			}
+		}
 
 		$this->initialise();
 
@@ -505,5 +520,56 @@ class MWordpress {
 	public function _shortcodeExists($tag) {
 		global $shortcode_tags;
 		return array_key_exists($tag, $shortcode_tags);
+	}
+
+	public function copyMiwi($src, $dest) {
+		$dir = opendir($src);
+		@mkdir($dest);
+		while (false !== ($file = readdir($dir))) {
+			if (($file != '.') && ($file != '..')) {
+				if (is_dir($src.'/'.$file)) {
+					$this->copyMiwi($src.'/'.$file, $dest.'/'.$file);
+				}
+				else {
+					copy($src.'/'.$file, $dest.'/'.$file);
+
+				}
+			}
+		}
+		closedir($dir);
+	}
+
+	public function deleteMiwi($dir) {
+		foreach (glob($dir.'/*') as $file) {
+			if (is_dir($file)) {
+				$this->deleteMiwi($file);
+			}
+			else {
+				unlink($file);
+			}
+		}
+		rmdir($dir);
+	}
+
+	public function getVersion($file) {
+		$version  = '0.0.0';
+		$manifest = simplexml_load_file($file, 'SimpleXMLElement');
+
+		if (is_null($manifest)) {
+			return $version;
+		}
+
+		if (!($manifest instanceof SimpleXMLElement) or (count($manifest->children()) == 0)) {
+			return $version;
+		}
+
+		foreach ($manifest->children() as $version) {
+			if ($version->attributes()->name == 'Miwi') {
+				$version = (string)$version->release;
+				break;
+			}
+		}
+
+		return $version;
 	}
 }

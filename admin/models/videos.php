@@ -45,17 +45,27 @@ class MiwovideosModelVideos extends MiwovideosModel {
 	public function getItems() {
 		if (empty($this->_data)) {
 			$rows = parent::getItems();
-			
+
+            static $cache = array();
+
 			foreach ($rows as $row) {
-				$sql = "SELECT c.title FROM #__miwovideos_categories AS c, #__miwovideos_video_categories AS ec WHERE c.id = ec.category_id AND ec.video_id = {$row->id}";
-				$this->_db->setQuery($sql);
-				
-				$row->categories = implode(' | ', $this->_db->loadColumn());
+                if (!isset($cache[$row->id.'c'])) {
+                    $sql = "SELECT c.title FROM #__miwovideos_categories AS c, #__miwovideos_video_categories AS ec WHERE c.id = ec.category_id AND ec.video_id = {$row->id}";
+                    $this->_db->setQuery($sql);
 
-                $sql = "SELECT c.title FROM #__miwovideos_channels AS c WHERE c.id = {$row->channel_id}";
-                $this->_db->setQuery($sql);
+                    $cache[$row->id.'c'] = implode(' | ', $this->_db->loadColumn());
+                }
 
-                $row->channel_title = $this->_db->loadResult();
+                $row->categories = $cache[$row->id.'c'];
+
+                if (!isset($cache[$row->channel_id])) {
+                    $sql = "SELECT c.title FROM #__miwovideos_channels AS c WHERE c.id = {$row->channel_id}";
+                    $this->_db->setQuery($sql);
+                    $cache[$row->channel_id] = $this->_db->loadResult();
+                }
+
+                $row->channel_title = $cache[$row->channel_id];
+
 			}
 
             $pagination = parent::getPagination();

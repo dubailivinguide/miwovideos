@@ -18,14 +18,14 @@ defined('MIWI') or die('Restricted access');
 <form name="adminForm" id="adminForm" action="<?php echo MRoute::getActiveUrl(); ?>" method="post">
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
-			<th>		
-				<?php
-                $pid = $this->config->get('pid');
-					if(empty($pid)){
-						MError::raiseWarning('100', MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.MiwoVideos::get('utility')->route('index.php?option=com_config&view=component&component=com_miwovideos&path=&tmpl=component').'">', '</a>'));
-					}
-				?>	
-			</th>
+					
+
+
+
+
+
+
+
 		</tr>
 		<tr>
 			<th>
