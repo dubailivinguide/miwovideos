@@ -1,6 +1,6 @@
 === MiwoVideos - Share Your Videos ===
 Contributors: miwisoft, gilbertlici
-Tags: video player, video sharing, html5 player, html5 video, video, videos, channel, playlist, youtube, vimeo, dailymotion, admin, plugin
+Tags: video player, video sharing, html5 player, html5 video, video, videos, channel, playlist, admin, plugin, youtube, vimeo, dailymotion
 Donate link: http://miwisoft.com
 Requires at least: 3.5
 Tested up to: 3.9.1
