@@ -136,6 +136,7 @@ class MiwovideosView extends MiwisoftView {
             // Load first jQuery lib
             if(MiwoVideos::is30()) {
                 MHtml::_('jquery.framework');
+                MHtml::_('behavior.framework');
             }
             $this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/thumbnail.js');
 			$this->document->setBase(MUri::root());

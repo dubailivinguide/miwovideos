@@ -27,7 +27,7 @@ class MiwovideosViewPlaylists extends MiwovideosView {
             MToolBarHelper::save2new();
             MToolBarHelper::cancel();
             MToolBarHelper::divider();
-            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/miwovideos/user-manual/playlists?tmpl=component', 650, 500);
+            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/playlists?tmpl=component', 650, 500);
         }
 
         $null_date = MFactory::getDbo()->getNullDate();

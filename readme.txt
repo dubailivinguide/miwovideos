@@ -68,11 +68,11 @@ Channels are the dynamic version of categories where users can subscribe, like/d
 
 = Front-end Management =
 
-[This feature](http://miwisoft.com/wordpress-plugins/miwovideos/front-end-management) offers you to manage the whole plugin as you where in admin panel but from front-end of your site. Of course that every step is controlled by the ACL settings so that only those who have access rights can make any action. Moreover, the whole code is used from the back-end one, not re-written again just for the front-end.
+[This feature](http://miwisoft.com/wordpress-plugins/miwovideos/front-end-management) offers you the possibility to manage the whole plugin from the front-end of your site as you were in admin panel. Of course that every step is controlled by the ACL settings so that only those who have access rights can make any action. Moreover, the whole code is used from the back-end one, not re-written again just for the front-end.
 
 = Migration tools =
 
-You can migrate your data from Wordpress Video Gallery , Cool Video Gallery , WPG Cool Gallery , All Video Gallery and HDW Player plugins within a couple of clicks.
+You can migrate your data from Wordpress Video Gallery, Cool Video Gallery, WPG Cool Gallery, All Video Gallery and HDW Player plugins within a couple of clicks.
 
 = Modern infrastucture =
 

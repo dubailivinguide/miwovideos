@@ -13,7 +13,7 @@ class MiwovideosViewUpgrade extends MiwovideosView {
 	public function display($tpl = null) {
         if ($this->_mainframe->isAdmin()) {
             MToolBarHelper::title(MText::_('COM_MIWOVIDEOS_CPANEL_UPGRADE'), 'miwovideos');
-            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/miwovideos/user-manual/upgrade?tmpl=component', 650, 500);
+            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/upgrade?tmpl=component', 650, 500);
         }
 		parent::display($tpl);
 	}

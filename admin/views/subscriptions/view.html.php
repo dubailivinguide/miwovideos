@@ -62,6 +62,6 @@ class MiwovideosViewSubscriptions extends MiwovideosView {
 
 
 
-        $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/miwovideos/user-manual/subscriptions?tmpl=component', 650, 500);
+        $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/subscriptions?tmpl=component', 650, 500);
     }
 }

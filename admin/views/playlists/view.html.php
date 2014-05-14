@@ -108,6 +108,6 @@ class MiwovideosViewPlaylists extends MiwovideosView {
 
 
 
-        $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/miwovideos/user-manual/playlists?tmpl=component', 650, 500);
+        $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/playlists?tmpl=component', 650, 500);
     }
 }

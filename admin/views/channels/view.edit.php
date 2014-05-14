@@ -27,7 +27,7 @@ class MiwovideosViewChannels extends MiwovideosView {
             MToolBarHelper::save2new();
             MToolBarHelper::cancel();
             MToolBarHelper::divider();
-            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/miwovideos/user-manual/channels?tmpl=component', 650, 500);
+            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/channels?tmpl=component', 650, 500);
         }
 
 		if ($task == "edit" and !empty($item->id)){

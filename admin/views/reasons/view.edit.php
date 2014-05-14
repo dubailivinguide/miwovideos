@@ -24,7 +24,7 @@ class MiwovideosViewReasons extends MiwovideosView {
             MToolBarHelper::save2new();
             MToolBarHelper::cancel();
             MToolBarHelper::divider();
-            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/miwovideos/user-manual/reasons?tmpl=component', 650, 500);
+            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/reasons?tmpl=component', 650, 500);
         }
 
         $item = $this->get('EditData');

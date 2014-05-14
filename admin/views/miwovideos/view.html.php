@@ -18,7 +18,7 @@ class MiwovideosViewMiwovideos extends MiwovideosView {
                 MToolBarHelper::divider();
             }
 
-            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/miwovideos/user-manual/control-panel?tmpl=component', 650, 500);
+            $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/control-panel?tmpl=component', 650, 500);
         }
 
         $this->info = $this->get('Info');

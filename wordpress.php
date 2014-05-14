@@ -424,7 +424,7 @@ class MWordpress {
             return $return;
         }
 
-        if(!empty($plugin) and $plugin['action'] != 'update' ){
+        if(!empty($plugin) and empty($plugin['action']) and $plugin['action'] != 'update' ){
             return;
         }
 
@@ -456,7 +456,7 @@ class MWordpress {
             return false;
         }
 
-        if(!empty($hook_extra) and $hook_extra['action'] != 'update' ){
+        if(!empty($hook_extra) and empty($hook_extra['action']) and $hook_extra['action'] != 'update' ){
             return;
         }
 
