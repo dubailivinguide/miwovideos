@@ -224,6 +224,10 @@ class miwovideosUninstaller {
 		if (MFolder::exists(MPATH_THEMES.'/'.$tmpl.'/html/mod_miwovideos_videos_popular')) {
 			MFolder::delete(MPATH_THEMES.'/'.$tmpl.'/html/mod_miwovideos_videos_popular');
 		}
+
+		if (MFolder::exists(MPATH_MEDIA.'/miwovideos')) {
+			MFolder::delete(MPATH_MEDIA.'/miwovideos');
+		}
 		return null;
 	}
 

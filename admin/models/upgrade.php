@@ -43,7 +43,7 @@ class MiwovideosModelUpgrade extends MiwovideosModel {
 
         
 		# Miwi Framework        
-	    if (MFolder::copy($package['dir'].'/miwi', MPath::clean(MPATH_WP_CNT), null, true)) {
+	    if (MFolder::copy($package['dir'].'/miwi', MPath::clean(MPATH_WP_CNT.'/miwi'), null, true)) {
 		    MFolder::delete($package['dir'].'/miwi');
 	    }
 		

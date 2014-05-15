@@ -58,7 +58,7 @@ class MWordpress {
 		add_filter('plugin_row_meta', array($this, 'links'), 10, 2);
 
         # upgrade hooks
-        add_filter('upgrader_pre_install', array($this,'miwiPreUpgrade'), 10, 2);
+        add_filter('upgrader_source_selection', array($this,'miwiPreUpgrade'), 10, 2);
         add_filter('upgrader_post_install', array($this,'miwiPostUpgrade'), 10, 3);
 	}
 
@@ -103,6 +103,19 @@ class MWordpress {
 		$this->app = MFactory::getApplication();
 
 		$this->app->initialise();
+		
+		# auto upgrade
+        mimport('joomla.application.component.helper');
+        $config = MComponentHelper::getParams('com_'.$this->context);
+		
+		if(!empty($config) and file_exists(MPATH_WP_CNT.'/miwi/autoupdate.php')) {
+			$pid = $config->get('pid');
+			if(!empty($pid)) {
+				$path = 'http://miwisoft.com/index.php?option=com_mijoextensions&view=download&pack=upgrade&model=' . $this->context.'&pid=' . $pid;
+				require_once(MPATH_WP_CNT.'/miwi/autoupdate.php');
+				new MiwisoftAutoUpdate($path, $this->context);
+			}
+		}
 	}
 
 	public function activate() {
@@ -136,11 +149,7 @@ class MWordpress {
 
 		$script_file = MPATH_WP_PLG.'/'.$this->context.'/script.php';
 		if (file_exists($script_file)) {
-			require_once($script_file);
-
-			$installer_class = 'com_'.ucfirst($this->context).'InstallerScript';
-
-			$installer = new $installer_class();
+			$installer = $this->getInstaller($script_file);
 
 			if (method_exists($installer, 'preflight')) {
 				$installer->preflight(null, null);
@@ -419,36 +428,29 @@ class MWordpress {
         return;
     }
 
-    public function miwiPreUpgrade($return, $plugin) {
-        if ( is_wp_error($return) ) { //Bypass if there is a error.
-            return $return;
+    public function miwiPreUpgrade($source) {       
+        if(empty($_GET['action']) or (!empty($_GET['action']) and $_GET['action'] != 'upgrade-plugin' )){
+            return $source;
         }
 
-        if(!empty($plugin) and empty($plugin['action']) and $plugin['action'] != 'update' ){
-            return;
+        if(empty($_GET['plugin']) or (!empty($_GET['plugin']) and $_GET['plugin'] != $this->context .'/'.$this->context.'.php')) {
+            return $source;
         }
-
-        if(!empty($plugin['plugin']) and $plugin['plugin'] != $this->context .'/'.$this->context.'.php') {
-            return;
-        }
-
 		
 		$script_file = MPATH_WP_PLG.'/'.$this->context.'/script.php';
 		if (!file_exists($script_file)) {
-			return $return;
+			return $source;
 		}
 
-        require_once($script_file);
-
-        $class_name = 'com_'.$this->context.'InstallerScript';
-
-        $installer = new $class_name;
+	    $installer = $this->getInstaller($script_file);
 		
 		if (!method_exists($installer, 'preflight')) {
-			return $return;
+			return $source;
 		}
 		
-        $installer->preflight('upgrade', '');
+        $installer->preflight('upgrade', $source);
+		
+		return $source;
     }
 
     public function miwiPostUpgrade($install_result, $hook_extra, $child_result) {
@@ -456,11 +458,11 @@ class MWordpress {
             return false;
         }
 
-        if(!empty($hook_extra) and empty($hook_extra['action']) and $hook_extra['action'] != 'update' ){
+        if(empty($hook_extra) or (!empty($hook_extra) and $hook_extra['action'] != 'update' )){
             return;
         }
 
-        if(!empty($hook_extra['plugin']) and $hook_extra['plugin'] != $this->context .'/'.$this->context.'.php') {
+        if(empty($hook_extra['plugin']) or  (!empty($hook_extra['plugin']) and $hook_extra['plugin'] != $this->context .'/'.$this->context.'.php')) {
             return;
         }
 
@@ -469,11 +471,7 @@ class MWordpress {
 			return;
 		}
 
-        require_once($script_file);
-
-        $class_name = 'com_'.$this->context.'InstallerScript';
-
-        $installer = new $class_name;
+	    $installer = $this->getInstaller($script_file);
 		
 		if (!method_exists($installer, 'postflight')) {
 			return;
@@ -571,5 +569,21 @@ class MWordpress {
 		}
 
 		return $version;
+	}
+
+	public function getInstaller($script_file) {
+		static $scripts = array();
+
+		require_once($script_file);
+
+		if (!isset($scripts[$this->context])) {
+			$installer_class = 'com_'.ucfirst($this->context).'InstallerScript';
+
+			$installer = new $installer_class();
+
+			$scripts[$this->context] = $installer;
+		}
+
+		return $scripts[$this->context];
 	}
 }

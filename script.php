@@ -76,6 +76,12 @@ class com_MiwovideosInstallerScript {
 			MFolder::delete(MPath::clean(MPATH_WP_PLG.'/miwovideos/plugins'));
 		}
 
+		//@TODO Delete this code next version(Current Version 1.0.3)
+		  if ($type == 'upgrade') {
+   return;
+  }
+		########
+
 		if ($this->_is_new_installation == true) {
 			$this->_installMiwovideos();
 		}

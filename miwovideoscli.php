@@ -26,6 +26,7 @@ require_once MPATH_BASE . '/initialise.php';
 define('MPATH_COMPONENT', MPATH_WP_PLG . '/miwovideos/admin');
 define('MPATH_COMPONENT_SITE', MPATH_WP_PLG.'/miwovideos/site');
 define('MPATH_COMPONENT_ADMINISTRATOR', MPATH_WP_PLG.'/miwovideos/admin');
+mimport('framework.environment.request');
 MRequest::setVar('option', 'com_miwovideos', 'GET');
 $_SERVER['REQUEST_METHOD'] = 'GET';
 
