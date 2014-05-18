@@ -21,6 +21,8 @@ Introducing, [MiwoVideos](http://miwisoft.com/wordpress-plugins/miwovideos-share
 
 MiwoVideos allows you to turn your site into a professional looking video-sharing website with user-interface and features similar to YouTube. Frames preview, custom fields, multi-channel, playlists, responsive design, template overrides and drag & drop video uploading are some of the great features that MiwoVideos ships with.
 
+[youtube https://www.youtube.com/watch?v=QTxA6XnAQas]
+
 = Features =
 
 * Unlimited Videos
