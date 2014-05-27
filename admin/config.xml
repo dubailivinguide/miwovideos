@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
     <!-- General -->
-    <fieldset name="general" label="COM_MIWOVIDEOS_GENERAL" description="" addfieldpath="/miwovideos/library/elements">
+    <fieldset name="general" label="COM_MIWOVIDEOS_GENERAL" description="" addfieldpath="/miwovideos/admin/library/elements">
         <field name="pid" readonly="true" type="password" default="" label="COM_MIWOVIDEOS_PERSONAL_ID" description="COM_MIWOVIDEOS_PERSONAL_ID_HELP" ></field>
 
         <field name="version_checker" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_VERSION_CHECKER" description="COM_MIWOVIDEOS_VERSION_CHECKER_HELP" >

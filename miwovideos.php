@@ -4,7 +4,7 @@ Plugin Name: MiwoVideos
 Plugin URI: http://miwisoft.com
 Description: MiwoVideos allows you to turn your site into a professional looking video-sharing website with features similar to YouTube.
 Author: Miwisoft LLC
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://miwisoft.com
 Plugin URI: http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos
 */
@@ -20,6 +20,10 @@ final class MVideos extends MWordpress {
     public function __construct() {
 	    if (!defined('MURL_MIWOVIDEOS')) {
 		    define('MURL_MIWOVIDEOS', plugins_url('', __FILE__));
+	    }
+
+	    if (!defined('MIWOVIDEOS_PACK')) {
+		    define('MIWOVIDEOS_PACK', 'lite');
 	    }
 
         parent::__construct('miwovideos', '33.0002');

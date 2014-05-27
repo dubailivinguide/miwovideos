@@ -7,7 +7,6 @@
 # No Permission
 defined('MIWI') or die('Restricted Access');
 
-define('MIWOVIDEOS_PACK', 'booking');
 define('MPATH_MIWOVIDEOS', MPATH_WP_PLG.'/miwovideos/site');
 define('MPATH_MIWOVIDEOS_ADMIN', MPATH_WP_PLG.'/miwovideos/admin');
 define('MPATH_MIWOVIDEOS_LIB', MPATH_MIWOVIDEOS_ADMIN.'/library');

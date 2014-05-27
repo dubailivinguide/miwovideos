@@ -25,7 +25,7 @@ class MiwovideosControllerUpgrade extends MiwovideosController {
             $msg = MText::_('COM_MIWOVIDEOS_UPGRADE_SUCCESS');
         }
         else {
-            $msg = '';
+            $msg = MText::_('COM_MIWOVIDEOS_UPGRADE_ERROR');
         }
 		
 		# Return

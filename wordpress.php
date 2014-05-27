@@ -36,10 +36,16 @@ class MWordpress {
 		if ($this->app->isAdmin()) {
 			add_action('admin_menu', array($this, 'menu'));
 			add_action('admin_init', array($this, 'preDisplayAdmin'));
+			$pack = strtoupper($this->context).'_PACK';
+			if (constant($pack) == 'pro') {
+				add_action('admin_footer', array($this, 'shortcodePopup'));
+			}
             add_action('admin_enqueue_scripts', array($this,'safelyAddScript'),999);
             add_action('admin_enqueue_scripts', array($this,'safelyAddStylesheet'),999);
 		}
 		else {
+			add_filter('rewrite_rules_array',array($this, 'miwiFrontendRewrite'));
+            add_action('wp_loaded',array($this, 'miwiFlushRewriteRules'));
 			add_action('parse_query', array($this, 'parse'));
 			add_action('wp_head', array($this, 'metadata'));
 			add_action('get_header', array($this, 'preDisplay'));
@@ -52,7 +58,13 @@ class MWordpress {
 		add_action('wp_ajax_'.$this->context, array($this, 'ajax'));
 		add_action('wp_ajax_nopriv_'.$this->context, array($this, 'ajax'));
 
-		add_shortcode($this->context, array($this, 'shortcode'));
+        #search hooks
+        add_filter('the_posts', array($this, 'search'), 10, 2);
+		add_filter('post_link', array($this, 'fixSearchLink'), 10, 2);
+		add_filter('get_edit_post_link', array($this, 'fixEditPostLink'), 10, 2);
+
+        #shortcode hooks
+        add_shortcode($this->context, array($this, 'shortcode'));
 		add_shortcode($this->context.'_item', array($this, 'shortcode'));
 
 		add_filter('plugin_row_meta', array($this, 'links'), 10, 2);
@@ -125,8 +137,8 @@ class MWordpress {
 			rename($src, $dest);
 		}
 		elseif (file_exists($dest) and file_exists($src)) {
-			$src_version  = $this->getVersion($src.'/versions.xml');
-			$dest_version = $this->getVersion($dest.'/versions.xml');
+			$src_version  = $this->getMiwiVersion($src.'/versions.xml');
+			$dest_version = $this->getMiwiVersion($dest.'/versions.xml');
 			if (version_compare($src_version, $dest_version, 'gt')) {
 				if (!@rename($src, $dest)) {
 					$this->copyMiwi($src, $dest);
@@ -234,6 +246,11 @@ class MWordpress {
 	}
 	
 	public function preDisplayAdmin($args = null) {
+		$pack = strtoupper($this->context).'_PACK';
+		if (constant($pack) == 'pro') {
+			add_filter('media_buttons_context', array($this, 'shortcodeButton'));
+		}
+
 		$page = MRequest::getCmd('page');
 		if ($page != $this->context) {
 			return;
@@ -261,6 +278,51 @@ class MWordpress {
 		$this->app->render();
 	}
 
+    public function search($posts, $wp_query) {
+        if (is_search() and isset($wp_query->query) and isset($wp_query->query['s'])) {
+            $this->wp_query = $wp_query;
+            $text = get_search_query();
+
+            mimport('framework.plugin.helper');
+            mimport('framework.application.component.helper');
+            MPluginHelper::importPlugin('search');
+
+            $dispatcher = MDispatcher::getInstance();
+	        $plg_result = $dispatcher->trigger('onContentSearch', array($text, 'all', 'newest', null, $this->context));
+
+            $miwo_result = array();
+            foreach($plg_result as $rows) {
+                $miwo_result = array_merge($miwo_result, $rows);
+            }
+
+            $posts = array_merge($miwo_result, $posts);
+
+            usort($posts, function ($a, $b) {
+                if ($this->wp_query->query_vars['order'] == 'DESC') {
+                    return strtolower($a->post_title) > strtolower($b->post_title);
+                }
+                else {
+                    return strtolower($a->post_title) < strtolower($b->post_title);
+                }
+            });
+        }
+
+        return $posts;
+    }
+
+   	public function fixSearchLink($url, $post) {
+   		if (isset($post->href)) {
+   			$url = $post->href;
+   		}
+
+   		return $url;
+   	}
+
+   	public function fixEditPostLink($url, $post_id) {
+   		# Post object should be passed here not its ID (Edit link issue on search page)
+   		return $url;
+   	}
+
 	public function shortcode($args) {
 		if (isset($args[ $this->context ])) {
 			return null;
@@ -269,6 +331,21 @@ class MWordpress {
 		ob_start();
 		echo $this->display($args);
 		return ob_get_clean();
+	}
+
+	public function shortcodeButton($content) {
+		$title = explode('miwo', $this->context);
+		$content .= '<a href="#TB_inline?width=450&height=550&inlineId='.$this->context.'-shortcode" class="button thickbox miwi-shortcode-btn" title="'.MText::sprintf('MLIB_X_ADD_SHORTCODE', 'Miwo'.ucfirst($title[1])).'">
+						<img src="'.MURL_WP_CNT.'/plugins/'.$this->context.'/admin/assets/images/icon-16-'.$this->context.'.png" alt="'.MText::sprintf('MLIB_X_ADD_SHORTCODE', 'Miwo'.ucfirst($title[1])).'" />'.
+		            MText::_('MLIB_ADD_SHORTCODE')
+		            .'</a>';
+		return $content;
+	}
+
+	public function shortcodePopup() {
+		mimport('framework.shortcode.shortcode');
+		$shortcode = new MShortcode();
+		$shortcode->popup($this->context);
 	}
 
 	public function ajax() {
@@ -549,7 +626,7 @@ class MWordpress {
 		rmdir($dir);
 	}
 
-	public function getVersion($file) {
+	public static function getMiwiVersion($file) {
 		$version  = '0.0.0';
 		$manifest = simplexml_load_file($file, 'SimpleXMLElement');
 
@@ -586,4 +663,19 @@ class MWordpress {
 
 		return $scripts[$this->context];
 	}
+	
+    public function miwiFrontendRewrite( $rules ) {
+        $newrules = array();
+        $newrules['([a-z]+)/'] =  'index.php?pagename=$matches[1]';
+
+        return $rules + $newrules;
+    }
+
+    public function miwiFlushRewriteRules(){
+		$rules = MFactory::getWOption('rewrite_rules');
+        if (!isset( $rules['([a-z]+)/'] ) ) {
+            global $wp_rewrite;
+            $wp_rewrite->flush_rules();
+        }
+    }
 }

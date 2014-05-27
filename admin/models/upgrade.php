@@ -32,20 +32,35 @@ class MiwovideosModelUpgrade extends MiwovideosModel {
 			$package = $utility->getPackageFromUpload($userfile);
 		}
         else if ($type == 'server') {
-			$package = $utility->getPackageFromServer('index.php?option=com_mijoextensions&view=download&model=miwovideos&pid='.$utility->getConfig()->pid);
+			$package = $utility->getPackageFromServer('index.php?option=com_mijoextensions&view=download&model=miwovideos&pid='.$utility->getConfig()->get('pid'));
 		}
 
 		# Was the package unpacked?
 		if (!$package or empty($package['dir'])) {
-			$this->setState('message', 'Unable to find install package.');
+			MError::raiseWarning('SOME_ERROR_CODE', MText::_('Unable to find install package.'));
 			return false;
 		}
 
         
-		# Miwi Framework        
-	    if (MFolder::copy($package['dir'].'/miwi', MPath::clean(MPATH_WP_CNT.'/miwi'), null, true)) {
-		    MFolder::delete($package['dir'].'/miwi');
-	    }
+		# Miwi Framework
+	    $src = $package['dir'].'/miwi';
+        $dest = MPATH_WP_CNT.'/miwi';
+        if (!MFolder::exists($dest)) {
+            MFolder::copy($src, $dest);
+            MFolder::delete($src);
+        }
+        elseif (MFolder::exists($src) and MFolder::exists($dest)) {
+            require_once(MPATH_WP_PLG.'/miwovideos/miwovideos.php');
+            $src_version  = MVideos::getMiwiVersion($src.'/versions.xml');
+            $dest_version = MVideos::getMiwiVersion($dest.'/versions.xml');
+            if (version_compare($src_version, $dest_version, 'gt')) {
+                MFolder::copy($src, $dest, '', true);
+                MFolder::delete($src);
+            }
+            else {
+                MFolder::delete($src);
+            }
+        }
 		
 		if (!MFolder::exists(ABSPATH.'cgi-bin')) {
 			MFolder::create(ABSPATH.'cgi-bin');

@@ -99,7 +99,7 @@ class MiwovideosControllerUpload extends MiwovideosController {
 	    $video_id = MRequest::getInt('video_id');
 	    $filename =  MRequest::getString('filename');
 
-	    if (!$config->get('auto_process_video')) {
+	    if (!$config->get('auto_process_videos')) {
 		    MiwoVideos::get('videos')->convertToHtml5($video_id, $filename);
 	    }
 	    else {
@@ -111,7 +111,7 @@ class MiwovideosControllerUpload extends MiwovideosController {
 		    else {
 			    @exec('where php.exe', $php_path);
 			    // @TODO Log if throw an error
-			    @exec($config->get('php_path', $php_path)." $cli convertToHtml5 " . $video_id . " " . $filename . " NUL", $output , $error);
+			    @exec($config->get('php_path', $php_path[0])." $cli convertToHtml5 " . $video_id . " " . $filename . " NUL", $output , $error);
 		    }
 
 		    MiwoVideos::log('CLI : ');

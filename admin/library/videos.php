@@ -1302,7 +1302,7 @@ class MiwovideosVideos {
 
 	public function convertToHtml5($video_id = null, $filename = null) {
 		$json = array();
-		if (!MiwoVideos::get('utility')->checkFfmpegInstalled()) {
+		if (!MiwoVideos::get('utility')->getFfmpegVersion()) {
 			$json = array(
 				'success' => 1,
 				'href'    => MiwoVideos::get('utility')->route('index.php?option=com_miwovideos&view=videos&task=edit&cid[]=1')

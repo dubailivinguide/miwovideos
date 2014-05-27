@@ -6,7 +6,7 @@
 	<state>
 		<name>Single Channel</name>
 		<fields name="request">
-			<fieldset name="request" addfieldpath="/miwovideos/library/elements">
+			<fieldset name="request" addfieldpath="/miwovideos/admin/library/elements">
 				<field name="channel_id" type="miwovideoschannels" size="3" default="0" label="Channel" description="Choose the channel which you want to display." />
 			</fieldset>
 		</fields>	

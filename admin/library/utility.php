@@ -21,12 +21,13 @@ class MiwovideosUtility {
 
 	public function __construct() {
 		$this->config = $this->getConfig();
+		$this->app    = MFactory::getApplication();
 	}
 
 	public static function getConfig() {
 
 		if (version_compare(PHP_VERSION, '5.2.0', '<')) {
-			MError::raiseWarning('100', MText::sprintf('MiwoVideos requires PHP 5.2.x to run, please contact your hosting company.'));
+			MFactory::getApplication()->enqueueMessage(MText::_('MiwoVideos requires PHP 5.2.x to run, please contact your hosting company.'), 'error');
 			return false;
 		}
 
@@ -136,7 +137,7 @@ class MiwovideosUtility {
 		$view      = MiwoVideos::getInput()->getCmd('view', '');
 		$dashboard = MiwoVideos::getInput()->getInt('dashboard', 0);
 
-		if ($app->isSite() and ($view == 'dashboard') or ($dashboard == 1)) {
+		if ($this->app->isSite() and ($view == 'dashboard') or ($dashboard == 1)) {
 			$s = true;
 		}
 
@@ -145,15 +146,25 @@ class MiwovideosUtility {
 
 	public function checkRequirements($src = 'all') {
 		if (version_compare(PHP_VERSION, '5.2.0', '<')) {
-			MError::raiseWarning('100', MText::sprintf('MiwoVideos requires PHP 5.2.x to run, please contact your hosting company.'));
+			$this->app->enqueueMessage(MText::_('MiwoVideos requires PHP 5.2.x to run, please contact your hosting company.'), 'error');
 			return false;
 		}
 
-		/*$pid = $base->getConfig()->get('pid');
+		$pid = $this->config->get('pid');
 		if (($src == 'site') and empty($pid)) {
-			MError::raiseWarning('404', MText::sprintf('COM_MIWOSHOP_CPANEL_PID_NOTE', '<a href="http://miwisoft.com/my-profile">', '</a>', '<a href="administrator/index.php?option=com_miwoshop&route=setting/setting">', '</a>'));
+			if (MiwoVideos::get('utility')->is30()) {
+				$uri    = (string)MUri::getInstance();
+				$return = urlencode(base64_encode($uri));
+				$link   = 'return='.$return;
+				$link   = MiwoVideos::get('utility')->route('administrator/index.php?option=com_config&view=component&component=com_miwovideos&'.$link);
+				MFactory::getApplication()->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.$link.'">', '</a>'), 'error');
+			}
+			else {
+				MHtml::_('behavior.modal');
+				MFactory::getApplication()->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.MiwoVideos::get('utility')->route('administrator/index.php?option=com_config&view=component&component=com_miwovideos&tmpl=component').'" style="cursor:pointer" class="modal" rel="{handler: \'iframe\', size: {x: 875, y: 550}}">', '</a>'), 'error');
+			}
 			return false;
-		}*/
+		}
 
 		return true;
 	}
@@ -530,25 +541,25 @@ class MiwovideosUtility {
 	public function getPackageFromUpload($userfile) {
 		# Make sure that file uploads are enabled in php
 		if (!(bool)ini_get('file_uploads')) {
-			MError::raiseWarning(100, MText::_('WARNINSTALLFILE'));
+			$this->app->enqueueMessage(MText::_('WARNINSTALLFILE'), 'error');
 			return false;
 		}
 
 		# Make sure that zlib is loaded so that the package can be unpacked
 		if (!extension_loaded('zlib')) {
-			MError::raiseWarning(100, MText::_('WARNINSTALLZLIB'));
+			$this->app->enqueueMessage(MText::_('WARNINSTALLZLIB'), 'error');
 			return false;
 		}
 
 		# If there is no uploaded file, we have a problem...
 		if (!is_array($userfile)) {
-			MError::raiseWarning(100, MText::_('No file selected'));
+			$this->app->enqueueMessage(MText::_('No file selected'), 'error');
 			return false;
 		}
 
 		# Check if there was a problem uploading the file.
 		if ($userfile['error'] || $userfile['size'] < 1) {
-			MError::raiseWarning(100, MText::_('WARNINSTALLUPLOADERROR'));
+			$this->app->enqueueMessage(MText::_('WARNINSTALLUPLOADERROR'), 'error');
 			return false;
 		}
 
@@ -564,7 +575,7 @@ class MiwovideosUtility {
 		$uploaded = MFile::upload($tmp_src, $tmp_dest);
 
 		if (!$uploaded) {
-			MError::raiseWarning('SOME_ERROR_CODE', '<br /><br />'.MText::_('File not uploaded, please, make sure that your "MiwoVideos => Configuration => Personal ID" and/or the "Global Configuration => Server => Path to Temp-folder" field has a valid value.').'<br /><br /><br />');
+			$this->app->enqueueMessage(MText::_('COM_MIWOVIDEOS_UPGRADE_PERSONAL_ID_3'), 'error');
 			return false;
 		}
 
@@ -616,13 +627,13 @@ class MiwovideosUtility {
 	public function getPackageFromServer($url) {
 		# Make sure that file uploads are enabled in php
 		if (!(bool)ini_get('file_uploads')) {
-			MError::raiseWarning('1001', MText::_('Your PHP settings does not allow uploads'));
+			$this->app->enqueueMessage(MText::_('Your PHP settings does not allow uploads'), 'error');
 			return false;
 		}
 
 		# Make sure that zlib is loaded so that the package can be unpacked
 		if (!extension_loaded('zlib')) {
-			MError::raiseWarning('1001', MText::_('The PHP extension ZLIB is not loaded, file cannot be unziped'));
+			$this->app->enqueueMessage(MText::_('The PHP extension ZLIB is not loaded, file cannot be unziped'), 'error');
 			return false;
 		}
 
@@ -638,13 +649,18 @@ class MiwovideosUtility {
 		# Grab the package
 		$data = $this->getRemoteData($url);
 
+		if (strpos($data, 'Error') !== false) {
+			$this->app->enqueueMessage(MText::_('COM_MIWOVIDEOS_UPGRADE_PERSONAL_ID_3'), 'error');
+			return false;
+		}
+
 		$target = $tmp_dest.'/miwovideos_upgrade.zip';
 
 		# Write buffer to file
 		$written = MFile::write($target, $data);
 
 		if (!$written) {
-			MError::raiseWarning('SOME_ERROR_CODE', '<br /><br />'.MText::_('File not uploaded, please, make sure that your "MiwoVideos => Configuration => Personal ID" and/or the "Global Configuration=>Server=>Path to Temp-folder" field has a valid value.').'<br /><br /><br />');
+			$this->app->enqueueMessage(MText::_('COM_MIWOVIDEOS_UPGRADE_TEMP_PATH'), 'error');
 			return false;
 		}
 
@@ -652,7 +668,7 @@ class MiwovideosUtility {
 
 		# Was the package downloaded?
 		if (!$p_file) {
-			MError::raiseWarning('SOME_ERROR_CODE', MText::_('Invalid Personal ID'));
+			$this->app->enqueueMessage(MText::_('COM_MIWOVIDEOS_UPGRADE_INVALID_PID'), 'error');
 			return false;
 		}
 
@@ -660,7 +676,7 @@ class MiwovideosUtility {
 		$package = self::unpack($tmp_dest.'/'.$p_file);
 
 		if (!$package) {
-			MError::raiseWarning('SOME_ERROR_CODE', MText::_('An error occured, please, make sure that your "MiwoVideos => Configuration => Personal ID" and/or the "Global Configuration=>Server=>Path to Temp-folder" field has a valid value.'));
+			$this->app->enqueueMessage(MText::_('COM_MIWOVIDEOS_UPGRADE_UNPACKED_ERROR'), 'error');
 			return false;
 		}
 
@@ -675,18 +691,20 @@ class MiwovideosUtility {
 	}
 
 	public function triggerContentPlg($text) {
-		$config = $this->getConfig();
-
 		$item               = new stdClass();
 		$item->id           = null;
 		$item->rating       = null;
 		$item->rating_count = null;
 		$item->text         = $text;
 
-		$params     = $config;
 		$limitstart = MRequest::getInt('limitstart');
 
-		$this->trigger('onContentPrepare', array('com_miwovideos.video', &$item, &$params, $limitstart), 'content');
+		$this->trigger('onContentPrepare', array(
+				'com_miwovideos.video',
+				&$item,
+				&$this->config,
+				$limitstart
+			), 'content');
 
 		return $item->text;
 	}
@@ -973,8 +991,6 @@ class MiwovideosUtility {
 	}
 
 	public function resizeImage($srcFile, $desFile, $thumbWidth, $thumbHeight, $quality) {
-		$app = MFactory::getApplication();
-
 		$imgTypes = array(
 			1  => 'GIF',
 			2  => 'JPG',
@@ -994,7 +1010,7 @@ class MiwovideosUtility {
 		$imgInfo  = getimagesize($srcFile);
 
 		if ($imgInfo == null) {
-			$app->enqueueMessage(MText::_('COM_MIWOVIDEOS_IMAGE_NOT_FOUND', 'error'));
+			$this->app->enqueueMessage(MText::_('COM_MIWOVIDEOS_IMAGE_NOT_FOUND', 'error'));
 			return false;
 		}
 
@@ -1002,7 +1018,7 @@ class MiwovideosUtility {
 		$gdSupportedTypes = array('JPG', 'PNG', 'GIF');
 
 		if (!in_array($type, $gdSupportedTypes)) {
-			$app->enqueueMessage(MText::_('COM_MIWOVIDEOS_ONLY_SUPPORT_TYPES'), 'error');
+			$this->app->enqueueMessage(MText::_('COM_MIWOVIDEOS_ONLY_SUPPORT_TYPES'), 'error');
 			return false;
 		}
 
@@ -1384,18 +1400,17 @@ class MiwovideosUtility {
 	}
 
 	public function getVideoSize($location) {
-		$config = MiwoVideos::getConfig();
 		if (!file_exists($location)) {
 			MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_SOURCE_VIDEO_NOT_EXIST'));
 			return false;
 		}
 
 		if (substr(PHP_OS, 0, 3) == "WIN") {
-			$command = "\"".$config->get('ffmpeg_path', '/usr/bin/ffmpeg')."\" -i $location 2>&1";
+			$command = "\"".$this->config->get('ffmpeg_path', '/usr/bin/ffmpeg')."\" -i $location 2>&1";
 			exec($command, $output);
 		}
 		else {
-			$command = $config->get('ffmpeg_path', '/usr/bin/ffmpeg')." -i $location 2>&1";
+			$command = $this->config->get('ffmpeg_path', '/usr/bin/ffmpeg')." -i $location 2>&1";
 			exec($command, $output);
 		}
 
@@ -1670,24 +1685,28 @@ class MiwovideosUtility {
 		}
 	}
 
-	public function checkFfmpegInstalled() {
+	public function getFfmpegVersion() {
+		$ffmpeg_version = false;
+		
 		if (substr(PHP_OS, 0, 3) == "WIN") {
 			$command = "\"".$this->config->get('ffmpeg_path', 'C:\ffmpeg\bin\ffmpeg.exe')."\" 2>&1";
 		}
 		else {
-			$command = "which ffmpeg";
+			$command = "".$this->config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."  2>&1";
 		}
 
 		exec($command, $output);
-
 		MiwoVideos::log('FFmpeg : '.$command);
 		MiwoVideos::log($output);
 
-		if (count($output)) {
-			return true;
+		if (preg_match('#FFmpeg version(.*?), Copyright#', implode("\n", $output), $matches)) {
+			$ffmpeg_version = trim($matches[1]);
 		}
-
-		return false;
+		elseif (preg_match('#ffmpeg version(.*?) Copyright#i', implode("\n", $output), $matches)) {
+			$ffmpeg_version = trim($matches[1]);
+		}
+		
+		return $ffmpeg_version;
 	}
 
 	public function findOption() {
@@ -1777,7 +1796,8 @@ class MiwovideosUtility {
 			if (!$reverse) {
 				$text = str_replace("\'", "'", $text);
 				$text = addslashes($text);
-			} else {
+			}
+			else {
 				$text = stripslashes($text);
 			}
 		}

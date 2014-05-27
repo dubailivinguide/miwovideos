@@ -141,7 +141,7 @@ class MiwovideosUpload extends MObject {
         $row->source = $filename;
 
 	    if ($this->config->get('upload_script') == 'fancy' and !empty($filedata)) {
-		    if (!$this->config->get('auto_process_video')) {
+		    if (!$this->config->get('auto_process_videos')) {
 			    MiwoVideos::get('videos')->convertToHtml5($row->id, $filename);
 		    }
 		    else {
@@ -418,7 +418,7 @@ class MiwovideosUpload extends MObject {
             MiwoVideos::get('controller')->updateField('videos', 'source', $filename, $model);
             $row->source = $filename;
 
-	        if (!$config->get('auto_process_video')) {
+	        if (!$config->get('auto_process_videos')) {
 		        MiwoVideos::get('videos')->convertToHtml5($row->id, $filename);
 	        }
 	        else {
@@ -446,7 +446,7 @@ class MiwovideosUpload extends MObject {
 
 
     public function addProcesses($item) {
-        if (!MiwoVideos::get('utility')->checkFfmpegInstalled()) {
+        if (!MiwoVideos::get('utility')->getFfmpegVersion()) {
             $this->setError('FFmpeg is not installed');
             return false;
         }

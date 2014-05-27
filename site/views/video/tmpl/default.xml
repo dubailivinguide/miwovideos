@@ -8,7 +8,7 @@
 		<description>Display a single video in details.</description>
 		<fields name="request">			
 			<fieldset name="request"
-				addfieldpath="/miwovideos/videos/tmpl">
+				addfieldpath="/miwovideos/admin/videos/tmpl">
 				<field name="video_id" type="modal" size="3" default="0" label="Video" description="Select Video which you want to link to" />
 			</fieldset>	
 		</fields>

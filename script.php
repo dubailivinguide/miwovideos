@@ -77,9 +77,9 @@ class com_MiwovideosInstallerScript {
 		}
 
 		//@TODO Delete this code next version(Current Version 1.0.3)
-		  if ($type == 'upgrade') {
-   return;
-  }
+		if ($type == 'upgrade') {
+			return;
+		}
 		########
 
 		if ($this->_is_new_installation == true) {

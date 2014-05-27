@@ -78,10 +78,12 @@ class MiwovideosModelMiwovideos extends MiwovideosModel {
 
 			$info['pid'] = $this->config->get('pid');
 
+			$version = MiwoVideos::get('utility')->getFfmpegVersion();
+
 			$server   = array();
 			$server[] = array(
 				'name'  => 'FFmpeg',
-				'value' => (MiwoVideos::get('utility')->checkFfmpegInstalled()) ? MText::_('MYES') : MText::_('MNO')
+				'value' => $version ? $version : MText::_('MNO')
 			);
 			$server[] = array(
 				'name'  => 'allow_fileuploads',
