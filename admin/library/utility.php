@@ -151,7 +151,7 @@ class MiwovideosUtility {
 		}
 
 		$pid = $this->config->get('pid');
-		if (($src == 'site') and empty($pid)) {
+		if (MIWOVIDEOS_PACK != 'lite' and ($src == 'site') and empty($pid)) {
 			if (MiwoVideos::get('utility')->is30()) {
 				$uri    = (string)MUri::getInstance();
 				$return = urlencode(base64_encode($uri));
