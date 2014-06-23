@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
@@ -41,7 +41,7 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
         if (isset($ytvars['cc_lang_pref'])) $params->set('cc_lang_pref', $ytvars['cc_lang_pref']);
         if (isset($ytvars['hl'])) $params->set('hl', $ytvars['hl']);
 
-        if ($params->get('play_local') == 1) {
+        if ($config->get('video_player') != 'flowplayer' and $params->get('play_local') == 1) {
             $plugin = MiwoVideos::getPlugin($config->get('video_player'));
 
             $pluginParams = new MRegistry();
@@ -49,7 +49,9 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
             $pluginParams->set('id', $id);
 
             $ret = $plugin->getPlayer($output, $pluginParams, $item);
-            MFactory::getDocument()->addScript(MURL_WP_CNT.'/miwi/plugins/plg_miwovideos_videojs/video-js/media.youtube.js');
+	        if ($config->get('video_player') == 'videojs') {
+		        MFactory::getDocument()->addScript(MURL_WP_CNT.'/miwi/plugins/plg_miwovideos_videojs/video-js/media.youtube.js');
+	        }
             // Stretch the YouTube poster
             // Keep the iframeblocker in front of the player when the user is inactive
             // (ONLY way because the iframe is so selfish with events)

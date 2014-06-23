@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        MiwoVideos
- * @copyright      Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license        GNU General Public License version 2 or later
  */
 # No Permission
@@ -29,6 +29,71 @@ class MiwovideosViewUpload extends MiwovideosView {
 			$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/dropzone.css');
 		}
 
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		parent::display($tpl);
 	}
 
@@ -40,5 +105,17 @@ class MiwovideosViewUpload extends MiwovideosView {
 		MToolBarHelper::title(MText::_('COM_MIWOVIDEOS_UPLOAD_NEW_VIDEO'), 'miwovideos');
 
 		$this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/miwovideos/how-to/how-to-upload-video-files?tmpl=component', 650, 500);
+	}
+
+	protected function getRecursiveFolders($folder) {
+		$this->folders_id = null;
+		$txt              = null;
+		if (isset($folder['children']) && count($folder['children'])) {
+			$tmp        = $this->tree;
+			$this->tree = $folder;
+			$txt        = $this->loadTemplate('server');
+			$this->tree = $tmp;
+		}
+		return $txt;
 	}
 }

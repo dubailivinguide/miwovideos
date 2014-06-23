@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
@@ -104,7 +104,7 @@ class plgSearchMiwovideos extends MPlugin {
 		
 		if (count($rows)) {
 			foreach($rows as $key => $row) {
-				$rows[$key]->href = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$row->id.$Itemid);
+				$rows[$key]->href = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$row->ID.$Itemid);
                   $rows[$key]->post_title   = html_entity_decode($row->post_title);
                 $rows[$key]->post_content = html_entity_decode($row->post_content);
 			}

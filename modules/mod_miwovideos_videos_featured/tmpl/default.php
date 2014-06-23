@@ -1,14 +1,14 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
 defined('MIWI') or die('Restricted access');
 if (count($rows)) {
     ?>
-    <?php if($params->get('position') == 0) { ?>
+    <?php if($params->get('position') == 1) { ?>
         <div class="miwovideos_player">
             <?php echo MiwoVideos::get('videos')->getPlayer($rows[0]);
             unset($rows[0]); ?>

@@ -2,7 +2,7 @@
 
 /**
  * @package        MiwoVideos
- * @copyright      Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license        GNU General Public License version 2 or later
  */
 # No Permission
@@ -43,19 +43,19 @@ if (($this->params->get('show_page_heading', '0') == '1') && !empty($page_title)
 			<div class="clr"></div>
 			<div id="video_items">
 				<?php echo $this->loadTemplate($this->display); ?>
+				<?php if ($this->pagination->total > $this->pagination->limit) { ?>
+					<tfoot>
+					<tr>
+						<td colspan="5">
+							<div class="pagination">
+								<?php echo $this->pagination->getListFooter(); ?>
+							</div>
+						</td>
+					</tr>
+					</tfoot>
+				<?php } ?>
 			</div>
 		</form>
 		<!-- content // -->
 	</div>
-	<?php if ($this->pagination->total > $this->pagination->limit) { ?>
-		<tfoot>
-		<tr>
-			<td colspan="5">
-				<div class="pagination">
-					<?php echo $this->pagination->getListFooter(); ?>
-				</div>
-			</td>
-		</tr>
-		</tfoot>
-	<?php } ?>
 </div>

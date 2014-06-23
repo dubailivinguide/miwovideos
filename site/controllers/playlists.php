@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
@@ -11,6 +11,7 @@ class MiwovideosControllerPlaylists extends MiwoVideosController {
 	
 	public function __construct($config = array()) {
 		parent::__construct('playlists');
+		$this->utility = MiwoVideos::get('utility');
 	}
 
     public function save() {
@@ -29,7 +30,7 @@ class MiwovideosControllerPlaylists extends MiwoVideosController {
                 $json['id'] = $insertid;
             }
         } else {
-            $json['redirect'] = MiwoVideos::get('utility')->redirectWithReturn();
+            $json['redirect'] = $this->utility->redirectWithReturn();
         }
         echo json_encode($json);
         exit();
@@ -37,11 +38,13 @@ class MiwovideosControllerPlaylists extends MiwoVideosController {
 
     public function addVideoToPlaylist() {
         $user_id = MFactory::getUser()->id;
-        $playlist_id = MRequest::getInt('playlist_id');
+	    if (!$playlist_id = MRequest::getInt('playlist_id')) {
+		    $playlist_id = $this->utility->getWatchlater()->id;
+	    }
         $video_id = MRequest::getInt('video_id');
         $ordering = MRequest::getWord('ordering');
         if ($user_id) {
-            $result = MiwoVideos::get('utility')->checkVideoInPlaylists($playlist_id, $video_id);
+            $result = $this->utility->checkVideoInPlaylists($playlist_id, $video_id);
             if (!empty($result)) {
                 $json['error'] = MText::_('COM_MIWOVIDEOS_ALREADY_ADDED');
                 echo json_encode($json);
@@ -54,7 +57,7 @@ class MiwovideosControllerPlaylists extends MiwoVideosController {
                 $json['success'] = MText::_('COM_MIWOVIDEOS_ADDED_TO_PLAYLIST');
             }
         } else {
-            $json['redirect'] = MiwoVideos::get('utility')->redirectWithReturn();
+            $json['redirect'] = $this->utility->redirectWithReturn();
         }
         echo json_encode($json);
         exit();
@@ -62,10 +65,12 @@ class MiwovideosControllerPlaylists extends MiwoVideosController {
 
     public function removeVideoFromPlaylist() {
         $user_id = MFactory::getUser()->id;
-        $playlist_id = MRequest::getInt('playlist_id');
+	    if (!$playlist_id = MRequest::getInt('playlist_id')) {
+		    $playlist_id = $this->utility->getWatchlater()->id;
+	    }
         $video_id = MRequest::getInt('video_id');
         if ($user_id) {
-            $result = MiwoVideos::get('utility')->checkVideoInPlaylists($playlist_id, $video_id);
+            $result = $this->utility->checkVideoInPlaylists($playlist_id, $video_id);
             if (empty($result)) {
                 $json['error'] = MText::_('COM_MIWOVIDEOS_ALREADY_REMOVED');
                 echo json_encode($json);
@@ -78,7 +83,7 @@ class MiwovideosControllerPlaylists extends MiwoVideosController {
                 $json['success'] = MText::_('COM_MIWOVIDEOS_REMOVED_FROM_PLAYLIST');
             }
         } else {
-            $json['redirect'] = MiwoVideos::get('utility')->redirectWithReturn();
+            $json['redirect'] = $this->utility->redirectWithReturn();
         }
         echo json_encode($json);
         exit();

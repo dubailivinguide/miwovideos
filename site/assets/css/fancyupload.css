@@ -96,14 +96,18 @@ a:hover, a.hover {
 	margin-right: 6px;
 }
 #miwovideos_browse.button {
-    background-image: url(../images/fancy/button_select.png);
+    
 }
 #miwovideos_clear.button {
-    background-image: url(../images/fancy/button_clear.png);
+    
     cursor: pointer;
 }
 #miwovideos_upload.button {
-    background-image: url(../images/fancy/button_start.png);
+    
     cursor: pointer;
 }
 
+
+.swiff-uploader-box {
+    margin-top: 31px;
+}

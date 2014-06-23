@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        MiwoVideos
- * @copyright      2009-2014 Miwisoft LLC, miwisoft.com
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license        GNU General Public License version 2 or later
  */
 # No Permission
@@ -76,10 +76,6 @@ class com_MiwovideosInstallerScript {
 			MFolder::delete(MPath::clean(MPATH_WP_PLG.'/miwovideos/plugins'));
 		}
 
-		//@TODO Delete this code next version(Current Version 1.0.3)
-		if ($type == 'upgrade') {
-			return;
-		}
 		########
 
 		if ($this->_is_new_installation == true) {
@@ -98,6 +94,7 @@ class com_MiwovideosInstallerScript {
 		$config->pid             = '';
 		$config->version_checker = '1';
 		$config->show_db_errors  = '0';
+		$config->log             = '0';
 		$config->jusersync       = '0';
 		$config->categories      = '1';
 		$config->playlists       = '1';
@@ -105,11 +102,13 @@ class com_MiwovideosInstallerScript {
 		$config->subscriptions   = '1';
 		$config->likes_dislikes  = '1';
 		$config->custom_fields   = '1';
+		$config->reports         = '1';
+		$config->comments        = '0';
+		$config->cdn             = '0';
 		# Front-end
 		$config->button_class       = MiwoVideos::is30() ? 'btn button-primary' : 'miwovideos_button';
 		$config->override_color     = '#dc2f2c';
 		$config->videos_per_page    = '6';
-		$config->comments           = '0';
 		$config->load_plugins       = '0';
 		$config->show_empty_cat     = '1';
 		$config->show_number_videos = '1';
@@ -121,50 +120,61 @@ class com_MiwovideosInstallerScript {
 		$config->thumb_aspect       = '43';
 		$config->items_per_column   = '3';
 		# Player
-		$config->video_player       = 'videojs';
-		$config->watermark          = '1';
-		$config->watermark_position = '4';
-		$config->watermark_path     = 'images\/powered_by.png';
+		$config->video_player  = 'videojs';
+		$config->fallback      = '0';
+		$config->video_quality = '480';
+		$config->autoplay      = '1';
 		# Upload
 		$config->video_upload        = '1';
 		$config->perl_upload         = '1';
 		$config->remote_upload       = '1';
-		$config->upload_script       = 'dropzone';
+		$config->upload_script       = 'fancy';
+		$config->allow_file_types    = 'mov|mpeg|divx|flv|mpg|avi|mp4|mkv';
 		$config->upload_max_filesize = '128';
+		# Processing
 		$config->process_videos      = '1';
 		$config->auto_process_videos = '1';
-		$config->allow_file_types    = 'mov|mpeg|divx|flv|mpg|avi|mp4|mkv';
+		$config->frames              = '1';
+		$config->watermark           = '1';
+		$config->watermark_position  = '4';
+		$config->watermark_path      = 'wp-admin/images/wordpress-logo.png';
+		$config->metadata_injector   = 'yamdi';
+		$config->jpeg_75             = '1';
+		$config->jpeg_100            = '1';
+		$config->jpeg_240            = '1';
+		$config->jpeg_500            = '1';
+		$config->jpeg_640            = '1';
+		$config->jpeg_1024           = '1';
+		$config->mp4_240p            = '1';
+		$config->mp4_360p            = '1';
+		$config->mp4_480p            = '1';
+		$config->mp4_720p            = '1';
+		$config->mp4_1080p           = '1';
+		$config->webm_240p           = '1';
+		$config->webm_360p           = '1';
+		$config->webm_480p           = '1';
+		$config->webm_720p           = '1';
+		$config->webm_1080p          = '1';
+		$config->ogg_240p            = '1';
+		$config->ogg_360p            = '1';
+		$config->ogg_480p            = '1';
+		$config->ogg_720p            = '1';
+		$config->ogg_1080p           = '1';
+		$config->flv_240p            = '1';
+		$config->flv_360p            = '1';
+		$config->flv_480p            = '1';
+		$config->flv_720p            = '1';
+		$config->flv_1080p           = '1';
 		# Server
+		$config->php_path             = '/usr/bin/php';
 		$config->ffmpeg_path          = '/usr/local/bin/ffmpeg';
 		$config->qt_faststart_path    = '/usr/local/bin/qt-faststart';
+		$config->flvtool2_path        = '/usr/bin/flvtool2';
+		$config->yamdi_path           = '/usr/bin/yamdi';
 		$config->uber_upload_perl_url = '';
 		$config->uber_upload_tmp_path = '/tmp/ubr_temp/';
-		# Processing
-		$config->frames     = '1';
-		$config->jpeg_75    = '1';
-		$config->jpeg_100   = '1';
-		$config->jpeg_240   = '1';
-		$config->jpeg_500   = '1';
-		$config->jpeg_640   = '1';
-		$config->jpeg_1024  = '1';
-		$config->mp4_240p   = '1';
-		$config->mp4_360p   = '1';
-		$config->mp4_480p   = '1';
-		$config->mp4_720p   = '1';
-		$config->mp4_1080p  = '1';
-		$config->webm_240p  = '1';
-		$config->webm_360p  = '1';
-		$config->webm_480p  = '1';
-		$config->webm_720p  = '1';
-		$config->webm_1080p = '1';
-		$config->ogg_240p   = '1';
-		$config->ogg_360p   = '1';
-		$config->ogg_480p   = '1';
-		$config->ogg_720p   = '1';
-		$config->ogg_1080p  = '1';
-
-		$reg    = new MRegistry($config);
-		$config = $reg->toString();
+		$reg                          = new MRegistry($config);
+		$config                       = $reg->toString();
 
 		$user_id = MFactory::getUser()->id;
 
@@ -256,52 +266,75 @@ class com_MiwovideosInstallerScript {
 			(8, 8, 4),
 			(9, 9, 3),
 			(10, 10, 2);");
-		$db->query();		
-	
+		$db->query();
+
 		$this->addPage();
 	}
-	
+
 	protected function _updateMiwovideos() {
 		if (empty($this->_current_version)) {
 			return;
 		}
 
+		if ($this->_current_version < '1.1.0') {
+			$config = MiwoVideos::getConfig();
+
+			$config->set('flv_240p', 1);
+			$config->set('flv_360p', 1);
+			$config->set('flv_480p', 1);
+			$config->set('flv_720p', 1);
+			$config->set('flv_1080p', 1);
+			$config->set('metadata_injector', 'yamdi');
+			$config->set('flvtool2_path', '/usr/bin/flvtool2');
+			$config->set('yamdi_path', '/usr/bin/yamdi');
+			$config->set('fallback', 0);
+
+			MiwoVideos::get('utility')->storeConfig($config);
+
+			MiwoDB::query("INSERT IGNORE INTO `#__miwovideos_process_type` (`id`, `title`, `alias`, `filetype`, `size`, `ordering`, `published`)
+							VALUES
+								(26, 'Flv (240p)', 'flv-240p', 'flv', '240', '26', '1'),
+								(27, 'Flv (360p)', 'flv-360p', 'flv', '360', '27', '1'),
+								(28, 'Flv (480p)', 'flv-480p', 'flv', '480', '28', '1'),
+								(29, 'Flv (720p)', 'flv-720p', 'flv', '720', '29', '1'),
+								(30, 'Flv (1080p)', 'flv-1080p', 'flv', '1080', '30', '1');");
+		}
 	}
 
 	public function uninstall($parent) {
 		$db  = MFactory::getDBO();
 		$src = __FILE__;
 	}
-	
-	public function addPage(){
-        $page_content="<!-- MiwoVideos Shortcode. Please do not remove to video plugin work properly. -->[miwovideos]<!-- MiwoVideos Shortcode End. -->";
-        add_option("miwovideos_page_id",'','','yes');
 
-        $miwovideos_post  = array();
-        $_tmp_page      = null;
+	public function addPage() {
+		$page_content = "<!-- MiwoVideos Shortcode. Please do not remove to video plugin work properly. -->[miwovideos]<!-- MiwoVideos Shortcode End. -->";
+		add_option("miwovideos_page_id", '', '', 'yes');
 
-        $id = get_option("miwovideos_page_id");
+		$miwovideos_post = array();
+		$_tmp_page       = null;
 
-        if (!empty($id) && $id > 0) {
-            $_tmp_page = get_post($id);
-        }
+		$id = get_option("miwovideos_page_id");
 
-        if ($_tmp_page != null){
-            $miwovideos_post['ID']            = $id;
-            $miwovideos_post['post_status']   = 'publish';
+		if (!empty($id) && $id > 0) {
+			$_tmp_page = get_post($id);
+		}
 
-            wp_update_post($miwovideos_post);
-        }
-        else{
-            $miwovideos_post['post_title']    = 'Videos';
-            $miwovideos_post['post_content']  = $page_content;
-            $miwovideos_post['post_status']   = 'publish';
-            $miwovideos_post['post_author']   = 1;
-            $miwovideos_post['post_type']     = 'page';
-            $miwovideos_post['comment_status']= 'closed';
+		if ($_tmp_page != null) {
+			$miwovideos_post['ID']          = $id;
+			$miwovideos_post['post_status'] = 'publish';
 
-            $id = wp_insert_post($miwovideos_post);
-            update_option('miwovideos_page_id',$id);
-        }
-    }
+			wp_update_post($miwovideos_post);
+		}
+		else {
+			$miwovideos_post['post_title']     = 'Videos';
+			$miwovideos_post['post_content']   = $page_content;
+			$miwovideos_post['post_status']    = 'publish';
+			$miwovideos_post['post_author']    = 1;
+			$miwovideos_post['post_type']      = 'page';
+			$miwovideos_post['comment_status'] = 'closed';
+
+			$id = wp_insert_post($miwovideos_post);
+			update_option('miwovideos_page_id', $id);
+		}
+	}
 }

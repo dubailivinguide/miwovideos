@@ -139,6 +139,13 @@
     <fieldset name="player" label="COM_MIWOVIDEOS_VIDEO_PLAYER" description="">
         <field name="video_player" type="list" default="videojs" label="COM_MIWOVIDEOS_VIDEO_PLAYER" description="COM_MIWOVIDEOS_VIDEO_PLAYER">
             <option value="videojs">VideoJS</option>
+            <option value="jwplayer">JW Player</option>
+            <option value="flowplayer">Flowplayer</option>
+        </field>
+
+        <field name="fallback" type="list" default="0" label="COM_MIWOVIDEOS_FALLBACK" description="">
+            <option value="0">HTML5 (Flash fallback)</option>
+            <option value="1">Flash (HTML5 fallback)</option>
         </field>
 
         <field name="video_quality" type="list" default="480" label="COM_MIWOVIDEOS_VIDEO_QUALITY" description="">
@@ -213,6 +220,11 @@
         </field>
 
         <field name="watermark_path" type="text" default="wp-admin/images/wordpress-logo.png" label="COM_MIWOVIDEOS_WATERMARK_PATH" description="" />
+
+        <field name="metadata_injector" type="list" default="1" label="COM_MIWOVIDEOS_METADATA_INJECTOR" description="" >
+            <option value="yamdi">Yamdi</option>
+            <option value="flvtool2">flvtool2</option>
+        </field>
 
         <field name="jpeg" type="spacer" label="JPEG" />
 
@@ -326,15 +338,46 @@
             <option value="1">MYES</option>
             <option value="0">MNO</option>
         </field>
+
+        <field name="flv" type="spacer" label="Flv" />
+
+        <field name="flv_240p" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_GENERATE_FLV_240" description="COM_MIWOVIDEOS_GENERATE_FLV_240">
+            <option value="1">MYES</option>
+            <option value="0">MNO</option>
+        </field>
+
+        <field name="flv_360p" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_GENERATE_FLV_360" description="COM_MIWOVIDEOS_GENERATE_FLV_360">
+            <option value="1">MYES</option>
+            <option value="0">MNO</option>
+        </field>
+
+        <field name="flv_480p" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_GENERATE_FLV_480" description="COM_MIWOVIDEOS_GENERATE_FLV_480">
+            <option value="1">MYES</option>
+            <option value="0">MNO</option>
+        </field>
+
+        <field name="flv_720p" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_GENERATE_FLV_720" description="COM_MIWOVIDEOS_GENERATE_FLV_720">
+            <option value="1">MYES</option>
+            <option value="0">MNO</option>
+        </field>
+
+        <field name="flv_1080p" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_GENERATE_FLV_1080" description="COM_MIWOVIDEOS_GENERATE_FLV_1080">
+            <option value="1">MYES</option>
+            <option value="0">MNO</option>
+        </field>
     </fieldset>
 
     <!-- Server -->
     <fieldset name="server" label="COM_MIWOVIDEOS_SERVER" description="">
-        <field name="php_path" type="text" default="/usr/local/php" label="COM_MIWOVIDEOS_PHP_PATH" description="COM_MIWOVIDEOS_PHP_PATH" />
+        <field name="php_path" type="text" default="/usr/bin/php" label="COM_MIWOVIDEOS_PHP_PATH" description="COM_MIWOVIDEOS_PHP_PATH" />
 
         <field name="ffmpeg_path" type="text" default="/usr/local/bin/ffmpeg" label="COM_MIWOVIDEOS_FFMPEG_PATH" description="COM_MIWOVIDEOS_FFMPEG_PATH" />
 
         <field name="qt_faststart_path" type="text" default="/usr/local/bin/qt-faststart" label="COM_MIWOVIDEOS_QT_FASTSTART_PATH" description="COM_MIWOVIDEOS_QT_FASTSTART_PATH" />
+
+        <field name="flvtool2_path" type="text" default="/usr/bin/flvtool2" label="COM_MIWOVIDEOS_FLVTOOL2_PATH" description="COM_MIWOVIDEOS_FLVTOOL2_PATH" />
+
+        <field name="yamdi_path" type="text" default="/usr/bin/yamdi" label="COM_MIWOVIDEOS_YAMDI_PATH" description="COM_MIWOVIDEOS_YAMDI_PATH" />
 
         <field name="uber_upload_perl_url" type="text" default="" label="COM_MIWOVIDEOS_UBER_UPLOAD_PERL_URL" description="" />
 

@@ -1,11 +1,16 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
 defined('MIWI') or die('Restricted access');
+
+
+if ($params->get('position') != "0" and !@isset($attribs['home']) and !@$attribs['home']) {
+    return false;
+}
 
 require_once(MPATH_WP_PLG.'/miwovideos/admin/library/miwovideos.php');
 

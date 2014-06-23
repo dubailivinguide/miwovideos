@@ -24,8 +24,13 @@
                 <field name="thumb_width" type="text" default="130" label="Thumbnail Width(px)" description="Thumbnail Width(px)" />
                 <field name="thumb_height" type="text" default="100" label="Thumbnail Height(px)" description="Thumbnail Height(px)" />
                 <field name="position" type="list" label="Position" description="Select position to show it on home page or module positions" class="inputbox" default="0">
-                    <option value="0">MiwoVideos Home</option>
-                    <option value="1">Widget</option>
+                    
+                    <option value="0">Widget</option>
+                    <option value="1">MiwoVideos Home(Top)</option>
+                    <option value="2">MiwoVideos Home(Left)</option>
+                    <option value="3">MiwoVideos Home(Right)</option>
+                    <option value="4">MiwoVideos Home(Bottom)</option>
+
                 </field>
 			</fieldset>
 		</fields>		

@@ -1,30 +1,30 @@
 <?php
 /**
- * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
- * @license		GNU General Public License version 2 or later
+ * @package        MiwoVideos
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @license        GNU General Public License version 2 or later
  */
 # No Permission
 defined('MIWI') or die;
 
-$maxUpload = (int)$this->config->get('upload_max_filesize');
-$maxPhpUpload = min((int)ini_get('post_max_size'), (int)ini_get('upload_max_filesize'),(int)$maxUpload);
-$isVideoPage = false;
-$utility = MiwoVideos::get('utility');
+$maxUpload    = (int)$this->config->get('upload_max_filesize');
+$maxPhpUpload = min((int)ini_get('post_max_size'), (int)ini_get('upload_max_filesize'), (int)$maxUpload);
+$isVideoPage  = false;
+$utility      = MiwoVideos::get('utility');
 if (MRequest::getWord('task') == 'edit' and MRequest::getWord('view') == 'videos') {
-    $isVideoPage = true;
+	$isVideoPage = true;
 }
 if (MiwoVideos::isDashboard()) {
-    $dashboard = '&dashboard=1';
+	$dashboard = '&dashboard=1';
 }
 ?>
 
 <?php echo MHtml::_('sliders.start', 'miwovideos_slider_upload'); ?>
-    <?php echo MHtml::_('sliders.panel', MText::sprintf('COM_MIWOVIDEOS_UPLOAD_VIDEOS_LESS_THAN_N_MB', $maxPhpUpload), 'small');?>
+    <?php echo MHtml::_('sliders.panel', MText::sprintf('COM_MIWOVIDEOS_UPLOAD_VIDEOS_LESS_THAN_N_MB', $maxPhpUpload), 'small'); ?>
 
-    <form action="<?php echo $utility->route('index.php?option=com_miwovideos&view=upload&task=upload&format=raw'); ?>" method="post" target="_parent" name="uploadForm" <?php echo $this->config->get('upload_script') == 'dropzone' ? "id=\"dropzone\" class=\"dropzone\"" : "id=\"uploadForm\" class=\"form-validate\""?> enctype="multipart/form-data">
+    <form action="<?php echo $utility->route('index.php?option=com_miwovideos&view=upload&task=upload&format=raw'); ?>" method="post" target="_parent" name="uploadForm" <?php echo $this->config->get('upload_script') == 'dropzone' ? "id=\"dropzone\" class=\"dropzone\"" : "id=\"uploadForm\" class=\"form-validate\"" ?> enctype="multipart/form-data">
 
-        <?php if ($this->config->get('upload_script') == 'dropzone' ) { // Dropzone ?>
+        <?php if ($this->config->get('upload_script') == 'dropzone') { // Dropzone ?>
             <div class="miwi_paid">
                 <strong><?php echo MText::sprintf('MLIB_X_PRO_MEMBERS', 'Drag & Drop'); ?></strong><br /><br />
                 <?php echo MText::sprintf('MLIB_PRO_MEMBERS_DESC', 'http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos#pricing', 'MiwoVideos'); ?>
@@ -32,18 +32,18 @@ if (MiwoVideos::isDashboard()) {
 		    <div class="dz-default dz-message"></div>
         <?php } ?>
 
-        <?php if ($this->config->get('upload_script') != 'dropzone' ) { // Dropzone ?>
+        <?php if ($this->config->get('upload_script') != 'dropzone') { // Dropzone ?>
             <fieldset class="adminform" id="miwovideos_fallback">
                 <ul class="panelform">
                     <li>
                         <label for="miwovideos_photoupload">
                             <?php echo MText::_('COM_MIWOVIDEOS_UPLOAD_A_FILE') ?>
                         </label>
-                        <input type="file" name="Filedata" />
+                        <input type="file" name="Filedata"/>
                     </li>
                     <li>
                         <label></label>
-                        <button type="button" onclick="Miwi.submitbutton('upload')">
+                        <button type="button" class="button btn-success" onclick="Miwi.submitbutton('upload')">
                             <?php echo MText::_('COM_MIWOVIDEOS_UPLOAD') ?>
                         </button>
                     </li>
@@ -57,18 +57,19 @@ if (MiwoVideos::isDashboard()) {
             <fieldset class="adminform">
                 <div id="miwovideos_status" class="hide">
                     <p>
-                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/button_select.png" href="#" id="miwovideos_browse" class="button" />
-                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/button_clear.png" href="#" id="miwovideos_clear" class="button" />
-                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/button_start.png" href="#" id="miwovideos_upload" class="button" />
+                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/button_select.png" href="#" id="miwovideos_browse" class="button"/>
+                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/button_clear.png" href="#" id="miwovideos_clear" class="button"/>
+                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/button_start.png" href="#" id="miwovideos_upload" class="button"/>
                     </p>
+
                     <div>
                         <span class="overall-title"></span>
-                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/bar.gif" class="progress overall-progress" />
+                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/bar.gif" class="progress overall-progress"/>
                     </div>
                     <div class="clr"></div>
                     <div>
                         <span class="current-title"></span>
-                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/bar.gif" class="progress current-progress" />
+                        <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/fancy/bar.gif" class="progress current-progress"/>
                     </div>
                     <div class="current-text"></div>
                 </div>
@@ -77,54 +78,69 @@ if (MiwoVideos::isDashboard()) {
         <?php } ?>
 
         <?php if (MiwoVideos::isDashboard()) { ?>
-            <input type="hidden" name="dashboard" value="1" />
-            <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>" />
+            <input type="hidden" name="dashboard" value="1"/>
+            <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>"/>
         <?php } ?>
     </form>
 
     <?php if ($this->config->get('perl_upload') == 1) { ?>
-        <?php echo MHtml::_('sliders.panel', MText::sprintf('COM_MIWOVIDEOS_UPLOAD_LARGE_VIDEOS_UP_TO_N_MB', $maxUpload ), 'large');?>
+        <?php echo MHtml::_('sliders.panel', MText::sprintf('COM_MIWOVIDEOS_UPLOAD_LARGE_VIDEOS_UP_TO_N_MB', $maxUpload), 'large'); ?>
         <form action="<?php echo $utility->route('index.php?option=com_miwovideos&view=upload&task=upload'); ?>" method="post" target="_parent" name="ubr_upload" id="ubr_upload" class="form-validate" enctype="multipart/form-data">
             <?php echo $this->loadTemplate('uber'); ?>
 
             <?php if (MiwoVideos::isDashboard()) { ?>
-                <input type="hidden" name="dashboard" value="1" />
-                <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>" />
+                <input type="hidden" name="dashboard" value="1"/>
+                <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>"/>
             <?php } ?>
 
         </form>
     <?php } ?>
-<?php echo MHtml::_('sliders.panel', MText::_( 'COM_MIWOVIDEOS_REMOTE_VIDEO' ), 'remote');?>
+<?php echo MHtml::_('sliders.panel', MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO'), 'remote'); ?>
     <form action="<?php echo $utility->route('index.php?option=com_miwovideos&view=upload&task=remoteLink'); ?>" method="post" target="_parent" name="remote_links" id="remote_links" class="form-validate" enctype="multipart/form-data">
         <fieldset class="adminform">
 
-            <?php if($isVideoPage) { ?>
+            <?php if ($isVideoPage) { ?>
                 <div class="miwovideos_remote_links"><?php echo MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO_LINK'); ?></div>
                 <input type="text" name="remote_links" style="width: 20%">
-            <?php } else { ?>
+            <?php }
+            else { ?>
                 <div class="miwovideos_remote_links"><?php echo MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO_LINKS'); ?></div>
                 <textarea name="remote_links" class="miwovideos_remote_link_textarea"></textarea>
             <?php } ?>
-            <button class="button" onclick="Miwi.submitbutton('remoteLink')"><?php echo MText::_('COM_MIWOVIDEOS_UPLOAD'); ?></button>
+            <button class="button btn-success" onclick="Miwi.submitbutton('remoteLink')"><?php echo MText::_('COM_MIWOVIDEOS_UPLOAD'); ?></button>
             <?php if (MiwoVideos::isDashboard()) { ?>
-                <input type="hidden" name="dashboard" value="1" />
-                <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>" />
+                <input type="hidden" name="dashboard" value="1"/>
+                <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>"/>
             <?php } ?>
         </fieldset>
     </form>
+<?php if (!MiwoVideos::isDashboard()) { ?>
+	
+
+
+
+
+
+
+
+
+
+
+
+<?php } ?>
 <?php echo MHtml::_('sliders.end'); ?>
 
-<div class="clr"> </div>
+<div class="clr"></div>
 
-<?php if ($this->config->get('upload_script') == 'dropzone' ) { // Dropzone ?>
-    <style type="text/css">
-        .dropzone a.dz-remove, .dropzone-previews a.dz-remove {
-            margin-top: 10px;
-        }
-    </style>
-    <script type="text/javascript">
+<?php if ($this->config->get('upload_script') == 'dropzone') { // Dropzone ?>
+	<style type="text/css">
+		.dropzone a.dz-remove, .dropzone-previews a.dz-remove {
+			margin-top : 10px;
+		}
+	</style>
+	<script type="text/javascript">
 		jQuery(document).ready(function() {
-        
+		
 
 
 
@@ -210,11 +226,12 @@ if (MiwoVideos::isDashboard()) {
 
 
 		});
-    </script>
+	</script>
 <?php } ?>
 <script type="text/javascript">
-    jQuery('#dropzone').append('<input type="hidden" name="channel_id" value="<?php echo MRequest::getInt('channel_id', MiwoVideos::get('channels')->getDefaultChannel()->id); ?>">');
-    jQuery('#ubr_upload').append('<input type="hidden" name="channel_id" id="channel_id" value="<?php echo MRequest::getInt('channel_id', MiwoVideos::get('channels')->getDefaultChannel()->id); ?>">');
-    jQuery('#remote_links').append('<input type="hidden" name="channel_id" value="<?php echo MRequest::getInt('channel_id', MiwoVideos::get('channels')->getDefaultChannel()->id); ?>">');
+	jQuery('#dropzone').append('<input type="hidden" name="channel_id" value="<?php echo MRequest::getInt('channel_id', MiwoVideos::get('channels')->getDefaultChannel()->id); ?>">');
+	jQuery('#ubr_upload').append('<input type="hidden" name="channel_id" id="channel_id" value="<?php echo MRequest::getInt('channel_id', MiwoVideos::get('channels')->getDefaultChannel()->id); ?>">');
+	jQuery('#remote_links').append('<input type="hidden" name="channel_id" value="<?php echo MRequest::getInt('channel_id', MiwoVideos::get('channels')->getDefaultChannel()->id); ?>">');
+	jQuery('#serverImport').append('<input type="hidden" name="channel_id" value="<?php echo MRequest::getInt('channel_id', MiwoVideos::get('channels')->getDefaultChannel()->id); ?>">');
 </script>
 

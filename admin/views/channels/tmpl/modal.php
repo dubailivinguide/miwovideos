@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
@@ -70,7 +70,7 @@ $function	= 'jSelectChannel_'.$field;
                 </th>
 
                 <th width="3%">
-                    <?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_ID'), 'r.id', $this->lists['order_Dir'], $this->lists['order']); ?>
+                    <?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_ID'), 'c.id', $this->lists['order_Dir'], $this->lists['order']); ?>
                 </th>
             </tr>
             </thead>

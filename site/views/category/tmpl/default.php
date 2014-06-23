@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        MiwoVideos
- * @copyright      Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license        GNU General Public License version 2 or later
  */
 # No Permission
@@ -15,8 +15,10 @@ $utility = MiwoVideos::get('utility');
 
 	<?php if (!empty($this->category->title)) { ?>
 		<h1><?php echo $this->category->title; ?></h1>
-	<?php }
-	else if (!empty($page_title)) { ?>
+	<?php
+	}
+	else if (!empty($page_title)) {
+		?>
 		<h1><?php echo $page_title; ?></h1>
 	<?php } ?>
 <?php } ?>
@@ -43,9 +45,6 @@ if (!empty($this->categories)) {
 
 		<?php
 		foreach ($this->categories as $category) {
-			if (!$this->config->get('show_empty_cat') and !$category->total_videos) {
-				continue;
-			}
 
 			$link = MRoute::_('index.php?option=com_miwovideos&view=category&category_id='.$category->id.$this->Itemid);
 			?>
@@ -73,6 +72,19 @@ if (!empty($this->categories)) {
 			</div>
 		<?php } ?>
 	</div>
+	<?php if ($this->category->id == 0) { ?>
+		<?php if ($this->pagination->total > $this->pagination->limit) { ?>
+			<tfoot>
+			<tr>
+				<td colspan="5">
+					<div class="pagination">
+						<?php echo $this->pagination->getListFooter(); ?>
+					</div>
+				</td>
+			</tr>
+			</tfoot>
+		<?php } ?>
+	<?php } ?>
 	<div class="clr"></div>
 <?php
 }
@@ -87,12 +99,8 @@ if (!empty($this->categories)) {
 			<div id="miwovideos_docs">
 				<h2 class="miwovideos_title"><?php echo MText::_('COM_MIWOVIDEOS_VIDEOS'); ?></h2>
 				<?php
-				$n = count($this->items);
-				for ($i = 0; $i < $n; $i++) {
-					$item = $this->items[ $i ];
-
-					$url = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$item->id.$this->Itemid);
-
+				foreach ($this->items as $item) {
+					$url       = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$item->id.$this->Itemid);
 					$template  = MFactory::getApplication()->getTemplate();
 					$ovrr_path = MPATH_WP_CNT.'/themes/'.$template.'/html/com_miwovideos/video/common.php';
 
@@ -106,12 +114,20 @@ if (!empty($this->categories)) {
 				?>
 			</div>
 			<?php if ($this->pagination->total > $this->pagination->limit) { ?>
-				<div align="center" class="pagination">
-					<?php echo $this->pagination->getListFooter(); ?>
-				</div>
+				<tfoot>
+				<tr>
+					<td colspan="5">
+						<div class="pagination">
+							<?php echo $this->pagination->getListFooter(); ?>
+						</div>
+					</td>
+				</tr>
+				</tfoot>
 			<?php } ?>
-		<?php }
-		else { ?>
+		<?php
+		}
+		else {
+			?>
 			<div class="miwovideos_box">
 				<div class="miwovideos_box_heading"><h3 class="miwovideos_box_h3"></h3></div>
 				<div class="miwovideos_box_content">
@@ -127,18 +143,5 @@ if (!empty($this->categories)) {
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="Itemid" value="<?php echo $this->Itemid; ?>"/>
 		<input type="hidden" name="id" value="0"/>
-
-		<script type="text/javascript">
-			function cancelRegistration(registrant_id) {
-				var form = document.adminForm;
-
-				if (confirm("<?php echo MText::_('COM_MIWOVIDEOS_CANCEL_REGISTRATION_CONFIRM'); ?>")) {
-					form.view.value = 'registration';
-					form.task.value = 'cancel';
-					form.id.value = registrant_id;
-					form.submit();
-				}
-			}
-		</script>
 	</form>
 <?php } ?>

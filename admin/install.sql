@@ -272,6 +272,11 @@ VALUES
   (23, 'Move moov atom', 'move-moov-atom', '', '', '23', '1'),
   (24, 'Get duration', 'get-duration', '', '', '24', '1'),
   (25, 'Get title', 'get-title', '', '', '25', '1'),
+  (26, 'Flv (240p)', 'flv-240p', 'flv', '240', '26', '1'),
+  (27, 'Flv (360p)', 'flv-360p', 'flv', '360', '27', '1'),
+  (28, 'Flv (480p)', 'flv-480p', 'flv', '480', '28', '1'),
+  (29, 'Flv (720p)', 'flv-720p', 'flv', '720', '29', '1'),
+  (30, 'Flv (1080p)', 'flv-1080p', 'flv', '1080', '30', '1'),
   (100, 'HTML5 format', 'html5-format', '', '', '100', '1');
 
 CREATE TABLE IF NOT EXISTS `#__miwovideos_subscriptions` (

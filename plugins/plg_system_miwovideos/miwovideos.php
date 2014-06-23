@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        MiwoVideos
- * @copyright      Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license        GNU General Public License version 2 or later
  */
 # No Permission
@@ -15,12 +15,18 @@ class plgSystemMiwovideos extends MPlugin {
 		$document = MFactory::getDocument();
 
 		
-        $ui_folder = MURL_WP_CNT.'/miwi/media/jui';
+            $ui_folder = MURL_WP_CNT.'/miwi/media/jui';
 
-		if ($app->isAdmin()) {
-			$document->addScript($ui_folder.'/js/jquery-ui-1.10.4.custom.min.js');
-			$document->addStyleSheet($ui_folder.'/css/jquery-ui-1.10.4.custom.min.css');
-		}
+            if ($app->isAdmin()) {
+                $document->addScript($ui_folder.'/js/jquery-ui-1.10.4.custom.min.js');
+                $document->addStyleSheet($ui_folder.'/css/jquery-ui-1.10.4.custom.min.css');
+
+				
+
+            }
+
+
+
 
 
 

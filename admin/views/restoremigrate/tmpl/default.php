@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	2009-2014 Miwisoft LLC, miwisoft.com
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU/GPL http://www.gnu.org/copyleft/gpl.html
  */
 # No Permission

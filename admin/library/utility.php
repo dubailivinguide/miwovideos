@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        MiwoVideos
- * @copyright      Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license        GNU General Public License version 2 or later
  */
 # No Permission
@@ -160,8 +160,8 @@ class MiwovideosUtility {
 				MFactory::getApplication()->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.$link.'">', '</a>'), 'error');
 			}
 			else {
-				MHtml::_('behavior.modal');
-				MFactory::getApplication()->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.MiwoVideos::get('utility')->route('administrator/index.php?option=com_config&view=component&component=com_miwovideos&tmpl=component').'" style="cursor:pointer" class="modal" rel="{handler: \'iframe\', size: {x: 875, y: 550}}">', '</a>'), 'error');
+				MFactory::getApplication()->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.MiwoVideos::get('utility')->route('wp-admin/admin.php?page=miwovideos&option=com_miwovideos&view=config').'">', '</a>'), 'error');
+
 			}
 			return false;
 		}
@@ -176,7 +176,7 @@ class MiwovideosUtility {
 			$version = $this->getXmlText(MPATH_WP_PLG.'/miwovideos/miwovideos.xml', 'version');
 		}
 
-		return $version;
+		return (string)$version;
 	}
 
 	public function getXmlText($file, $variable) {
@@ -201,15 +201,7 @@ class MiwovideosUtility {
 		static $version;
 
 		if (!isset($version)) {
-			$cache = MFactory::getCache('com_miwovideos', 'output');
-			$cache->setCaching(1);
-
-			$version = $cache->get('mv_version', 'com_miwovideos');
-
-			if (empty($version)) {
-				$version = $this->getRemoteVersion();
-				$cache->store($version, 'mv_version', 'com_miwovideos');
-			}
+			$version = $this->getRemoteVersion();
 		}
 
 		return $version;
@@ -700,11 +692,11 @@ class MiwovideosUtility {
 		$limitstart = MRequest::getInt('limitstart');
 
 		$this->trigger('onContentPrepare', array(
-				'com_miwovideos.video',
-				&$item,
-				&$this->config,
-				$limitstart
-			), 'content');
+			'com_miwovideos.video',
+			&$item,
+			&$this->config,
+			$limitstart
+		), 'content');
 
 		return $item->text;
 	}
@@ -1490,26 +1482,31 @@ class MiwovideosUtility {
 			case 7:
 			case 12:
 			case 17:
+			case 26:
 				$size = 240;
 				break;
 			case 8:
 			case 13:
 			case 18:
+			case 27:
 				$size = 360;
 				break;
 			case 9:
 			case 14:
 			case 19:
+			case 28:
 				$size = 480;
 				break;
 			case 10:
 			case 15:
 			case 20:
+			case 29:
 				$size = 720;
 				break;
 			case 11:
 			case 16:
 			case 21:
+			case 30:
 				$size = 1080;
 				break;
 			case 100: // HTML5 type
@@ -1549,7 +1546,7 @@ class MiwovideosUtility {
 					$ret = MPATH_MEDIA.$ret;
 					break;
 				case 'default':
-					$ret = '/'.$ret;
+					$ret = $ret;
 					break;
 			}
 		}
@@ -1687,7 +1684,7 @@ class MiwovideosUtility {
 
 	public function getFfmpegVersion() {
 		$ffmpeg_version = false;
-		
+
 		if (substr(PHP_OS, 0, 3) == "WIN") {
 			$command = "\"".$this->config->get('ffmpeg_path', 'C:\ffmpeg\bin\ffmpeg.exe')."\" 2>&1";
 		}
@@ -1705,7 +1702,7 @@ class MiwovideosUtility {
 		elseif (preg_match('#ffmpeg version(.*?) Copyright#i', implode("\n", $output), $matches)) {
 			$ffmpeg_version = trim($matches[1]);
 		}
-		
+
 		return $ffmpeg_version;
 	}
 
@@ -1803,5 +1800,30 @@ class MiwovideosUtility {
 		}
 
 		return $text;
+	}
+
+	public function backgroundTask($id, $filename) {
+		if (!$this->config->get('auto_process_videos')) {
+			$ret = MiwoVideos::get('videos')->convertToHtml5($id, $filename);
+		}
+		else {
+			$cli = MPATH_MIWI.'/cli/miwovideoscli.php';
+			if (substr(PHP_OS, 0, 3) != "WIN") {
+				// @TODO Log if throw an error
+				$command = "env -i ".$this->config->get('php_path', '/usr/bin/php')." $cli convertToHtml5 ".$id." ".$filename." 2>&1";
+			}
+			else {
+				@exec('where php.exe', $php_path);
+				// @TODO Log if throw an error
+				$command = $this->config->get('php_path', $php_path)." $cli convertToHtml5 ".$id." ".$filename." NUL";
+			}
+
+			@exec($command, $output, $ret);
+			MiwoVideos::log('CLI : '.$command);
+			MiwoVideos::log($output);
+			MiwoVideos::log($ret);
+		}
+
+		return $ret;
 	}
 }

@@ -57,11 +57,12 @@
     display : inline-block;
 }
 
-.miwovideos_upload{
-    margin:10px;
-    position: relative;
-    bottom:5px;
+.miwovideos_upload {
+    margin   : 10px;
+    position : relative;
+    bottom   : 5px;
 }
+
 .miwovideos_grid_flow {
     background : url(../images/grid.ico);
 }
@@ -161,9 +162,9 @@
 }
 
 .miwovideos_preview_videos .miwovideos_preview .miwovideos_thumb_100 {
-    width         : 100px;
-    height        : 56px;
-    margin-right  : 3px;
+    width        : 100px;
+    height       : 56px;
+    margin-right : 3px;
 }
 
 /* Channels Grid */
@@ -671,9 +672,18 @@ a.miwovideos_button.active {
 }
 
 .miwovideos_report_text {
-    max-width : 100%;
-    width     : 450px;
-    height    : 150px;
+    max-width        : 100%;
+    background-color : #EFEFEF;
+    padding          : 10px;
+}
+
+.miwovideos_report_text p {
+    color     : #555555;
+    font-size : 11px;
+}
+
+.miwovideos_report_success {
+    padding-bottom : 10px;
 }
 
 .miwovideos_embed {
@@ -925,7 +935,7 @@ span.subs_count {
 }
 
 .miwovideos_box_content_99 {
-    width    : 99%;
+    width : 99%;
 }
 
 a.miwovideos_button {
@@ -2183,3 +2193,14 @@ fieldset.adminform {
     vertical-align : top;
 }
 
+.jwhd.jwbuttoncontainer .jwoverlay {
+    width : 216%;
+}
+
+.jwfullscreen.jwbuttoncontainer .jwoverlay {
+    width : 277%;
+}
+
+.jwrail.jwsmooth .jwoverlay {
+    width : 15%;
+}

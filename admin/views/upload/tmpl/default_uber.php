@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
@@ -256,7 +256,7 @@ $this->document->addScriptDeclaration($html);
             </div>
             <li>
                 <label></label>
-                <button class="button" type="button" id="upload_button" name="upload_button" value="Upload"
+                <button class="button btn-success" type="button" id="upload_button" name="upload_button" value="Upload"
                         onClick="linkUpload();">
                     <?php echo MText::_('COM_MIWOVIDEOS_UPLOAD') ?>
                 </button>

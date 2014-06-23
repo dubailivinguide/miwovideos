@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
@@ -70,6 +70,6 @@ for ($i = 0, $n = count($rows); $i < $n; $i++) {
 	}		
 }
 
-$document->addStyleSheet(MUri::root(true).'/modules/mod_miwovideos_videos/css/style.css');
+$document->addStyleSheet(MURL_WP_CNT.'/miwi/modules/mod_miwovideos_videos/css/style.css');
 
 require(MModuleHelper::getLayoutPath('mod_miwovideos_videos', 'default'));

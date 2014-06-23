@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
@@ -20,6 +20,8 @@ class plgMiwovideosVideoJs extends MPlugin {
 	public function getPlayer(&$output, $pluginParams, $item) {
         if (strpos($output, '{miwovideos ') === false) {
             return false;
+        } else {
+	        $output .= '}';
         }
 
         $this->output = $output;
@@ -36,8 +38,8 @@ class plgMiwovideosVideoJs extends MPlugin {
 
 		#Video Plugins
         if ($item->duration) {
-            $document->addStyleSheet(MURL_WP_CNT.'/miwi/plugins/plg_miwovideos_videojs/video-js/videojs.thumbnails.css');
-            $document->addScript(MURL_WP_CNT.'/miwi/plugins/plg_miwovideos_videojs/video-js/videojs.thumbnails.js');
+            $document->addStyleSheet(MURL_WP_CNT.'/miwi/plugins/plg_miwovideos_videojs/video-js/videojs.plugins.css');
+            $document->addScript(MURL_WP_CNT.'/miwi/plugins/plg_miwovideos_videojs/video-js/videojs.plugins.js');
         }
 		if ($input->getCmd('view') == 'video' and $input->getInt('playlist_id', 0) > 0) {
 			$document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/playlist_videojs.css');
@@ -84,7 +86,7 @@ class plgMiwovideosVideoJs extends MPlugin {
 			left: 0;
 			width: 100%;
 			height: 100% !important;
-			z-index: 1;
+			z-index: 0;
 		}
 		.vjs-spinner {
 		  /*display: none !important;*/
@@ -105,10 +107,23 @@ class plgMiwovideosVideoJs extends MPlugin {
             }');
 		}
 
+		$tech = $this->config->get('fallback');
+		if ($tech) {
+			$document->addScriptDeclaration('videojs.options.techOrder = ["flash", "html5"];');
+		}
+		else {
+			$document->addScriptDeclaration('videojs.options.techOrder = ["html5", "html5"];');
+		}
+
+
+
 		return true;
 	}
 
     public function _processMatches(&$matches) {
+	    $utility = MiwoVideos::get('utility');
+	    $result = null;
+	    $script = '';
         static $id = 1;
         $videoParams = $matches[1];
         $videoParamsList = $this->getParams($videoParams);
@@ -116,6 +131,26 @@ class plgMiwovideosVideoJs extends MPlugin {
         if ($this->item->duration and $this->config->get('frames')) {
             $html .= $this->getFramesOutput();
         }
+
+	    $watch_later_id = $utility->getWatchlater()->id;
+	    if (!empty($watch_later_id)) {
+		    $result = $utility->checkVideoInPlaylists($watch_later_id, $this->item->id);
+	    }
+	    if (empty($result) or empty($watch_later_id)) {
+		    $script .= "video.watchlater();";
+	    } else {
+		    $script .= "video.watchlater('already_added');";
+	    }
+
+	    $tech = '';
+	    if ($this->pluginParams->get('id')) {
+		    $tech = ', {"techOrder": ["youtube"], "src": "http://www.youtube.com/watch?v='.$this->pluginParams->get('id').'"}';
+	    }
+	    $html .= "
+	    <script type=\"text/javascript\"><!--
+	        var video = videojs('plg_videojs_1'".$tech.");
+	        ".$script."
+	    //--></script>";
 
         if(isset($id)) {
             $id++;
@@ -140,6 +175,7 @@ class plgMiwovideosVideoJs extends MPlugin {
 		$videoParamsList['preload']				= $pluginParams->get('preload');
 		$videoParamsList['loop']				= $pluginParams->get('loop');
 		$videoParamsList['poster_visibility']	= $pluginParams->get('poster_visibility');
+		$videoParamsList['playlist']	        = $pluginParams->get('playlist');
 		$videoParamsList['video_mp4']			= '';
 		$videoParamsList['video_webm']			= '';
 		$videoParamsList['video_ogg']			= '';
@@ -167,6 +203,7 @@ class plgMiwovideosVideoJs extends MPlugin {
 	protected function getHtmlOutput($id, &$videoParamsList) {
         $pluginParams = $this->pluginParams;
         $item = $this->item;
+		$autoplay_html = $preload_html = $controls_html = $loop_html = $poster_html = $text_track_html = '';
 		$width 				= $videoParamsList['width'];
 		$height 			= $videoParamsList['height'];
 		$controls			= $videoParamsList['controls'];
@@ -174,6 +211,7 @@ class plgMiwovideosVideoJs extends MPlugin {
 		$preload			= $videoParamsList['preload'];
 		$loop				= $videoParamsList['loop'];
 		$poster_visibility	= $videoParamsList['poster_visibility'];
+		$playlist	        = $videoParamsList['playlist'];
 		$original_mp4		= $videoParamsList['video_mp4'];
 		$original_webm		= $videoParamsList['video_webm'];
 		$original_ogg		= $videoParamsList['video_ogg'];
@@ -184,8 +222,6 @@ class plgMiwovideosVideoJs extends MPlugin {
 		// Controls
 		if ($controls == "1") {
 			$controls_html 	= ' controls="controls"';
-		} else {
-			$controls_html 	= '';
 		}
 
 		// Autoplay
@@ -193,15 +229,11 @@ class plgMiwovideosVideoJs extends MPlugin {
             case "global":
                 if ($this->config->get('autoplay') == 1) {
                     $autoplay_html 	= ' autoplay="autoplay"';
-                } else {
-                    $autoplay_html 	= '';
                 }
                 break;
             case "1":
                 $autoplay_html 	= ' autoplay="autoplay"';
                 break;
-            case "0":
-                $autoplay_html 	= '';
         }
 
 		// Preload
@@ -212,105 +244,22 @@ class plgMiwovideosVideoJs extends MPlugin {
 		// Loop
 		if ($loop == "1") {
 			$loop_html		= ' loop="loop"';
-		} else {
-			$loop_html 		= '';
 		}
 
 		// Poster image
 		if ($poster_visibility == "1" && $poster != "") {
 			$poster_html 	= ' poster="'.$poster;
-		} else {
-			$poster_html 	= '';
 		}
 
 		// Text tracks
 		if (!empty($tracks)) {
-			$text_track_html = '';
 			foreach ($tracks AS $track) {
 				$track_items = explode('|', $track);
 				$text_track_html .= '<track kind="'.$track_items[0].'" src="'.$track_items[1].'" srclang="'.$track_items[2].'" label="'.$track_items[3].'" />';
 			}
-		} else {
-			$text_track_html = '';
 		}
 
-        $video_mp4 = $video_webm = $video_ogg = '';
-
-        $files = MiwoVideos::get('files')->getVideoFiles($item->id);
-        $utility = MiwoVideos::get('utility');
-        $default_size = $utility->getVideoSize(MIWOVIDEOS_UPLOAD_DIR.'/videos/'.$item->id.'/orig/'.$item->source);
-        $default_res = '';
-
-        if ($this->config->get('video_quality') == $default_size) {
-            $default_res = 'true';
-        }
-        foreach ($files as $file) {
-
-            if (!$item->duration) {
-                $orig = '<source src="' . MURL_MEDIA.'/com_miwovideos/videos/' . $item->id . '/orig/' . $file->source . '" type="video/'. $file->ext .'"/>';;
-            }
-
-            if ($file->process_type == '200' or $file->process_type < 7) continue;
-            $size = $utility->getSize($file->process_type);
-
-            if ($this->config->get('video_quality') == $size) {
-                $default_res = 'true';
-            }
-
-            $src = $utility->getVideoFilePath($file->video_id, $size, $file->source, 'url');
-
-            if ($file->ext == 'mp4' and $file->process_type == '100') {
-                $src = $utility->getVideoFilePath($file->video_id, $default_size, $original_mp4, 'url');
-                $video_mp4 .= '<source src="' . $src . '" type="video/mp4" data-res="' . $default_size . 'p" data-default="'.$default_res.'" />';
-            } else if ($file->ext == 'mp4') {
-                $video_mp4 .= '<source src="' . $src . '" type="video/mp4" data-res="' . $size . 'p" data-default="'.$default_res.'" />';
-            }
-
-            if ($file->ext == 'webm' and $file->process_type == '100') {
-                $src = $utility->getVideoFilePath($file->video_id, $default_size, $original_webm, 'url');
-                $video_webm .= '<source src="' . $src . '" type="video/webm" data-res="' . $default_size . 'p" data-default="'.$default_res.'" />';
-            } else if ($file->ext == 'webm') {
-                $video_webm .= '<source src="' . $src . '" type="video/webm" data-res="' . $size . 'p" data-default="'.$default_res.'" />';
-            }
-
-            if (($file->ext == 'ogg' or $file->ext == 'ogv') and $file->process_type == '100') {
-                $src = $utility->getVideoFilePath($file->video_id, $default_size, $original_ogg, 'url');
-                $video_ogg .= '<source src="' . $src . '" type="video/ogg" data-res="' . $default_size . 'p" data-default="'.$default_res.'" />';
-            } else if ($file->ext == 'ogg' or $file->ext == 'ogv') {
-                $video_ogg .= '<source src="' . $src . '" type="video/ogg" data-res="' . $size . 'p" data-default="'.$default_res.'" />';
-            }
-            $default_res = '';
-        }
-
-		// HTML output
-		$html = '<div class="videoSizer_'.$id.'"><div class="videoWrapper_'.$id.' videoWrapper">';
-
-        if ($pluginParams->get('id')) {
-            $html .= '<video id="plg_videojs_'.$id.'" class="video-js vjs-default-skin vjs-big-play-centered"'.$controls_html.$autoplay_html.$preload_html.$loop_html.$poster_html.'" data-setup=\'{ "techOrder": ["youtube"], "src": "http://www.youtube.com/watch?v='.$pluginParams->get('id').'"}\'>';
-        }
-		else {
-            $html .= '<video id="plg_videojs_'.$id.'" class="video-js vjs-default-skin vjs-big-play-centered"'.$controls_html.$autoplay_html.$preload_html.$loop_html.$poster_html.'" data-setup="{}">';
-            if (!empty($video_mp4)) {
-                $html .= $video_mp4;
-            }
-
-            if (!empty($video_webm)) {
-                $html .= $video_webm;
-            }
-
-            if (!empty($video_ogg)) {
-                $html .= $video_ogg;
-            }
-
-            if (!$item->duration) {
-                $html .= $orig;
-            }
-
-            $html .= $text_track_html;
-        }
-
-        $html .= ' </video>';
-		$html .= '</div></div>';
+		$html = $this->_sourceHtml($id, $item, $original_mp4, $original_webm, $original_ogg, $pluginParams, $controls_html, $autoplay_html, $preload_html, $loop_html, $poster_html, $text_track_html);
 
 		$html .= '<style type="text/css">
 		.videoSizer_'.$id.' { max-width: '.$width.'px; }
@@ -353,11 +302,99 @@ class plgMiwovideosVideoJs extends MPlugin {
                                                 }
             }
             });
-            video.resolutions();
-			});
+            video.resolutions();});
             //--></script>";
 
             return $output;
         }
     }
+
+	protected function _sourceHtml($id, $item, $original_mp4, $original_webm, $original_ogg, $pluginParams, $controls_html, $autoplay_html, $preload_html, $loop_html, $poster_html, $text_track_html) {
+		$video_mp4 = $video_webm = $video_ogg = $video_flv = '';
+
+		$files        = MiwoVideos::get('files')->getVideoFiles($item->id);
+		$utility      = MiwoVideos::get('utility');
+		$default_size = $utility->getVideoSize(MIWOVIDEOS_UPLOAD_DIR.'/videos/'.$item->id.'/orig/'.$item->source);
+		$default_res  = '';
+
+		if ($this->config->get('video_quality') == $default_size) {
+			$default_res = 'true';
+		}
+		foreach ($files as $file) {
+
+			if (!$item->duration) {
+				$orig = '<source src="'.MURL_MEDIA.'/com_miwovideos/videos/'.$item->id.'/orig/'.$file->source.'" type="video/'.$file->ext.'"/>';;
+			}
+
+			if ($file->process_type == '200' or $file->process_type < 7)
+				continue;
+			$size = $utility->getSize($file->process_type);
+
+			if ($this->config->get('video_quality') == $size) {
+				$default_res = 'true';
+			}
+
+			$src = $utility->getVideoFilePath($file->video_id, $size, $file->source, 'url');
+
+			if ($file->ext == 'mp4' and $file->process_type == '100') {
+				$src = $utility->getVideoFilePath($file->video_id, $default_size, $original_mp4, 'url');
+				$video_mp4 .= '<source src="'.$src.'" type="video/mp4" data-res="'.$default_size.'p" data-default="'.$default_res.'" />';
+			}
+			else if ($file->ext == 'mp4') {
+				$video_mp4 .= '<source src="'.$src.'" type="video/mp4" data-res="'.$size.'p" data-default="'.$default_res.'" />';
+			}
+
+			if ($file->ext == 'webm' and $file->process_type == '100') {
+				$src = $utility->getVideoFilePath($file->video_id, $default_size, $original_webm, 'url');
+				$video_webm .= '<source src="'.$src.'" type="video/webm" data-res="'.$default_size.'p" data-default="'.$default_res.'" />';
+			}
+			else if ($file->ext == 'webm') {
+				$video_webm .= '<source src="'.$src.'" type="video/webm" data-res="'.$size.'p" data-default="'.$default_res.'" />';
+			}
+
+			if (($file->ext == 'ogg' or $file->ext == 'ogv') and $file->process_type == '100') {
+				$src = $utility->getVideoFilePath($file->video_id, $default_size, $original_ogg, 'url');
+				$video_ogg .= '<source src="'.$src.'" type="video/ogg" data-res="'.$default_size.'p" data-default="'.$default_res.'" />';
+			}
+			else if ($file->ext == 'ogg' or $file->ext == 'ogv') {
+				$video_ogg .= '<source src="'.$src.'" type="video/ogg" data-res="'.$size.'p" data-default="'.$default_res.'" />';
+			}
+
+			if ($file->ext == 'flv') {
+				$video_flv .= '<source src="'.$src.'" type="video/flv" data-res="'.$size.'p" data-default="'.$default_res.'" />';
+			}
+			$default_res = '';
+		}
+
+		// HTML output
+		$html = '<div class="videoSizer_'.$id.'"><div class="videoWrapper_'.$id.' videoWrapper">';		
+		$html .= '<video id="plg_videojs_'.$id.'" class="video-js vjs-default-skin vjs-big-play-centered"'.$controls_html.$autoplay_html.$preload_html.$loop_html.$poster_html.'" data-setup=\'{}\'>';
+		if (!empty($video_mp4)) {
+			$html .= $video_mp4;
+		}
+
+		if (!empty($video_webm)) {
+			$html .= $video_webm;
+		}
+
+		if (!empty($video_ogg)) {
+			$html .= $video_ogg;
+		}
+
+		if (!empty($video_flv)) {
+			$html .= $video_flv;
+		}
+
+		if (!$item->duration) {
+			$html .= $orig;
+		}
+
+		$html .= $text_track_html;
+		
+
+
+		$html .= ' </video>';
+		$html .= '</div></div>';
+		return $html;
+	}
 }

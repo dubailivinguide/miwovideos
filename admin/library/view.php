@@ -1,8 +1,8 @@
 <?php
 /**
- * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
- * @license		GNU General Public License version 2 or later
+ * @package        MiwoVideos
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @license        GNU General Public License version 2 or later
  */
 # No Permission
 defined('MIWI') or die('Restricted Access');
@@ -24,40 +24,39 @@ class MiwovideosView extends MiwisoftView {
 	public $toolbar;
 	public $document;
 
-    public function __construct($config = array()) {
+	public function __construct($config = array()) {
 		parent::__construct($config);
 
-        $this->_mainframe = MFactory::getApplication();
-        if ($this->_mainframe->isAdmin()) {
-            $this->_option = MiwoVideos::get('utility')->findOption();
-        }
-        else {
-            $this->_option = MiwoVideos::getInput()->getCmd('option');
-        }
+		$this->_mainframe = MFactory::getApplication();
+		if ($this->_mainframe->isAdmin()) {
+			$this->_option = MiwoVideos::get('utility')->findOption();
+		}
+		else {
+			$this->_option = MiwoVideos::getInput()->getCmd('option');
+		}
 
-        $this->_view = MiwoVideos::getInput()->getCmd('view');
+		$this->_view = MiwoVideos::getInput()->getCmd('view');
 
 		# Get toolbar object
-        if ($this->_mainframe->isAdmin()) {
-		    $this->toolbar = MToolBar::getInstance();
-        }
+		if ($this->_mainframe->isAdmin()) {
+			$this->toolbar = MToolBar::getInstance();
+		}
 
 		$this->document = MFactory::getDocument();
 
-        $tmpl = $this->_mainframe->getTemplate();
+		$tmpl = $this->_mainframe->getTemplate();
 
 		# Template CSS
-        if (file_exists(MPATH_WP_CNT.'/themes/'. $tmpl .'/html/com_miwovideos/assets/css/stylesheet.css') and !MiwoVideos::isDashboard()) {
-            $this->document->addStyleSheet(MURL_WP_CNT.'/themes/'. $tmpl .'/html/com_miwovideos/assets/css/stylesheet.css');
-            if(MiwoVideos::is30()) {
-                MHtml::_('jquery.framework');
-            }
-            $this->document->addScript(MURL_WP_CNT.'/themes/'. $tmpl .'/html/com_miwovideos/assets/js/watchlater.js');
-            $color = MiwoVideos::getConfig()->get('override_color');
-            $color1 = '#'.dechex(hexdec($color) - 1379346);
-            $color2 = '#'.dechex(hexdec($color) + 654582);
-            $color3 = '#'.dechex(hexdec($color) + 1967870);
-            $css = '.subscribe {
+		if (file_exists(MPATH_WP_CNT.'/themes/'.$tmpl.'/html/com_miwovideos/assets/css/stylesheet.css') and !MiwoVideos::isDashboard()) {
+			$this->document->addStyleSheet(MURL_WP_CNT.'/themes/'.$tmpl.'/html/com_miwovideos/assets/css/stylesheet.css');
+			if (MiwoVideos::is30()) {
+				MHtml::_('jquery.framework');
+			}
+			$color  = MiwoVideos::getConfig()->get('override_color');
+			$color1 = '#'.dechex(hexdec($color) - 1379346);
+			$color2 = '#'.dechex(hexdec($color) + 654582);
+			$color3 = '#'.dechex(hexdec($color) + 1967870);
+			$css    = '.subscribe {
                         background-color:'.$color.' !important;
                         background-image: -webkit-gradient(linear, 0 0, 0 100%, from('.$color1.'), to('.$color2.'));
                         background-image: -webkit-linear-gradient(to top, '.$color1.' 0%, '.$color2.' 100%);
@@ -99,172 +98,176 @@ class MiwovideosView extends MiwisoftView {
                     .vjs-default-skin .vjs-play-progress {
                         background: '.$color.' !important;
                     }';
-            $this->document->addStyleDeclaration($css);
+			$this->document->addStyleDeclaration($css);
 
-        }
-        # Component CSS
-        else {
-            if ($this->_mainframe->isAdmin()) {
-                $this->document->addStyleSheet(MURL_MIWOVIDEOS.'/admin/assets/css/miwovideos.css');
-            } else {
-                $this->document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/miwovideos.css');
-            }
-        }
+		}
+		# Component CSS
+		else {
+			if ($this->_mainframe->isAdmin()) {
+				$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/admin/assets/css/miwovideos.css');
+			}
+			else {
+				$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/miwovideos.css');
+			}
+		}
 
-        if (MiwoVideos::is30()) {
-            if ($this->_mainframe->isAdmin()) {
-                $this->document->addStyleSheet(MURL_MIWOVIDEOS.'/admin/assets/css/j3.css');
-                MHtml::_('formbehavior.chosen', 'select');
-            } else {
-                $this->document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/j3.css');
-            }
-        }
-        else {
-            if ($this->_mainframe->isAdmin()) {
-                $this->document->addStyleSheet(MURL_MIWOVIDEOS.'/admin/assets/css/j2.css');
-                $this->document->addStyleSheet(MURL_MIWOVIDEOS.'/admin/assets/css/table.css');
-            } else {
-                $this->document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/j2.css');
-            }
-        }
+		if (MiwoVideos::is30()) {
+			if ($this->_mainframe->isAdmin()) {
+				$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/admin/assets/css/j3.css');
+				MHtml::_('formbehavior.chosen', 'select');
+			}
+			else {
+				$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/j3.css');
+			}
+		}
+		else {
+			if ($this->_mainframe->isAdmin()) {
+				$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/admin/assets/css/j2.css');
+				$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/admin/assets/css/table.css');
+			}
+			else {
+				$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/j2.css');
+			}
+		}
 
 		if (MiwoVideos::isDashboard()) {
-            $this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/adminform.js');
-        }
+			$this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/adminform.js');
+		}
 
 		if ($this->_mainframe->isSite()) {
-            // Load first jQuery lib
-            if(MiwoVideos::is30()) {
-                MHtml::_('jquery.framework');
-                MHtml::_('behavior.framework');
-            }
-            $this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/thumbnail.js');
+			// Load first jQuery lib
+			if (MiwoVideos::is30()) {
+				MHtml::_('jquery.framework');
+				MHtml::_('behavior.framework');
+			}
+			$this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/thumbnail.js');
+			$this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/watchlater.js');
 			$this->document->setBase(MUri::root());
 		}
 
-        $this->acl = MiwoVideos::get('acl');
+		$this->acl    = MiwoVideos::get('acl');
 		$this->config = MiwoVideos::getConfig();
-        $this->Itemid = MiwoVideos::getInput()->getInt('Itemid', 0);
+		$this->Itemid = MiwoVideos::getInput()->getInt('Itemid', 0);
 	}
-	
+
 	public function getIcon($i, $task, $img, $check_acl = false) {
-        if ($check_acl and !$this->acl->canEditState()) {
-            $html = '<img src="'.MURL_MIWOVIDEOS.'/admin/assets/images/'.$img.'" border="0" />';
-        }
-        else {
-            $html = '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.$i.'\',\''.$task.'\')">';
-            $html .= '<img src="'.MURL_MIWOVIDEOS.'/admin/assets/images/'.$img.'" border="0" />';
-            $html .= '</a>';
-        }
+		if ($check_acl and !$this->acl->canEditState()) {
+			$html = '<img src="'.MURL_MIWOVIDEOS.'/admin/assets/images/'.$img.'" border="0" />';
+		}
+		else {
+			$html = '<a href="javascript:void(0);" onclick="return listItemTask(\'cb'.$i.'\',\''.$task.'\')">';
+			$html .= '<img src="'.MURL_MIWOVIDEOS.'/admin/assets/images/'.$img.'" border="0" />';
+			$html .= '</a>';
+		}
 
 		return $html;
 	}
 
-    public function loadForeignTemplate($view, $layout = 'default', $function = 'display') {
-        $type = 'html';
+	public function loadForeignTemplate($view, $layout = 'default', $function = 'display') {
+		$type = 'html';
 
-        $task = MiwoVideos::getInput()->getCmd('task', '');
-        $tasks = array('add', 'edit', 'apply', 'save2new');
-        if (in_array($task, $tasks)/* and ($view != 'upload') and ($view != 'files')*/) {
-            //$type = 'edit';
-        }
+		$task  = MiwoVideos::getInput()->getCmd('task', '');
+		$tasks = array('add', 'edit', 'apply', 'save2new');
+		if (in_array($task, $tasks) /* and ($view != 'upload') and ($view != 'files')*/) {
+			//$type = 'edit';
+		}
 
-        $location = MPATH_MIWOVIDEOS_ADMIN;
-        if ($this->_mainframe->isSite()) {
-            $location = MPATH_MIWOVIDEOS;
-        }
+		$location = MPATH_MIWOVIDEOS_ADMIN;
+		if ($this->_mainframe->isSite()) {
+			$location = MPATH_MIWOVIDEOS;
+		}
 
-        $path = $location.'/views/'.$view.'/view.'.$type.'.php';
+		$path = $location.'/views/'.$view.'/view.'.$type.'.php';
 
-        if (file_exists($path)) {
-            require_once $path;
-        }
-        else {
-            return null;
-        }
+		if (file_exists($path)) {
+			require_once $path;
+		}
+		else {
+			return null;
+		}
 
-        $view_name = 'MiwovideosView'.ucfirst($view);
-        $model_name = 'MiwovideosModel'.ucfirst($view);
+		$view_name  = 'MiwovideosView'.ucfirst($view);
+		$model_name = 'MiwovideosModel'.ucfirst($view);
 
-        $options['name'] = $view;
-        $options['layout'] = $layout;
-        $options['base_path'] = $location;
+		$options['name']      = $view;
+		$options['layout']    = $layout;
+		$options['base_path'] = $location;
 
-        $view = new $view_name($options);
+		$_view = new $view_name($options);
 
-        $model_file = $location.'/models/'.$view.'.php';
-        if (file_exists($model_file)) {
-            require_once($model_file);
+		$model_file = $location.'/models/'.$view.'.php';
+		if (file_exists($model_file)) {
+			require_once($model_file);
 
-            $model = new $model_name();
+			$model = new $model_name();
 
-            $view->setModel($model, true);
-        }
+			$_view->setModel($model, true);
+		}
 
-        if (MiwoVideos::is30()) {
-            MHtml::_('formbehavior.chosen', 'select');
-        }
+		if (MiwoVideos::is30()) {
+			MHtml::_('formbehavior.chosen', 'select');
+		}
 
-        $tpl = null;
-        if ($layout != 'default') {
-            $tpl = $layout;
-        }
+		$tpl = null;
+		if ($layout != 'default') {
+			$tpl = $layout;
+		}
 
-        ob_start();
+		ob_start();
 
-        $view->$function($tpl);
+		$_view->$function($tpl);
 
-        $output = ob_get_contents();
-        ob_end_clean();
+		$output = ob_get_contents();
+		ob_end_clean();
 
-        return $output;
-    }
+		return $output;
+	}
 
-    public function display($tpl = null) {
-        $is_dashboard = MiwoVideos::isDashboard();
+	public function display($tpl = null) {
+		$is_dashboard = MiwoVideos::isDashboard();
 
-        if ($is_dashboard) {
-            $result = $this->loadDashboardTemplate($tpl);
+		if ($is_dashboard) {
+			$result = $this->loadDashboardTemplate($tpl);
 
-            if ($result instanceof Exception) {
-                return $result;
-            }
+			if ($result instanceof Exception) {
+				return $result;
+			}
 
-            echo $result;
-        }
-        else {
-            parent::display($tpl);
-        }
-    }
+			echo $result;
+		}
+		else {
+			parent::display($tpl);
+		}
+	}
 
-    public function loadDashboardTemplate($tpl = null) {
-        $this->_output = null;
+	public function loadDashboardTemplate($tpl = null) {
+		$this->_output = null;
 
-        $view = $this->_view;
-        if ($view == 'dashboard') {
-            $view = 'miwovideos';
-        }
+		$view = $this->_view;
+		if ($view == 'dashboard') {
+			$view = 'miwovideos';
+		}
 
-        $layout = $this->getLayout();
+		$layout = $this->getLayout();
 
-        // Create the template file name based on the layout
-        $file = isset($tpl) ? $layout . '_' . $tpl : $layout;
-        $file = preg_replace('/[^A-Z0-9_\.-]/i', '', $file);
+		// Create the template file name based on the layout
+		$file = isset($tpl) ? $layout.'_'.$tpl : $layout;
+		$file = preg_replace('/[^A-Z0-9_\.-]/i', '', $file);
 
-        $template_path = MPATH_MIWOVIDEOS_ADMIN . '/views/' . $view . '/tmpl/' . $file . '.php';
+		$template_path = MPATH_MIWOVIDEOS_ADMIN.'/views/'.$view.'/tmpl/'.$file.'.php';
 
-        if (file_exists($template_path)) {
-            ob_start();
+		if (file_exists($template_path)) {
+			ob_start();
 
-            include($template_path);
+			include($template_path);
 
-            $this->_output = ob_get_contents();
-            ob_end_clean();
+			$this->_output = ob_get_contents();
+			ob_end_clean();
 
-            return $this->_output;
-        }
-        else {
-            throw new Exception(MText::sprintf('MLIB_APPLICATION_ERROR_LAYOUTFILE_NOT_FOUND', $file), 500);
-        }
-    }
+			return $this->_output;
+		}
+		else {
+			throw new Exception(MText::sprintf('MLIB_APPLICATION_ERROR_LAYOUTFILE_NOT_FOUND', $file), 500);
+		}
+	}
 }

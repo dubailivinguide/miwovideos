@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        MiwoVideos
- * @copyright      Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license        GNU General Public License version 2 or later
  */
 # No Permission
@@ -60,80 +60,131 @@ class MiwovideosModelMiwovideos extends MiwovideosModel {
 		static $info;
 
 		if (!isset($info)) {
-			$info = array();
+			$cache = MFactory::getCache('com_miwovideos', 'output');
+			$cache->setCaching(1);
 
-			if ($this->config->get('version_checker') == 1) {
-				$utility                   = MiwoVideos::get('utility');
-				$info['version_installed'] = $utility->getMiwovideosVersion();
-				$info['version_latest']    = $utility->getLatestMiwovideosVersion();
+			$info = $cache->get('mv_info', 'com_miwovideos');
 
-				# Set the version status
-				$info['version_status']  = version_compare($info['version_installed'], $info['version_latest']);
-				$info['version_enabled'] = 1;
-			}
-			else {
-				$info['version_status']  = 0;
-				$info['version_enabled'] = 0;
-			}
+			if (empty($info)) {
+				$info = array();
 
-			$info['pid'] = $this->config->get('pid');
+				if ($this->config->get('version_checker') == 1) {
+					$utility                   = MiwoVideos::get('utility');
+					$info['version_installed'] = $utility->getMiwovideosVersion();
+					$info['version_latest']    = $utility->getLatestMiwovideosVersion();
 
-			$version = MiwoVideos::get('utility')->getFfmpegVersion();
+					# Set the version status
+					$info['version_status']  = version_compare($info['version_installed'], $info['version_latest']);
+					$info['version_enabled'] = 1;
+				}
+				else {
+					$info['version_status']  = 0;
+					$info['version_enabled'] = 0;
+				}
 
-			$server   = array();
-			$server[] = array(
-				'name'  => 'FFmpeg',
-				'value' => $version ? $version : MText::_('MNO')
-			);
-			$server[] = array(
-				'name'  => 'allow_fileuploads',
-				'value' => ini_get('file_uploads') ? MText::_('MYES') : MText::_('MNO')
-			);
-			$server[] = array('name' => 'upload_max_filesize', 'value' => ini_get('upload_max_filesize'));
-			$server[] = array('name' => 'max_input_time', 'value' => ini_get('max_input_time'));
-			$server[] = array('name' => 'memory_limit', 'value' => ini_get('memory_limit'));
-			$server[] = array('name' => 'max_execution_time', 'value' => ini_get('max_execution_time'));
-			$server[] = array('name' => 'post_max_size', 'value' => ini_get('post_max_size'));
-			$server[] = array(
-				'name'  => 'upload_folder_permission',
-				'value' => (is_writable(MIWOVIDEOS_UPLOAD_DIR.'/')) ? MText::_('MYES') : MText::_('MNO')
-			);
-			$server[] = array(
-				'name'  => 'curl',
-				'value' => (extension_loaded('curl')) ? MText::_('MYES') : MText::_('MNO')
-			);
-			$server[] = array(
-				'name'  => 'exec',
-				'value' => (function_exists('exec')) ? MText::_('MYES') : MText::_('MNO')
-			);
-			$server[] = array('name' => 'php-cli', 'value' => $this->checkPhpCli());
-			if ($this->config->get('perl_upload')) {
+				$info['pid'] = $this->config->get('pid');
+
+				$version = MiwoVideos::get('utility')->getFfmpegVersion();
+
+				$server   = array();
 				$server[] = array(
-					'name'  => 'ubr_upload script',
-					'value' => ($this->isUrlExist($this->config->get('uber_upload_perl_url'))) ? MText::_('MYES') : MText::_('MNO')
+					'name'  => 'FFmpeg',
+					'value' => $version ? $version : MText::_('MNO')
 				);
+				$server[] = array(
+					'name'  => 'allow_fileuploads',
+					'value' => ini_get('file_uploads') ? MText::_('MYES') : MText::_('MNO')
+				);
+				$server[] = array('name' => 'upload_max_filesize', 'value' => ini_get('upload_max_filesize'));
+				$server[] = array('name' => 'max_input_time', 'value' => ini_get('max_input_time'));
+				$server[] = array('name' => 'memory_limit', 'value' => ini_get('memory_limit'));
+				$server[] = array('name' => 'max_execution_time', 'value' => ini_get('max_execution_time'));
+				$server[] = array('name' => 'post_max_size', 'value' => ini_get('post_max_size'));
+				$server[] = array(
+					'name'  => 'upload_folder_permission',
+					'value' => (is_writable(MIWOVIDEOS_UPLOAD_DIR.'/')) ? MText::_('MYES') : MText::_('MNO')
+				);
+				$server[] = array(
+					'name'  => 'curl',
+					'value' => (extension_loaded('curl')) ? MText::_('MYES') : MText::_('MNO')
+				);
+				$server[] = array(
+					'name'  => 'exec',
+					'value' => (function_exists('exec')) ? MText::_('MYES') : MText::_('MNO')
+				);
+				$server[] = array(
+					'name'  => 'flvtool2',
+					'value' => $this->checkFlvtool2()
+				);
+				$server[] = array(
+					'name'  => 'yamdi',
+					'value' => $this->checkYamdi()
+				);
+				$server[] = array('name' => 'php-cli', 'value' => $this->checkPhpCli());
+				if ($this->config->get('perl_upload')) {
+					$server[] = array(
+						'name'  => 'ubr_upload script',
+						'value' => ($this->isUrlExist($this->config->get('uber_upload_perl_url'))) ? MText::_('MYES') : MText::_('MNO')
+					);
+				}
+				$info['server'] = $server;
+				$cache->store($info, 'mv_info', 'com_miwovideos');
 			}
-
-			$info['server'] = $server;
-
 		}
 
 		return $info;
 	}
 
+	public function checkFlvtool2() {
+		if (substr(PHP_OS, 0, 3) != "WIN") {
+			@exec("which flvtool2 2>&1", $output, $error);
+		}
+		else {
+			@exec("where flvtool2.exe", $output, $error);
+		}
+
+		MiwoVideos::log($output);
+		MiwoVideos::log($error);
+
+		if (!$error) {
+			return $output[0];
+		}
+		else {
+			return MText::_('MNO');
+		}
+	}
+
+	public function checkYamdi() {
+		if (substr(PHP_OS, 0, 3) != "WIN") {
+			@exec("which yamdi 2>&1", $output, $error);
+		}
+		else {
+			@exec("where yamdi", $output, $error);
+		}
+
+		MiwoVideos::log($output);
+		MiwoVideos::log($error);
+
+		if (!$error) {
+			return $output[0];
+		}
+		else {
+			return MText::_('MNO');
+		}
+	}
+
 	public function checkPhpCli() {
 		$config = MiwoVideos::getConfig();
 		if (substr(PHP_OS, 0, 3) != "WIN") {
-			// @TODO Log if throw an error
-			@exec($config->get('php_path', '/usr/bin/php')." -v 2>&1", $output, $error);
+			$command = $config->get('php_path', '/usr/bin/php')." -v 2>&1";
 		}
 		else {
 			@exec('where php.exe', $php_path);
-			// @TODO Log if throw an error
-			@exec($config->get('php_path', $php_path)." -v", $output, $error);
+			$command = $config->get('php_path', $php_path)." -v";
 		}
 
-		MiwoVideos::log('CLI : ');
+		@exec($command, $output, $error);
+		MiwoVideos::log('CLI : '.$command);
 		MiwoVideos::log($output);
 		MiwoVideos::log($error);
 

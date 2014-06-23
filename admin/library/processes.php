@@ -1,7 +1,7 @@
 <?php
 /**
  * @package		MiwoVideos
- * @copyright	Copyright  ( C ) 2009-2014 Miwisoft, LLC. All rights reserved.
+ * @copyright	Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license		GNU General Public License version 2 or later
  */
 # No Permission
@@ -69,7 +69,7 @@ class MiwovideosProcesses {
                 $item->load($task->video_id);
                 switch ($task->process_type) {
                     case 22 :
-                        return true;//$result = $videos_lib->processInjectMetadata($task, $task->filetype, $item->source);
+                        $result = $videos_lib->injectMetadata($task);
                         break;
                     case 23 :
                         $result = $videos_lib->checkMoovAtoms($task);

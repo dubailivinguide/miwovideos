@@ -1,7 +1,7 @@
 <?php
 /**
  * @package        MiwoVideos
- * @copyright      2009-2014 Miwisoft LLC, miwisoft.com
+ * @copyright      Copyright (C) 2009-2014 Miwisoft, LLC. All rights reserved.
  * @license        GNU General Public License version 2 or later
  */
 # No Permission
@@ -18,11 +18,12 @@ class MiwovideosModelConfig extends MiwovideosModel {
         $config = MiwoVideos::getConfig();
 
         // General
-        $config->set('version_checker', MRequest::getVar('version_checker', 1, 'post', 'int'));
-        $config->set('pid', MRequest::getVar('pid', '', 'post', 'string'));
-        $config->set('jusersync', MRequest::getVar('jusersync', $config->get('jusersync', 0), 'post', 'int'));
-        $config->set('log', MRequest::getVar('log', 0, 'post', 'int'));
-        $config->set('categories', MRequest::getVar('categories', 1, 'post', 'int'));
+	    $config->set('pid', MRequest::getVar('pid', '', 'post', 'string'));
+	    $config->set('version_checker', MRequest::getVar('version_checker', 1, 'post', 'int'));
+	    $config->set('show_db_errors', MRequest::getVar('show_db_errors', 0, 'post', 'int'));
+	    $config->set('log', MRequest::getVar('log', 0, 'post', 'int'));
+	    $config->set('jusersync', MRequest::getVar('jusersync', $config->get('jusersync', 0), 'post', 'int'));
+	    $config->set('categories', MRequest::getVar('categories', 1, 'post', 'int'));
         $config->set('playlists', MRequest::getVar('playlists', 1, 'post', 'int'));
         $config->set('tags', MRequest::getVar('tags', 1, 'post', 'int'));
         $config->set('subscriptions', MRequest::getVar('subscriptions', 1, 'post', 'int'));
@@ -30,7 +31,7 @@ class MiwovideosModelConfig extends MiwovideosModel {
         $config->set('custom_fields', MRequest::getVar('custom_fields', 1, 'post', 'int'));
         $config->set('reports', MRequest::getVar('reports', 1, 'post', 'int'));
         $config->set('comments', MRequest::getVar('comments', 0, 'post', 'string'));
-        $config->set('list', MRequest::getVar('list', 0, 'post', 'string'));
+        $config->set('cdn', MRequest::getVar('cdn', 0, 'post', 'string'));
 
         // Frontend
         $config->set('button_class', MRequest::getVar('button_class', 'miwovideos_button', 'post', 'string'));
@@ -49,7 +50,8 @@ class MiwovideosModelConfig extends MiwovideosModel {
 
         // Player
         $config->set('video_player', MRequest::getVar('video_player', 'videojs', 'post', 'string'));
-        $config->set('video_quality', MRequest::getVar('video_quality', 480, 'post', 'int'));
+	    $config->set('fallback', MRequest::getVar('fallback', 0, 'post', 'int'));
+	    $config->set('video_quality', MRequest::getVar('video_quality', 480, 'post', 'int'));
         $config->set('autoplay', MRequest::getVar('autoplay', 1, 'post', 'int'));
 
         // Upload
@@ -67,7 +69,8 @@ class MiwovideosModelConfig extends MiwovideosModel {
         $config->set('watermark', MRequest::getVar('watermark', 1, 'post', 'int'));
         $config->set('watermark_position', MRequest::getVar('watermark_position', 4, 'post', 'int'));
         $config->set('watermark_path', MRequest::getVar('watermark_path', '', 'post', 'string'));
-        $config->set('jpeg_75', MRequest::getVar('jpeg_75', 1, 'post', 'int'));
+	    $config->set('metadata_injector', MRequest::getVar('metadata_injector', 'yamdi', 'post', 'string'));
+	    $config->set('jpeg_75', MRequest::getVar('jpeg_75', 1, 'post', 'int'));
         $config->set('jpeg_100', MRequest::getVar('jpeg_100', 1, 'post', 'int'));
         $config->set('jpeg_240', MRequest::getVar('jpeg_240', 1, 'post', 'int'));
         $config->set('jpeg_500', MRequest::getVar('jpeg_500', 1, 'post', 'int'));
@@ -88,11 +91,18 @@ class MiwovideosModelConfig extends MiwovideosModel {
         $config->set('ogg_480p', MRequest::getVar('ogg_480p', 1, 'post', 'int'));
         $config->set('ogg_720p', MRequest::getVar('ogg_720p', 1, 'post', 'int'));
         $config->set('ogg_1080p', MRequest::getVar('ogg_1080p', 1, 'post', 'int'));
+        $config->set('flv_240p', MRequest::getVar('flv_240p', 1, 'post', 'int'));
+        $config->set('flv_360p', MRequest::getVar('flv_360p', 1, 'post', 'int'));
+        $config->set('flv_480p', MRequest::getVar('flv_480p', 1, 'post', 'int'));
+        $config->set('flv_720p', MRequest::getVar('flv_720p', 1, 'post', 'int'));
+        $config->set('flv_1080p', MRequest::getVar('flv_1080p', 1, 'post', 'int'));
 
         // Server
-	    $config->set('php_path', MRequest::getVar('php_path', '/usr/local/php', 'post', 'string'));
+	    $config->set('php_path', MRequest::getVar('php_path', '/usr/bin/php', 'post', 'string'));
         $config->set('ffmpeg_path', MRequest::getVar('ffmpeg_path', '/usr/local/bin/ffmpeg', 'post', 'string'));
         $config->set('qt_faststart_path', MRequest::getVar('qt_faststart_path', '/usr/local/bin/qt-faststart', 'post', 'string'));
+        $config->set('flvtool2_path', MRequest::getVar('flvtool2_path', '/usr/bin/yamdi_path', 'post', 'string'));
+        $config->set('yamdi_path', MRequest::getVar('yamdi_path', '/usr/bin/yamdi_path', 'post', 'string'));
         $config->set('uber_upload_perl_url', MRequest::getVar('uber_upload_perl_url', '', 'post', 'string'));
         $config->set('uber_upload_tmp_path', MRequest::getVar('uber_upload_tmp_path', '/tmp/ubr_temp/', 'post', 'string'));
 
