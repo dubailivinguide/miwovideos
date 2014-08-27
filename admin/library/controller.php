@@ -465,13 +465,6 @@ class MiwovideosController extends MiwisoftController {
             $post['user_id'] = $user_id;
         }
 
-
-        if (MiwoVideos::get('channels')->getChannels($post['user_id']) > 0) {
-			$msg = MText::sprintf('MLIB_X_PRO_MEMBERS', 'Multi-Channel') . ". ";
-			$msg .= MText::sprintf('MLIB_PRO_MEMBERS_DESC', 'http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos#pricing', 'MiwoVideos');
-			self::route($msg, $post);
-			return MError::raiseWarning(500, MText::_('COM_MIWOVIDEOS_COMMON_RECORD_SAVED_NOT'));
-		}
         $table = ucfirst($this->_component).ucfirst($this->_context);
         $row = MiwoVideos::getTable($table);
         $row->load($post['id']);

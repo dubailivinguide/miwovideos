@@ -84,6 +84,17 @@ class MiwovideosControllerChannels extends MiwoVideosController {
         # Return
         self::route();
     }
+	
+	public function save() {
+		if (MiwoVideos::get('channels')->getChannels(MFactory::getUser()->get('id')) > 0) {
+			$post = MRequest::get('post', MREQUEST_ALLOWRAW);
+			$msg = MText::sprintf('MLIB_X_PRO_MEMBERS', 'Multi-Channel') . ". ";
+			$msg .= MText::sprintf('MLIB_PRO_MEMBERS_DESC', 'http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos#pricing', 'MiwoVideos');
+			self::route($msg, $post);
+			return MError::raiseWarning(500, MText::_('COM_MIWOVIDEOS_COMMON_RECORD_SAVED_NOT'));
+		}
+		parent::save();
+	}
 
     public function delete() {
         # Check token
