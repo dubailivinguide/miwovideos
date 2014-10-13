@@ -13,5 +13,7 @@ jQuery(window).load(function() {
             this.setStyle('margin-top', margin + 'px');
         });
     }
+	
+	jQuery('.miwovideos_iframe_youtube').height(jQuery('.miwovideos_iframe_youtube').width()*0.5625);
 });
 

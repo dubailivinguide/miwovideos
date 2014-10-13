@@ -44,12 +44,14 @@
 }
 
 #miwovideos_playlist li span {
-    float       : left;
-    font-size   : 10px;
-    margin-left : 10px;
-    max-height  : 40px;
-    max-width   : 65%;
-    overflow    : hidden;
+    float          : left;
+    font-size      : 10px;
+    margin-left    : 10px;
+    max-height     : 40px;
+    max-width      : 65%;
+    overflow       : hidden;
+    width          : 100%;
+    letter-spacing : 0px;
 }
 
 #miwovideos_playlist li div {

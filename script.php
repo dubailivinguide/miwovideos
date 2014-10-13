@@ -106,19 +106,21 @@ class com_MiwovideosInstallerScript {
 		$config->comments        = '0';
 		$config->cdn             = '0';
 		# Front-end
-		$config->button_class       = MiwoVideos::is30() ? 'btn button-primary' : 'miwovideos_button';
-		$config->override_color     = '#dc2f2c';
-		$config->videos_per_page    = '6';
-		$config->load_plugins       = '0';
-		$config->show_empty_cat     = '1';
-		$config->show_number_videos = '1';
-		$config->order_videos       = '2';
-		$config->listing_style      = 'grid';
-		$config->title_truncation   = '20';
-		$config->desc_truncation    = '150';
-		$config->thumb_size         = '3'; // Small Image
-		$config->thumb_aspect       = '43';
-		$config->items_per_column   = '3';
+		$config->button_class          = MiwoVideos::is30() ? 'btn button-primary' : 'miwovideos_button';
+		$config->override_color        = '#dc2f2c';
+		$config->videos_per_page       = '6';
+		$config->load_plugins          = '0';
+		$config->show_related_carousel = '0';
+		$config->total_related_videos  = '9';
+		$config->show_empty_cat        = '1';
+		$config->show_number_videos    = '1';
+		$config->order_videos          = 'v.ordering';
+		$config->listing_style         = 'grid';
+		$config->title_truncation      = '20';
+		$config->desc_truncation       = '150';
+		$config->thumb_size            = '3'; // Small Image
+		$config->thumb_aspect          = '43';
+		$config->items_per_column      = '3';
 		# Player
 		$config->video_player  = 'videojs';
 		$config->fallback      = '0';
@@ -298,6 +300,10 @@ class com_MiwovideosInstallerScript {
 								(28, 'Flv (480p)', 'flv-480p', 'flv', '480', '28', '1'),
 								(29, 'Flv (720p)', 'flv-720p', 'flv', '720', '29', '1'),
 								(30, 'Flv (1080p)', 'flv-1080p', 'flv', '1080', '30', '1');");
+		}
+
+		if ($this->_current_version < '1.1.2') {
+			MiwoDB::query("ALTER TABLE `#__miwovideos_videos` ADD ordering INT(0) DEFAULT '0' AFTER published");
 		}
 	}
 

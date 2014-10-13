@@ -1517,22 +1517,64 @@ class MiwovideosUtility {
 	}
 
 	public function getThumbPath($id, $view, $thumb, $size = null, $type = 'url') {
-		if (empty($size)) {
-			$size = $this->getThumbSize($this->config->get('thumb_size'));
-		}
-		if ($thumb and file_exists(MIWOVIDEOS_UPLOAD_DIR.'/images/'.$view.'/'.$id.'/'.$size.'/'.$thumb)) {
-			$ret = '/miwovideos/images/'.$view.'/'.$id.'/'.$size.'/'.$thumb;
-		}
-		else {
-			if (strpos($thumb, 'http://') !== false or strpos($thumb, 'https://') !== false) {
-				$ret = $thumb;
+		if (empty($thumb)) {
+			if ($view == 'channels') {
+				$ret = '/miwovideos/images/'.$view.'/default/default.jpg';
 			}
 			else {
-				if ($view == 'channels') {
-					$ret = '/miwovideos/images/'.$view.'/default/default.jpg';
+				if (empty($size)) {
+					$size = $this->getThumbSize($this->config->get('thumb_size'));
+				}
+				$ret = '/miwovideos/images/default/default'.$size.'.jpg';
+			}
+		}
+		else {
+			if (empty($size)) {
+				$size = $this->getThumbSize($this->config->get('thumb_size'));
+			}
+			if (file_exists(MIWOVIDEOS_UPLOAD_DIR.'/images/'.$view.'/'.$id.'/'.$size.'/'.$thumb)) {
+				$ret = '/miwovideos/images/'.$view.'/'.$id.'/'.$size.'/'.$thumb;
+			}
+			else {
+				if (strpos($thumb, 'http://') !== false or strpos($thumb, 'https://') !== false) {
+					$ret = $thumb;
 				}
 				else {
-					$ret = '/miwovideos/images/default/default'.$size.'.jpg';
+					$_sizes = array(75, 100, 240, 500, 640, 1024);
+					while (current($_sizes) !== $size) {
+						next($_sizes);
+					}
+
+					$val = prev($_sizes);
+					if (file_exists(MIWOVIDEOS_UPLOAD_DIR.'/images/'.$view.'/'.$id.'/'.$val.'/'.$thumb)) {
+						$ret = '/miwovideos/images/'.$view.'/'.$id.'/'.$val.'/'.$thumb;
+						$key = array_search($val, $_sizes);
+						unset($_sizes[ $key ]);
+					}
+					next($_sizes);
+					$val = next($_sizes);
+					if (!isset($ret) and file_exists(MIWOVIDEOS_UPLOAD_DIR.'/images/'.$view.'/'.$id.'/'.$val.'/'.$thumb)) {
+						$ret = '/miwovideos/images/'.$view.'/'.$id.'/'.$val.'/'.$thumb;
+						$key = array_search($val, $_sizes);
+						unset($_sizes[ $key ]);
+					}
+
+					if (!isset($ret)) {
+						reset($_sizes);
+						foreach ($_sizes as $_size) {
+							if (!isset($ret) and file_exists(MIWOVIDEOS_UPLOAD_DIR.'/images/'.$view.'/'.$id.'/'.$_size.'/'.$thumb)) {
+								$ret = '/miwovideos/images/'.$view.'/'.$id.'/'.$_size.'/'.$thumb;
+								break;
+							}
+
+							if ($view == 'channels') {
+								$ret = '/miwovideos/images/channels/default/default.jpg';
+							}
+							else {
+								$ret = '/miwovideos/images/default/default'.$size.'.jpg';
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1612,16 +1654,11 @@ class MiwovideosUtility {
 
 		if (empty($result) or empty($watch_later_id)) {
 			$html = '<button class="video_watch_later_button miwovideos_video'.$id.'" onclick="return false;">';
-			if (!empty($override) and $override == 'dailymotion') {
-				$html .= '<div class="video_watch_later miwovideos_watch_later'.$watch_later_id.'">'.MText::_('COM_MIWOVIDEOS_WATCH_LATER').'</div>';
+			$html .= '<div class="video_watch_later miwovideos_watch_later'.$watch_later_id.'">';
+			if ($override == 'vimeo') {
+				$html .= '<i class="fa fa-clock-o"></i>';
 			}
-			else {
-				$html .= '<div class="video_watch_later miwovideos_watch_later'.$watch_later_id.'">';
-				if ($override == 'vimeo') {
-					$html .= '<i class="fa fa-clock-o"></i>';
-				}
-				$html .= '</div>';
-			}
+			$html .= '</div>';
 			$html .= '</button>';
 		}
 		else {
@@ -1810,7 +1847,7 @@ class MiwovideosUtility {
 			$cli = MPATH_MIWI.'/cli/miwovideoscli.php';
 			if (substr(PHP_OS, 0, 3) != "WIN") {
 				// @TODO Log if throw an error
-				$command = "env -i ".$this->config->get('php_path', '/usr/bin/php')." $cli convertToHtml5 ".$id." ".$filename." 2>&1";
+				$command = "env -i ".$this->config->get('php_path', '/usr/bin/php')." $cli convertToHtml5 ".$id." ".$filename." > /dev/null 2>&1 &";
 			}
 			else {
 				@exec('where php.exe', $php_path);

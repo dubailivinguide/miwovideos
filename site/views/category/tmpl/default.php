@@ -45,8 +45,8 @@ if (!empty($this->categories)) {
 
 		<?php
 		foreach ($this->categories as $category) {
-
-			$link = MRoute::_('index.php?option=com_miwovideos&view=category&category_id='.$category->id.$this->Itemid);
+			$Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'category', 'category_id' => $category->id), null, true);
+			$link   = MRoute::_('index.php?option=com_miwovideos&view=category&category_id='.$category->id.$Itemid);
 			?>
 
 			<div class="miwovideos_box">
@@ -100,7 +100,8 @@ if (!empty($this->categories)) {
 				<h2 class="miwovideos_title"><?php echo MText::_('COM_MIWOVIDEOS_VIDEOS'); ?></h2>
 				<?php
 				foreach ($this->items as $item) {
-					$url       = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$item->id.$this->Itemid);
+					$Itemid    = MiwoVideos::get('router')->getItemid(array('view' => 'video', 'video_id' => $item->id), null, true);
+					$url       = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$item->id.$Itemid);
 					$template  = MFactory::getApplication()->getTemplate();
 					$ovrr_path = MPATH_WP_CNT.'/themes/'.$template.'/html/com_miwovideos/video/common.php';
 

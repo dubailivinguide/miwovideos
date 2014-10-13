@@ -141,7 +141,13 @@ class MiwovideosView extends MiwisoftView {
 				MHtml::_('behavior.framework');
 			}
 			$this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/thumbnail.js');
-			$this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/watchlater.js');
+			if (file_exists(MPATH_WP_CNT.'/themes/'.$tmpl.'/html/com_miwovideos/assets/js/watchlater.js') and !MiwoVideos::isDashboard()) {
+				$this->document->addScript(MURL_WP_CNT.'/themes/'.$tmpl.'/html/com_miwovideos/assets/js/watchlater.js');
+			}
+			else {
+				$this->document->addScript(MURL_MIWOVIDEOS.'/site/assets/js/watchlater.js');
+			}
+
 			$this->document->setBase(MUri::root());
 		}
 

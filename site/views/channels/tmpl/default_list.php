@@ -35,9 +35,8 @@ if (count($this->items)) {
 		<?php
 		$i = $k = 0;
 		foreach ($this->items as $item) {
-			$this->Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'channel', 'channel_id' => $item->id), null, true);
-
-			$url = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.$item->id.$this->Itemid);
+			$Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'channel', 'channel_id' => $item->id), null, true);
+			$url    = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.$item->id.$Itemid);
 			?>
 			<tr class="cat-list-row-<?php echo $i % 2; ?>">
 				<td>

@@ -29,8 +29,14 @@
 				<field name="show_channel" type="list" default="0" label="Show channel" description="Choose whether to show or hide channel of videos.">
 					<option value="1">Yes</option>	
 					<option value="0">No</option>	
-				</field>		
+				</field>
+				<field name="show_description" type="list" default="0" label="Show description" description="Choose whether to show or hide description of videos.">
+					<option value="1">Yes</option>
+					<option value="0">No</option>
+				</field>
 				<field name="number_videos" type="text" default="6" label="Number of Videos" description="Number of videos to be shown." />
+				<field name="thumb_width" type="text" default="130" label="Thumbnail Width(px)" description="Thumbnail Width(px)" />
+				<field name="thumb_height" type="text" default="100" label="Thumbnail Height(px)" description="Thumbnail Height(px)" />
 				<field name="item_id" type="text" default="" label="ItemID" description="Menu Item ID" />
 			</fieldset>
 		</fields>		

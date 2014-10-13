@@ -18,18 +18,19 @@ class MiwovideosModelCategory extends MiwovideosModel {
 	public function _buildViewQuery() {
 		$where = $this->_buildViewWhere();
 
-		if ($this->config->get('order_videos') == 2) {
-			$orderby = ' ORDER BY v.created ';
+		$orderby = MiwoVideos::getConfig()->get('order_videos', 'v.title');
+		if ($orderby == 'v.hits' or $orderby == 'v.likes') {
+			$order_dir = ' DESC';
 		}
 		else {
-			$orderby = ' ORDER BY v.ordering ';
+			$order_dir = ' ASC';
 		}
 
 		$this->_query = 'SELECT v.* '
 		                .' FROM #__miwovideos_videos AS v '
 		                .$where
 		                .' GROUP BY v.id '
-		                .$orderby;
+		                .' ORDER BY '.$orderby.$order_dir;
 	}
 
 	public function _buildViewWhere() {

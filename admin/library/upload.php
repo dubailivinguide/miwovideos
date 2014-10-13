@@ -152,6 +152,8 @@ class MiwovideosUpload extends MObject {
 
 		$this->addProcesses($row);
 
+		MiwoVideos::get('utility')->trigger('onFinderAfterSave', array('com_miwovideos.videos', $row->id, null), 'finder');
+
 		return true;
 	}
 
@@ -269,7 +271,7 @@ class MiwovideosUpload extends MObject {
 		$output = '';
 		if (substr(PHP_OS, 0, 3) != "WIN") {
 			// @TODO Log if throw an error
-			$command = "env -i ".$this->config->get('php_path', '/usr/bin/php')." $cli process ".implode(" ", $processes)." 2>&1";
+			$command = "env -i ".$this->config->get('php_path', '/usr/bin/php')." $cli process ".implode(" ", $processes)." > /dev/null 2>&1 &";
 		}
 		else {
 			@exec('where php.exe', $php_path);
@@ -665,6 +667,7 @@ class MiwovideosUpload extends MObject {
 	}
 
 	
+
 
 
 

@@ -50,12 +50,24 @@ class MiwovideosViewVideo extends MiwovideosView {
 			$cats = Miwovideos::get('utility')->getCategories($item->category_id);
 
 			if (!empty($cats)) {
-				asort($cats);
+				$break = false;
 				foreach ($cats as $cat) {
-					$Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'category', 'category_id' => $cat->id), null, true);
+					if (isset($active_menu->query['category_id']) and $active_menu->query['category_id'] == $cat->id) {
+						$break = true;
+					}
+				}
 
-					$path_url = MRoute::_('index.php?option=com_miwovideos&view=category&category_id='.$cat->id.$Itemid);
-					$pathway->addItem($cat->title, $path_url);
+				if (!$break) {
+					asort($cats);
+					foreach ($cats as $cat) {
+						if (isset($active_menu->query['category_id']) and array_search($active_menu->query['category_id'], $cats)) {
+							break;
+						}
+						$Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'category', 'category_id' => $cat->id), null, true);
+
+						$path_url = MRoute::_('index.php?option=com_miwovideos&view=category&category_id='.$cat->id.$Itemid);
+						$pathway->addItem($cat->title, $path_url);
+					}
 				}
 
 				$pathway->addItem($item->title);
@@ -84,17 +96,18 @@ class MiwovideosViewVideo extends MiwovideosView {
 
 		MHtml::_('behavior.modal');
 
-		//$playlist_order	    = $this->_mainframe->getUserStateFromRequest('com_miwovideos.history.playlist_order',         'playlist_order',             'title_za',  'cmd');
+		$filter_order     = $this->_mainframe->getUserStateFromRequest('com_miwovideos.playlists.filter_order', 'filter_order', 'p.created', 'cmd');
+		$filter_order_Dir = $this->_mainframe->getUserStateFromRequest('com_miwovideos.playlists.filter_order_Dir', 'filter_order_Dir', 'DESC', 'word');
 
 		$options   = array();
-		$options[] = MHtml::_('select.option', 'title_az', MText::_('COM_MIWOVIDEOS_TITLE_AZ'));
-		$options[] = MHtml::_('select.option', 'title_za', MText::_('COM_MIWOVIDEOS_TITLE_ZA'));
-		$options[] = MHtml::_('select.option', 'access', MText::_('COM_MIWOVIDEOS_ACCESS'));
-		$options[] = MHtml::_('select.option', 'created_on', MText::_('COM_MIWOVIDEOS_DATE_CREATED_O_N'));
-		$options[] = MHtml::_('select.option', 'created_no', MText::_('COM_MIWOVIDEOS_DATE_CREATED_N_O'));
+		$options[] = MHtml::_('select.option', 'p.title_asc', MText::_('COM_MIWOVIDEOS_TITLE_AZ'));
+		$options[] = MHtml::_('select.option', 'p.title_desc', MText::_('COM_MIWOVIDEOS_TITLE_ZA'));
+		$options[] = MHtml::_('select.option', 'p.access', MText::_('COM_MIWOVIDEOS_ACCESS'));
+		$options[] = MHtml::_('select.option', 'p.created_asc', MText::_('COM_MIWOVIDEOS_DATE_CREATED_O_N'));
+		$options[] = MHtml::_('select.option', 'p.created_desc', MText::_('COM_MIWOVIDEOS_DATE_CREATED_N_O'));
 
-		$lists                   = array();
-		$lists['playlist_order'] = MHtml::_('select.genericlist', $options, 'playlist_order', ' class="inputbox" style="width: 150px; margin:0;" onchange="ajaxOrder();" ', 'value', 'text');
+		$lists                 = array();
+		$lists['filter_order'] = MHtml::_('select.genericlist', $options, 'filter_order', ' class="inputbox" style="width: 150px; margin:0;" onchange="ajaxOrder();" ', 'value', 'text', $filter_order.'_'.strtolower($filter_order_Dir));
 
 
 		$options   = array();

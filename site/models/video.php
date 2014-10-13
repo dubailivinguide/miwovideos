@@ -102,7 +102,7 @@ class MiwovideosModelVideo extends MiwovideosModel {
 		$result = MiwoDB::loadObjectList("SELECT v.*
                             FROM #__miwovideos_videos v
                             LEFT JOIN #__miwovideos_playlist_videos pv ON (pv.video_id=v.id)"
-		                                 .$this->_buildViewWhere());
+		                                 .$this->_buildViewWhere().' ORDER BY pv.ordering ASC');
 
 		return $result;
 	}

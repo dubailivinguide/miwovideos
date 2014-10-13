@@ -25,6 +25,7 @@ class TableMiwovideosVideos extends MTable {
     public $modified							= null;
     public $featured							= 0;
     public $published							= 1;
+    public $ordering							= 0;
     public $fields								= null;
     public $thumb								= null;
     public $meta_desc 							= '';

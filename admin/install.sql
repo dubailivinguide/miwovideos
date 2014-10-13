@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS `#__miwovideos_categories` (
 
 INSERT IGNORE INTO `#__miwovideos_categories` (`id`, `parent`, `title`, `alias`, `description`, `thumb`, `introtext`, `fulltext`, `ordering`, `access`, `language`, `created`, `modified`, `type`, `meta_desc`, `meta_key`, `meta_author`, `published`)
 VALUES
-  (1, '0', 'Uncategorised', 'uncategorised', NULL, '', '', NULL, '1', '1', '*', NOW(), NOW(), NULL, NULL, NULL, NULL, '1'),
+  (1, '0', 'Uncategorised', 'uncategorised', NULL, '', '', NULL, '1', '1', '*', NOW(), NOW(), NULL, NULL, NULL, NULL,
+   '1'),
   (2, '0', 'Technology', 'technology', NULL, 'technology.jpg',
    'This category is created by MiwoVideos as sample data,you can change or delete it.',
    NULL, '1', '1', '*', NOW(), NOW(), NULL, NULL, NULL, NULL, '1'),
@@ -314,6 +315,7 @@ CREATE TABLE IF NOT EXISTS `#__miwovideos_videos` (
   `modified`    DATETIME            NOT NULL DEFAULT '0000-00-00 00:00:00',
   `featured`    TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
   `published`   TINYINT(3)          NOT NULL DEFAULT '1',
+  `ordering`    INT(11) DEFAULT '0',
   `fields`      TEXT DEFAULT NULL,
   `thumb`       VARCHAR(255) DEFAULT NULL,
   `meta_desc`   VARCHAR(1024) DEFAULT NULL,

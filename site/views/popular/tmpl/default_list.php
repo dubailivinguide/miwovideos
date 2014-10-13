@@ -11,8 +11,10 @@ if (count($this->items)) {
 	$utility    = MiwoVideos::get('utility');
 	$thumb_size = $utility->getThumbSize($this->config->get('thumb_size'));
 	foreach ($this->items as $item) {
-		$url         = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$item->id.$this->Itemid);
-		$channel_url = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.$item->channel_id.$this->Itemid); ?>
+		$Itemid      = MiwoVideos::get('router')->getItemid(array('view' => 'video', 'video_id' => $item->id), null, true);
+		$url         = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$item->id.$Itemid);
+		$Itemid      = MiwoVideos::get('router')->getItemid(array('view' => 'channel', 'channel_id' => $item->channel_id), null, true);
+		$channel_url = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.$item->channel_id.$Itemid); ?>
 		<div class="videos-items-list-box">
 			<div class="videos-list-item" style="width: <?php echo $thumb_size; ?>px">
 				<div class="videos-aspect<?php echo $this->config->get('thumb_aspect'); ?>"></div>
@@ -61,8 +63,8 @@ if (count($this->items)) {
 		var box_width = document.getElementById("video_items").offsetWidth;
 		var thumb_size = <?php echo $thumb_size; ?>;
 		var thumb_percent = Math.round((thumb_size / box_width) * 100);
-		var desc_percent = 100 - thumb_percent - 3;
-		jQuery('div[class^="videos-items-list-box-content"]').css('width', desc_percent + '%');
-		jQuery('div[class^="videos-list-item"]').css('width', thumb_percent + '%');
+		var desc_percent = 100-thumb_percent-3;
+		jQuery('div[class^="videos-items-list-box-content"]').css('width', desc_percent+'%');
+		jQuery('div[class^="videos-list-item"]').css('width', thumb_percent+'%');
 	});
 </script>

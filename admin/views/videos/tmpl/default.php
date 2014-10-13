@@ -9,6 +9,7 @@ defined('MIWI') or die;
 
 MHtml::_('behavior.modal');
 $utility = MiwoVideos::get('utility');
+$ordering = ($this->lists['order'] == 'v.ordering');
 ?>
 <form action="<?php echo MRoute::getActiveUrl(); ?>" method="post" name="adminForm" id="adminForm">
 	<?php if (MiwoVideos::isDashboard()) { ?>
@@ -105,6 +106,12 @@ $utility = MiwoVideos::get('utility');
 						<?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_FEATURE'), 'v.featured', $this->lists['order_Dir'], $this->lists['order']); ?>
 					</th>
 				<?php } ?>
+				<th width="5%" style="text-align: right;">
+					<?php echo MHtml::_('grid.sort', MText::_('MGRID_HEADING_ORDERING'), 'v.ordering', $this->lists['order_Dir'], $this->lists['order']); ?>
+					<?php if ($ordering) { ?>
+						<?php echo MHtml::_('grid.order', $this->items, 'filesave.png', 'saveOrder'); ?>
+					<?php } ?>
+				</th>
 				
 
 
@@ -189,6 +196,14 @@ $utility = MiwoVideos::get('utility');
 							<?php echo $featured; ?>
 						</td>
 					<?php } ?>
+					<td class="ordering" style="text-align: right;">
+						<?php if ($ordering) { ?>
+							<span><?php echo $this->pagination->orderUpIcon($i, true,'orderup', 'Move Up', $ordering ); ?></span>
+							<span><?php echo $this->pagination->orderDownIcon($i, $n, true, 'orderdown', 'Move Down', $ordering ); ?></span>
+						<?php } ?>
+						<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
+						<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" style="text-align: center; width: 30px;" <?php echo $disabled; ?> />
+					</td>
 					
 
 

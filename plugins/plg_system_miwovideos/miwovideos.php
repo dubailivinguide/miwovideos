@@ -17,7 +17,7 @@ class plgSystemMiwovideos extends MPlugin {
 		
             $ui_folder = MURL_WP_CNT.'/miwi/media/jui';
 
-            if ($app->isAdmin()) {
+            if ($app->isAdmin() or MiwoVideos::isDashboard()) {
                 $document->addScript($ui_folder.'/js/jquery-ui-1.10.4.custom.min.js');
                 $document->addStyleSheet($ui_folder.'/css/jquery-ui-1.10.4.custom.min.css');
 

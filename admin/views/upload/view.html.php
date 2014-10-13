@@ -29,7 +29,8 @@ class MiwovideosViewUpload extends MiwovideosView {
 			$this->document->addStyleSheet(MURL_MIWOVIDEOS.'/site/assets/css/dropzone.css');
 		}
 
-		
+		if ($this->_mainframe->isAdmin()) {
+			
 
 
 
@@ -93,6 +94,7 @@ class MiwovideosViewUpload extends MiwovideosView {
 
 
 
+		}
 
 		parent::display($tpl);
 	}

@@ -13,7 +13,8 @@ if (count($this->items)) {
 	}
 	$utility = MiwoVideos::get('utility');
 	foreach ($this->items as $item) {
-		$url = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.$item->id.$this->Itemid); ?>
+		$Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'channel', 'channel_id' => $item->id), null, true);
+		$url    = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.$item->id.$Itemid); ?>
 		<div class="miwovideos_channels_grid">
 			<a href="<?php echo $url; ?>">
 				<img class="miwovideos_channels_box_content_img2" src="<?php echo $utility->getThumbPath($item->id, 'channels', $item->thumb); ?>" title="<?php echo $item->title; ?>" alt="<?php echo $item->title; ?>"/>
@@ -38,8 +39,10 @@ if (count($this->items)) {
 									</div>
 									<div style="visibility:hidden" class="subs_nub"><s></s><i></i></div>
 									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribed" id="unsubscribe_button"><?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBED'); ?></a>
-								<?php }
-								else { ?>
+								<?php
+								}
+								else {
+									?>
 									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribe" id="subscribe_button">
 										<?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBE'); ?>
 									</a>
@@ -49,8 +52,10 @@ if (count($this->items)) {
 									<div class="subs_nub"><s></s><i></i></div>
 									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribed" style="display:none" id="unsubscribe_button"><?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBED'); ?></a>
 								<?php } ?>
-							<?php }
-							else { ?>
+							<?php
+							}
+							else {
+								?>
 								<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribe" id="subscribe_button">
 									<?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBE'); ?>
 								</a>
@@ -67,7 +72,8 @@ if (count($this->items)) {
 				<div class="miwovideos_preview_videos">
 					<div class="miwovideos_preview_videos_title"><?php echo MText::_('COM_MIWOVIDEOS_PREVIEW_VIDEOS'); ?></div>
 					<?php foreach ($item->videos as $video) { ?>
-						<?php $url = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$video->id.$this->Itemid); ?>
+						<?php $Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'video', 'video_id' => $video->id), null, true); ?>
+						<?php $url = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$video->id.$Itemid); ?>
 						<div class="miwovideos_preview">
 							<a href="<?php echo $url; ?>">
 								<img class="miwovideos_thumb_100" src="<?php echo $utility->getThumbPath($video->id, 'videos', $video->thumb); ?>" title="<?php echo $video->title; ?>" alt="<?php echo $video->title; ?>"/>

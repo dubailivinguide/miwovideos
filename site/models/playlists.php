@@ -12,30 +12,17 @@ class MiwovideosModelPlaylists extends MiwovideosModel {
 	public function __construct() {
 		parent::__construct('playlists');
 
-		$this->_getUserStates();
-		$this->_buildViewQuery();
+		if (MRequest::getWord('view') == 'playlists' or MRequest::getWord('filter_videos') == 'playlists') {
+			$this->_getUserStates();
+			$this->_buildViewQuery();
+		}
 	}
 
 	public function _getUserStates() {
 		$this->filter_order     = parent::_getSecureUserState($this->_option.'.'.$this->_context.'.filter_order', 'filter_order', 'p.title', 'cmd');
 		$this->filter_order_Dir = parent::_getSecureUserState($this->_option.'.'.$this->_context.'.filter_order_Dir', 'filter_order_Dir', 'DESC', 'word');
-		/* Filter fix */
-		//$filter_videos = $this->_mainframe->getUserStateFromRequest($this->_option . '.' . $this->_context . '.filter_videos',		'filter_videos',	        'uploads',		    'string');
-		//if ($filter_videos == 'playlists') {
-		$this->filter_order = str_replace('created_on', 'p.created', $this->filter_order);
-		if ($this->filter_order == 'p.created') {
-			$this->filter_order_Dir = 'ASC';
-		}
-		$this->filter_order = str_replace('title_az', 'p.title', $this->filter_order);
-		if ($this->filter_order == 'p.title') {
-			$this->filter_order_Dir = 'ASC';
-		}
-		$this->filter_order = str_replace('created_no', 'p.created', $this->filter_order);
-		$this->filter_order = str_replace('title_za', 'p.title', $this->filter_order);
-		//}
-		/* Filter fix */
-		$this->search = parent::_getSecureUserState($this->_option.'.'.$this->_context.'.miwovideos_search', 'miwovideos_search', '', 'string');
-		$this->search = MString::strtolower($this->search);
+		$this->search           = parent::_getSecureUserState($this->_option.'.'.$this->_context.'.miwovideos_search', 'miwovideos_search', '', 'string');
+		$this->search           = MString::strtolower($this->search);
 	}
 
 	public function _buildViewQuery() {
@@ -132,7 +119,11 @@ class MiwovideosModelPlaylists extends MiwovideosModel {
 	public function getChannelPlaylists() {
 		$user_id    = MFactory::getUser()->id;
 		$channel_id = MiwoVideos::get('channels')->getDefaultChannel()->id;
-		$rows       = MiwoDB::loadObjectList("SELECT p.* FROM #__miwovideos_playlists p WHERE p.user_id = ".$user_id." and p.channel_id =".$channel_id);
+		$orderby    = "";
+		if (!empty($this->filter_order) and !empty($this->filter_order_Dir)) {
+			$orderby = " ORDER BY {$this->filter_order} {$this->filter_order_Dir}";
+		}
+		$rows = MiwoDB::loadObjectList("SELECT p.* FROM #__miwovideos_playlists p WHERE p.user_id = ".$user_id." AND p.channel_id =".$channel_id.$orderby);
 
 		foreach ($rows as $row) {
 			$row->total  = $this->_totalPlaylistVideos($row->id);

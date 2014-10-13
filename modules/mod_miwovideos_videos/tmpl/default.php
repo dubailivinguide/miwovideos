@@ -21,15 +21,20 @@ if (count($rows)) {
 			?>	
 				<tr class="<?php echo $tab; ?>">
 					<td class="eb_video">
+						<div>
+							<a href="<?php echo MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$row->id . $Itemid); ?>">
+								<img class="miwovideos-module-thumbs" style="width: <?php echo $width; ?>px; height: <?php echo $height; ?>px" src="<?php echo $utility->getThumbPath($row->id, 'videos', $row->thumb); ?>" title="<?php echo $row->title; ?>" alt="<?php echo $row->title; ?>"/>
+							</a>
+						</div>
 						<a href="<?php echo MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$row->id . $Itemid); ?>" class="miwovideos_video_link">
                             <?php echo htmlspecialchars(MHtmlString::truncate($row->title, $config->get('title_truncation'), false, false)); ?>
                         </a>
 						<br />
 						<span class="created"><?php echo MHtml::_('date', $row->created, $config->get('date_format'), null); ?></span>
 						<?php
-							if ($showCategory) {
+							if ($showCategory and !empty($row->categories)) {
 							?>
-								<br />		
+								<br />
 								<span><?php echo MText::_('COM_MIWOVIDEOS_CATEGORY'); ?>:&nbsp;&nbsp;<?php echo $row->categories; ?></span>
 							<?php	
 							}
@@ -47,7 +52,15 @@ if (count($rows)) {
                                 </span>
 							<?php	 
 							}
-						?>											
+						?>
+
+							<?php if ($showDescription and !empty($row->introtext)) {
+							?>
+								<br />
+                                <span><?php echo htmlspecialchars(MHtmlString::truncate($row->introtext, $config->get('desc_truncation'), false, false), ENT_COMPAT, 'UTF-8'); ?></span>
+							<?php
+							}
+						?>
 					</td>
 				</tr>
 			<?php

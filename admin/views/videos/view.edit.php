@@ -67,26 +67,16 @@ class MiwovideosViewVideos extends MiwovideosView {
 		));
 
         if (MiwoVideos::is31()) {
-            // Tags field ajax
-            $chosenAjaxSettings = new MRegistry(
-                array(
-                    'selector'    => '#tags',
-                    'type'        => 'GET',
-                    'url'         => MUri::root() . 'index.php?option=com_tags&task=tags.searchAjax',
-                    'dataType'    => 'json',
-                    'jsonTermKey' => 'like'
-                )
-            );
-            MHtml::_('formbehavior.ajaxchosen', $chosenAjaxSettings);
+            MHtml::_('tag.ajaxfield', '#tags', true);
 
             $item_tags = MiwoVideos::get('videos')->getTags($item->id, false, true);
 
             $lists['tags'] = MHtml::_('select.genericlist', $item_tags, 'tags[]', array(
                     'option.text.toHtml'=> false ,
-                    'option.text' 		=> 'text',
-                    'option.value' 		=> 'value',
-                    'list.attr' 		=> 'class="inputbox" size="5" multiple="multiple"',
-                    'list.select' 		=> $item_tags
+                    'option.text'   => 'text',
+                    'option.value'   => 'value',
+                    'list.attr'   => 'class="inputbox" size="5" multiple="multiple"',
+                    'list.select'   => $item_tags
             ));
         }
 
@@ -110,5 +100,10 @@ class MiwovideosViewVideos extends MiwovideosView {
         $this->availableFields = MiwoVideos::get('fields')->getAvailableFields();
 				
 		parent::display($tpl);				
+	}
+
+	public function displayPreview() {
+		$item = $this->get('EditData');
+		echo MiwoVideos::get('videos')->getPlayer($item);
 	}
 }

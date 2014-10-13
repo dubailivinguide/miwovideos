@@ -22,7 +22,12 @@ class MiwovideosControllerVideos extends MiwoVideosController {
 	    $view->setModel($videos_model, true);
 	    $processes_model = $this->getModel('processes');
 	    $view->setModel($processes_model);
-        $view->display('edit');
+	    if (MRequest::getWord('layout') == 'preview') {
+		    $view->displayPreview('edit');
+	    }
+	    else {
+		    $view->display('edit');
+	    }
     }
 
 	public function save() {
@@ -81,6 +86,8 @@ class MiwovideosControllerVideos extends MiwoVideosController {
             $msg = MText::_('COM_MIWOVIDEOS_VIDEO_SAVE_ERROR');
         }
 
+		MiwoVideos::get('utility')->trigger('onFinderAfterSave', array('com_miwovideos.videos', $post['id'], null), 'finder');
+
 		parent::route($msg, $post);
 
         return $msg;
@@ -119,6 +126,8 @@ class MiwovideosControllerVideos extends MiwoVideosController {
                 MFolder::delete(MIWOVIDEOS_UPLOAD_DIR.'/images/videos/'.$id);
 
             }
+
+	        MiwoVideos::get('utility')->trigger('onFinderAfterDelete', array('com_miwovideos.videos', $id), 'finder');
         }
 
         $del_row = $this->deleteRecord($this->_table, $this->_model);
@@ -157,6 +166,9 @@ class MiwovideosControllerVideos extends MiwoVideosController {
         # Action
         self::updateField($this->_table, 'featured', 1, $this->_model);
 
+	    # Trigger
+	    $this->trigger();
+
         # Return
         self::route();
     }
@@ -169,7 +181,25 @@ class MiwovideosControllerVideos extends MiwoVideosController {
         # Action
         self::updateField($this->_table, 'featured', 0, $this->_model);
 
+	    # Trigger
+	    $this->trigger();
+
         # Return
         self::route();
     }
+
+	public function publish() {
+		$this->trigger();
+		parent::publish();
+	}
+
+	public function unpublish() {
+		$this->trigger();
+		parent::unpublish();
+	}
+
+	protected function trigger() {
+		$cid = MRequest::getVar('cid', array(), 'post');
+		MiwoVideos::get('utility')->trigger('onFinderAfterSave', array('com_miwovideos.videos', $cid[0], null), 'finder');
+	}
 }

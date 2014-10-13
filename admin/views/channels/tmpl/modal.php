@@ -27,9 +27,6 @@ $function	= 'jSelectChannel_'.$field;
 
 
 
-                &nbsp;&nbsp;&nbsp;
-	</fieldset>
-
     <div id="editcell">
         <table class="wp-list-table widefat">
             <thead>
@@ -125,9 +122,9 @@ $function	= 'jSelectChannel_'.$field;
                             <?php echo $featured; ?>
                         </td>
 
-                        <td class="text_center">
-                            <?php echo $this->levels[$row->access]->title; ?>
-                        </td>
+                        
+
+
 
                         <td class="text_center">
                             <?php echo $row->hits; ?>

@@ -19,7 +19,8 @@ if (count($this->items)) {
             $thumb = $utility->getThumbPath($video_id, 'videos', $item->videos[0]->thumb);
         }
 		$url = MRoute::_('index.php?option=com_miwovideos&view=video&video_id='.$video_id.'&playlist_id='.$item->id.$this->Itemid);
-		$channel_url = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.$item->channel_id.$this->Itemid); ?>
+	    $Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'channel', 'channel_id' => $item->channel_id), null, true);
+	    $channel_url = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.$item->channel_id.$Itemid); ?>
         <div class="miwovideos_column<?php echo $this->config->get('items_per_column'); ?>">
             <div class="videos-grid-item">
                 <div class="videos-aspect<?php echo $this->config->get('thumb_aspect'); ?>"></div>

@@ -38,9 +38,11 @@ class MiwovideosModelConfig extends MiwovideosModel {
         $config->set('override_color', MRequest::getVar('override_color', '#dc2f2c', 'post', 'string'));
         $config->set('videos_per_page', MRequest::getVar('videos_per_page', 6, 'post', 'int'));
         $config->set('load_plugins', MRequest::getVar('load_plugins', 0, 'post', 'int'));
+        $config->set('show_related_carousel', MRequest::getVar('show_related_carousel', 0, 'post', 'int'));
+        $config->set('total_related_videos', MRequest::getVar('total_related_videos', 9, 'post', 'int'));
         $config->set('show_empty_cat', MRequest::getVar('show_empty_cat', 0, 'post', 'int'));
         $config->set('show_number_videos', MRequest::getVar('show_number_videos', 1, 'post', 'int'));
-        $config->set('order_videos', MRequest::getVar('order_videos', 2, 'post', 'int'));
+        $config->set('order_videos', MRequest::getVar('order_videos', 'v.ordering', 'post', 'string'));
         $config->set('listing_style', MRequest::getVar('listing_style', 'grid', 'post', 'string'));
         $config->set('title_truncation', MRequest::getVar('title_truncation', 20, 'post', 'int'));
         $config->set('desc_truncation', MRequest::getVar('desc_truncation', 150, 'post', 'imt'));

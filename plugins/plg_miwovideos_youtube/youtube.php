@@ -25,7 +25,8 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
             $autoplay = $config->get('autoplay');
         }
 
-        $this->width = '100%'; //$config->get('video_width');
+        $this->width = '100%';
+        $this->height = '100%';
         if ($config->get('video_height')) {
             $this->height = $config->get('video_height');
         } else {
@@ -41,9 +42,12 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
         if (isset($ytvars['cc_lang_pref'])) $params->set('cc_lang_pref', $ytvars['cc_lang_pref']);
         if (isset($ytvars['hl'])) $params->set('hl', $ytvars['hl']);
 
-        if ($config->get('video_player') != 'flowplayer' and $params->get('play_local') == 1) {
-            $plugin = MiwoVideos::getPlugin($config->get('video_player'));
+	    $plugin = MiwoVideos::getPlugin($config->get('video_player'));
+	    if (empty($plugin)) {
+		    $params->set('play_local', 0);
+	    }
 
+        if ($config->get('video_player') != 'flowplayer' and $params->get('play_local') == 1) {
             $pluginParams = new MRegistry();
             $pluginParams->loadString($plugin->params);
             $pluginParams->set('id', $id);
@@ -67,9 +71,9 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
 
         ob_start();
         ?>
-        <iframe class="miwovideos_iframe_youtube" width="<?php echo $this->width; ?>" height="<?php echo $this->height; ?>"
+        <iframe class="miwovideos_iframe_youtube" style="width: <?php echo $this->width; ?>; border: none;" height="<?php echo $this->height; ?>"
                 src="<?php echo MUri::getInstance()->getScheme(); ?>://www.youtube.com/embed/<?php echo $id; ?>?wmode=opaque&amp;autoplay=<?php echo $autoplay; ?>&amp;autohide=<?php echo $params->get('autohide', 2); ?>&amp;border=<?php echo $params->get('border', 0); ?>&amp;cc_load_policy=<?php echo $params->get('cc_load_policy', 1); ?>&amp;cc_lang_pref=<?php echo $params->get('cc_lang_pref', 'en'); ?>&amp;hl=<?php echo $params->get('hl', 'en'); ?>&amp;color=<?php echo $params->get('color', 'red'); ?>&amp;color1=<?php echo $params->get('color1'); ?>&amp;color2=<?php echo $params->get('color2'); ?>&amp;controls=<?php echo $params->get('controls', 1); ?>&amp;fs=<?php echo $params->get('fs', 1); ?>&amp;hd=<?php echo $params->get('hd', 0); ?>&amp;iv_load_policy=<?php echo $params->get('iv_load_policy', 1); ?>&amp;modestbranding=<?php echo $params->get('modestbranding', 1); ?>&amp;rel=<?php echo $params->get('rel', 1); ?>&amp;theme=<?php echo $params->get('theme', 'dark'); ?>"
-                frameborder="0" allowfullscreen></iframe>
+                allowfullscreen></iframe>
         <?php
         $output = ob_get_contents();
         ob_end_clean();
@@ -88,8 +92,7 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
     }
 
     public function getThumbnail() {
-        $thumbnail = $this->parse($this->url, 'hqthumb');
-
+        $thumbnail = $this->getContent('image');
         return $thumbnail;
     }
 

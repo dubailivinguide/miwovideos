@@ -21,12 +21,9 @@ $utility = MiwoVideos::get('utility');
 			<input type="text" name="search" id="search" value="<?php echo $this->lists['search']; ?>" class="text_area search-query" onchange="document.adminForm.submit();"/>
 			<button onclick="this.form.submit();" class="button"><?php echo MText::_('Go'); ?></button>
 			<button onclick="document.getElementById('search').value='';this.form.submit();" class="button"><?php echo MText::_('Reset'); ?></button>
-			<button onclick="this.form.submit();" class="button"><?php echo MText::_('Filter'); ?></button>
-		</div>
-	</fieldset>
-			<?php echo $this->lists['bulk_actions']; ?>
-                <button onclick="Miwi.submitform(document.getElementById('bulk_actions').value);" class="button"><?php echo MText::_('Apply'); ?></button>
-                &nbsp;&nbsp;&nbsp;
+			
+
+
 
 	<div id="editcell">
 		<table class="wp-list-table widefat">
@@ -60,9 +57,9 @@ $utility = MiwoVideos::get('utility');
 						<?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_FEATURE'), 'v.featured', $this->lists['order_Dir'], $this->lists['order']); ?>
 					</th>
 				<?php } ?>
-				<th width="10%" style="text-align: center;">
-					<?php echo MHtml::_('grid.sort', 'MGRID_HEADING_ACCESS', 'v.access', $this->lists['order_Dir'], $this->lists['order']); ?>
-				</th>
+				
+
+
 				<th width="90px" style="text-align: center;">
 					<?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_DATE_CREATED'), 'v.created', $this->lists['order_Dir'], $this->lists['order']); ?>
 				</th>
@@ -89,7 +86,7 @@ $utility = MiwoVideos::get('utility');
 			<?php
 			$i      = $k = 0;
 			$config = MiwoVideos::getConfig();
-			foreach ($this->linkedVideos as $row) {
+			foreach ($this->get('LinkedVideos') as $row) {
 				$link         = $utility->route('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$row->id);
 				$channel_link = $utility->route('index.php?option=com_miwovideos&view=channels&task=edit&cid[]='.$row->channel_id);
 				$checked      = MHtml::_('grid.id', $i, $row->id);
@@ -100,9 +97,9 @@ $utility = MiwoVideos::get('utility');
 				$featured     = MHtml::_('image', MURL_MIWOVIDEOS.'/admin/assets/images/'.$img, '', null, true);
 				?>
 				<tr class="<?php echo "row$k"; ?>">
-					<td style="vertical-align: middle">
-						<?php echo $this->pagination->getRowOffset($i); ?>
-					</td>
+
+
+
 					<td style="vertical-align: middle">
 						<?php echo $checked; ?>
 					</td>
@@ -146,9 +143,9 @@ $utility = MiwoVideos::get('utility');
 							<?php echo $featured; ?>
 						</td>
 					<?php } ?>
-					<td class="center" style="vertical-align: middle">
-						<?php echo $this->levels[ $row->access ]->title; ?>
-					</td>
+					
+
+
 					<td style="text-align: center; vertical-align: middle;">
 						<?php echo MHtml::_('date', $row->created, MText::_('DATE_FORMAT_LC4')); ?>
 					</td>

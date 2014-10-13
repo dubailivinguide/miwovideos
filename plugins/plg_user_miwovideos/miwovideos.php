@@ -166,12 +166,12 @@ class plgUserMiwovideos extends MPlugin {
 
         # Add Watch Later
         $db->setQuery("INSERT INTO `#__miwovideos_playlists` (`channel_id`, `user_id`, `type`, `title`, `alias`, `introtext`, `fulltext`, `thumb`, `fields`,`likes`, `dislikes`, `hits`, `subscriptions`, `params`, `ordering`, `access`, `language`, `created`, `modified`, `meta_desc`, `meta_key`, `meta_author`, `share_others`, `featured`, `published`) VALUES
-        ({$channel_id}, {$user->ID}, 1, 'Watch Later', '', '', '', '', '', '', 0, 0, 0, '', '', 1, '*', NOW(), NOW(), '', '', '', 0, 0, {$published})");
+        ({$channel_id}, {$user->ID}, 1, 'Watch Later', 'watch-later', '', '', '', '', '', 0, 0, 0, '', '', 1, '*', NOW(), NOW(), '', '', '', 0, 0, {$published})");
         $db->execute();
 
         # Add Favorite Videos
         $db->setQuery("INSERT INTO `#__miwovideos_playlists` (`channel_id`, `user_id`,  `type`, `title`, `alias`, `introtext`, `fulltext`, `thumb`, `fields`,`likes`, `dislikes`, `hits`, `subscriptions`, `params`, `ordering`, `access`, `language`, `created`, `modified`, `meta_desc`, `meta_key`, `meta_author`, `share_others`, `featured`, `published`) VALUES
-        ({$channel_id}, {$user->ID}, 2, 'Favorite Videos', '', '', '', '', '', '', 0, 0, 0, '', '', 1, '*', NOW(), NOW(), '', '', '', 0, 0, {$published})");
+        ({$channel_id}, {$user->ID}, 2, 'Favorite Videos', 'favorite-videos', '', '', '', '', '', 0, 0, 0, '', '', 1, '*', NOW(), NOW(), '', '', '', 0, 0, {$published})");
         $db->execute();
 
         return true;

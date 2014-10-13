@@ -27,7 +27,7 @@ defined('MIWI') or die ; ?>
 
 <?php echo MHtml::_('tabs.panel', MText::_('COM_MIWOVIDEOS_EMBED'), 'sl_embed'); ?>
     <textarea class="miwovideos_embed">
-        <?php echo "<iframe width=\"600\" height=\"360\" src=\"".MUri::root().MRoute::_("index.php?option=com_miwovideos&view=video&video_id=".$this->item->id.$this->Itemid."&layout=player&tmpl=component")."\" frameborder=\"0\" allowfullscreen></iframe>"; ?>
+        <?php echo "<iframe width=\"600\" height=\"360\" src=\"".rtrim(MUri::root(), '/').MRoute::_("index.php?option=com_miwovideos&view=video&video_id=".$this->item->id.$this->Itemid."&layout=player&tmpl=component")."\" frameborder=\"0\" allowfullscreen></iframe>"; ?>
     </textarea>
 
 <?php echo MHtml::_('tabs.end'); ?>

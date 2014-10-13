@@ -200,7 +200,43 @@ $utility = MiwoVideos::get('utility');
 		else { ?>
 			<input type="hidden" name="published" value="<?php echo $this->item->published; ?>"/>
 			<input type="hidden" name="featured" value="<?php echo $this->item->featured; ?>"/>
-            <?php } ?>
+		<?php } ?>
+		<tr>
+			<td class="key2">
+				<?php echo MText::_('COM_MIWOVIDEOS_VIDEO_PREVIEW')?>
+			</td>
+			<td class="value2">
+				<?php MHtml::_('behavior.modal', 'a.modal_preview');
+				$dashboard = '';
+				if ($utility->isDashboard()) {
+					$dashboard = '&amp;dashboard=1';
+				}
+				$link = MRoute::_('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$this->item->id.'&layout=preview&tmpl=component'.$dashboard); ?>
+				<div style="display: inline-block">
+					<a class="modal_preview btn button-primary" title="<?php echo MText::_('COM_MIWOVIDEOS_PREVIEW'); ?>" href="<?php echo $link; ?>" rel="{handler: 'iframe', size: {x: 800, y: 500}}">
+						<?php echo MText::_('COM_MIWOVIDEOS_PREVIEW'); ?>
+					</a>
+				</div>
+			</td>
+		</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -360,7 +396,7 @@ $utility = MiwoVideos::get('utility');
 	<!-- Files Settings -->
 	<?php if ($this->acl->canAdmin()) { ?>
 		<?php echo MHtml::_('tabs.panel', MText::_('COM_MIWOVIDEOS_CPANEL_FILES'), 'files'); ?>
-		<?php echo $this->loadTemplate('files'); ?>
+		<?php echo $this->loadDashboardTemplate('files'); ?>
 	<?php } ?>
 
 	<!-- Meta Settings -->

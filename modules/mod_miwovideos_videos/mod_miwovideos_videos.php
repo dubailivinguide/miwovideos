@@ -15,11 +15,13 @@ $document 	= MFactory::getDocument();
 $app 		= MFactory::getApplication();
 $utility    = MiwoVideos::get('utility');
 $config 	= MiwoVideos::getConfig();
-
+$width = $params->get('thumb_width', 130);
+$height = $params->get('thumb_height', 100);
 $numberVideos = $params->get('number_videos', 6);
 $categoryIds = $params->get('category_ids', '');
 $showCategory = $params->get('show_category', 1);
 $showChannel = $params->get('show_channel') ;
+$showDescription = $params->get('show_description', 0) ;
 $tmpl = $app->getTemplate();
 if (file_exists(MPATH_WP_CNT.'/themes/'.$tmpl.'/html/com_miwovideos/assets/css/modules.css') and !MiwoVideos::isDashboard()) {
     $document->addStyleSheet(MURL_WP_CNT.'/themes/'.$tmpl.'/html/com_miwovideos/assets/css/modules.css');
@@ -40,7 +42,7 @@ if ($app->getLanguageFilter()) {
 	$where[] = 'a.language IN (' . $db->Quote(MFactory::getLanguage()->getTag()) . ',' . $db->Quote('*') . ')';
 }
 
-$sql = 'SELECT a.id, a.title, a.channel_id, a.created, c.title AS channel_title FROM #__miwovideos_videos AS a '
+$sql = 'SELECT a.id, a.title, a.channel_id, a.created, a.thumb, c.title AS channel_title, a.introtext FROM #__miwovideos_videos AS a '
 	 . ' LEFT JOIN #__miwovideos_channels AS c '
 	 . ' ON a.channel_id = c.id '
 	 . ' WHERE '.implode(' AND ', $where)

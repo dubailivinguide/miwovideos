@@ -11,11 +11,10 @@ defined('MIWI') or die;
 class MiwovideosViewVideos extends MiwovideosView {
 
 	public function displayModal($tpl = null) {
-		$this->linkedVideos = $this->get('LinkedVideos');
 		$this->display($tpl);
 	}
 
-	function display($tpl = null) {
+	public function display($tpl = null) {
 		if ($this->_mainframe->isAdmin()) {
 			$this->addToolbar();
 		}

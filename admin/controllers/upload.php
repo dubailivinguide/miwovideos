@@ -27,7 +27,7 @@ class MiwovideosControllerUpload extends MiwovideosController {
 		if (!$upload->process()) {
 			if (MRequest::getWord('format') != 'raw') {
 				MError::raiseWarning(500, $upload->getError());
-				$this->setRedirect('index.php?option=com_miwovideos&view=upload'.$dashboard);
+				$this->_mainframe->redirect('index.php?option=com_miwovideos&view=upload'.$dashboard);
 			}
 			else {
 				$result = array(
@@ -40,7 +40,7 @@ class MiwovideosControllerUpload extends MiwovideosController {
 		else {
 			if (MRequest::getWord('format') != 'raw') {
 				$this->_mainframe->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_SUCCESSFULLY_UPLOADED_X', $upload->_title));
-				$this->setRedirect('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$upload->_id.$dashboard);
+				$this->_mainframe->redirect('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$upload->_id.$dashboard);
 			}
 			else {
 				$result = array(
@@ -66,11 +66,11 @@ class MiwovideosControllerUpload extends MiwovideosController {
 		// Add embed code
 		if (!$upload->uber()) {
 			MError::raiseWarning(500, $upload->getError());
-			$this->setRedirect('index.php?option=com_miwovideos&view=videos'.$dashboard);
+			$this->_mainframe->redirect('index.php?option=com_miwovideos&view=videos'.$dashboard);
 		}
 		else {
 			$this->_mainframe->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_SUCCESSFULLY_UPLOADED_X', $upload->_title));
-			$this->setRedirect('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$upload->_id.$dashboard);
+			$this->_mainframe->redirect('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$upload->_id.$dashboard);
 		}
 
 		return $upload;
@@ -128,18 +128,18 @@ class MiwovideosControllerUpload extends MiwovideosController {
 		if (!count($upload->getErrors())) {
 			if ($upload->_count > 1) {
 				$this->_mainframe->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_SUCCESSFULLY_UPLOADED'));
-				$this->setRedirect('index.php?option=com_miwovideos&view=videos'.$dashboard);
+				$this->_mainframe->redirect('index.php?option=com_miwovideos&view=videos'.$dashboard);
 			}
 			else {
 				$this->_mainframe->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_SUCCESSFULLY_UPLOADED_X', $upload->_title));
 				$redirect_url = MiwoVideos::get('utility')->route('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$upload->_id.$dashboard);
-				$this->setRedirect($redirect_url);
+				$this->_mainframe->redirect($redirect_url);
 			}
 		}
 		else {
 			$this->_mainframe->enqueueMessage($upload->getError(0));
 			$redirect_url = MiwoVideos::get('utility')->route('index.php?option=com_miwovideos&view=upload'.$dashboard);
-			$this->setRedirect($redirect_url);
+			$this->_mainframe->redirect($redirect_url);
 		}
 
 		return $upload;
@@ -157,18 +157,18 @@ class MiwovideosControllerUpload extends MiwovideosController {
 		if (!count($upload->getErrors())) {
 			if ($upload->_count > 1) {
 				$this->_mainframe->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_SUCCESSFULLY_UPLOADED'));
-				$this->setRedirect('index.php?option=com_miwovideos&view=videos'.$dashboard);
+				$this->_mainframe->redirect('index.php?option=com_miwovideos&view=videos'.$dashboard);
 			}
 			else {
 				$this->_mainframe->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_SUCCESSFULLY_UPLOADED_X', $upload->_title));
 				$redirect_url = MiwoVideos::get('utility')->route('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$upload->_id.$dashboard);
-				$this->setRedirect($redirect_url);
+				$this->_mainframe->redirect($redirect_url);
 			}
 		}
 		else {
 			$this->_mainframe->enqueueMessage($upload->getError(0));
 			$redirect_url = MiwoVideos::get('utility')->route('index.php?option=com_miwovideos&view=upload'.$dashboard);
-			$this->setRedirect($redirect_url);
+			$this->_mainframe->redirect($redirect_url);
 		}
 
 		return $upload;

@@ -84,6 +84,13 @@
             <option value="0">MNO</option>
         </field>
 
+        <field name="show_related_carousel" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_SHOW_RELATED_CAROUSEL" description="" >
+            <option value="1">MYES</option>
+            <option value="0">MNO</option>
+        </field>
+
+        <field name="total_related_videos" type="text" default="9" label="COM_MIWOVIDEOS_TOTAL_RELATED_VIDEOS" description="" ></field>
+
         <field name="show_empty_cat" type="radio" class="btn-group" default="0" label="COM_MIWOVIDEOS_SHOW_EMPTY_CATEGORIES" description="" >
             <option value="1">MYES</option>
             <option value="0">MNO</option>
@@ -94,9 +101,12 @@
             <option value="0">MNO</option>
         </field>
 
-        <field name="order_videos" type="list" default="2" label="COM_MIWOVIDEOS_VIDEO_ORDER_BY" description="" >
-            <option value="1">COM_MIWOVIDEOS_ORDERING</option>
-            <option value="2">COM_MIWOVIDEOS_VIDEO_DATE</option>
+        <field name="order_videos" type="list" default="v.ordering" label="COM_MIWOVIDEOS_VIDEO_ORDER_BY" description="" >
+            <option value="v.ordering">COM_MIWOVIDEOS_ORDERING</option>
+	        <option value="v.title">COM_MIWOVIDEOS_VIDEO_TITLE</option>
+	        <option value="v.created">COM_MIWOVIDEOS_VIDEO_DATE</option>
+	        <option value="v.likes">COM_MIWOVIDEOS_MOST_FAVORITE</option>
+	        <option value="v.hits">COM_MIWOVIDEOS_MOST_POPULAR</option>
         </field>
 
         <field name="listing_style" type="list" default="grid" label="COM_MIWOVIDEOS_LISTING_STYLE" description="" >

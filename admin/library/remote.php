@@ -53,6 +53,7 @@ class MiwovideosRemote extends MPlugin {
                 curl_setopt($curl_handle, CURLOPT_URL, $url);
                 curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 30);
                 curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+	            curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);
                 curl_setopt($curl_handle, CURLOPT_USERAGENT, $useragent);
                 $this->buffer = curl_exec($curl_handle);
                 curl_close($curl_handle);

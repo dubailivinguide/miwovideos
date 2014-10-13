@@ -1469,19 +1469,75 @@ class MiwovideosVideos {
 					break;
 			}
 
-			try {
-				if (substr(PHP_OS, 0, 3) == "WIN") {
-					$logo = preg_replace('|^([a-z]{1}):|i', '', $logo); //Strip out windows drive letter if it's there.
-					$logo = str_replace('\\', '/', $logo); //Windows path sanitisation
-					//$command = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -b:v 700k -qscale 0 -b:v 1500k -i $location -vf \"movie=".$logo." [logo];[in][logo] overlay=".$overlay." [out]\" -vcodec $vcodec -acodec copy -f $format $new_location 2>&1";
-					$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -vf \"movie=" . $logo . " [logo];[in][logo] overlay=" . $overlay . " [out]\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
-					exec($input, $output);
-				}
-				else {
-					$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -vf \"movie=" . $logo . " [logo];[in][logo] overlay=" . $overlay . " [out]\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
-					exec($input, $output);
+			// Get information on original
+			if (substr(PHP_OS, 0, 3) == "WIN") {
+				$command = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -i $location 2>&1";
+				exec($command, $output);
+			}
+			else {
+				$command = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -i $location 2>&1";
+				exec($command, $output);
+			}
+
+			MiwoVideos::log('FFmpeg : ' . $command);
+			MiwoVideos::log($output);
+
+			$flatoutput = is_array($output) ? implode("\n", $output) : $output;
+			if (empty($flatoutput)) {
+				MiwoVideos::log('Flatoutput is empty');
+				return false;
+			}
+			else {
+				$pos = strpos($flatoutput, "No such file or directory");
+				if ($pos !== false) {
+					MiwoVideos::log('No such file or directory');
+					return false;
 				}
 
+				$pos = strpos($flatoutput, "not found");
+				if ($pos !== false) {
+					MiwoVideos::log('Not found');
+					return false;
+				}
+
+				$pos = strpos($flatoutput, "Permission denied");
+				if ($pos !== false) {
+					MiwoVideos::log('Permission denied');
+					return false;
+				}
+			}
+
+			// Get original size
+			if (preg_match('/Stream.*Video:.* (\d+)x(\d+).* (\d+\.\d+|\d+) tbr/', implode("\n", $output), $matches)) {
+				$width  = $matches[1]/2;
+			}
+			elseif (preg_match('/Stream.*Video:.* (\d+)x(\d+).* (\d+\.\d+|\d+) tb/', implode("\n", $output), $matches)) {
+				$width  = $matches[1]/2;
+			}
+
+			try {
+				if (isset($width)) {
+					if (substr(PHP_OS, 0, 3) == "WIN") {
+						$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -i $logo -filter_complex \"[1:v]scale=".$width.":-1 [ovrl], [0:v][ovrl]overlay=$overlay\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
+						exec($input, $output);
+					}
+					else {
+						$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -i $logo -filter_complex \"[1:v]scale=".$width.":-1 [ovrl], [0:v][ovrl]overlay=$overlay\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
+						exec($input, $output);
+					}
+				}
+				else {
+					if (substr(PHP_OS, 0, 3) == "WIN") {
+						$logo = preg_replace('|^([a-z]{1}):|i', '', $logo); //Strip out windows drive letter if it's there.
+						$logo = str_replace('\\', '/', $logo); //Windows path sanitisation
+						$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -vf \"movie=" . $logo . " [logo];[in][logo] overlay=" . $overlay . " [out]\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
+						exec($input, $output);
+					}
+					else {
+						$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -vf \"movie=" . $logo . " [logo];[in][logo] overlay=" . $overlay . " [out]\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
+						exec($input, $output);
+					}
+				}
 				MiwoVideos::log('FFmpeg : ' . $input);
 				MiwoVideos::log($output);
 
@@ -1573,7 +1629,7 @@ class MiwovideosVideos {
 		if (!$this->_runProcesses('processMp4', $process, 'mp4', $size)) return false;
 		if (!$this->_runProcesses('processWebm', $process, 'webm', $size)) return false;
 		if (!$this->_runProcesses('processOgg', $process, 'ogg', $size)) return false;
-		if (!$this->_runProcesses('processThumb', $process, 'jpg', $size)) return false;
+		$this->_runProcesses('processThumb', $process, 'jpg', $thumb_size);
 		if (!$this->_runProcesses('getDuration', $process)) return false;
 		if (!$this->_runProcesses('getTitle', $process)) return false;
 		if (!$this->_runProcesses('checkMoovAtoms', $process)) return false;
