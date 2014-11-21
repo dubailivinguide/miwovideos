@@ -21,18 +21,11 @@ $utility = MiwoVideos::get('utility');
 			<input type="text" name="search" id="search" value="<?php echo $this->lists['search']; ?>" class="text_area search-query" onchange="document.adminForm.submit();"/>
 			<button onclick="this.form.submit();" class="button"><?php echo MText::_('Go'); ?></button>
 			<button onclick="document.getElementById('search').value='';this.form.submit();" class="button"><?php echo MText::_('Reset'); ?></button>
-			
-
-
-
-	<div id="editcell">
+				<div id="editcell">
 		<table class="wp-list-table widefat">
 			<thead>
 			<tr>
-				
-
-
-				<th width="20px">
+								<th width="20px">
 					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)"/>
 				</th>
 				<th width="80px" style="text-align: center;">
@@ -57,10 +50,7 @@ $utility = MiwoVideos::get('utility');
 						<?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_FEATURE'), 'v.featured', $this->lists['order_Dir'], $this->lists['order']); ?>
 					</th>
 				<?php } ?>
-				
-
-
-				<th width="90px" style="text-align: center;">
+								<th width="90px" style="text-align: center;">
 					<?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_DATE_CREATED'), 'v.created', $this->lists['order_Dir'], $this->lists['order']); ?>
 				</th>
 				<?php if ($this->acl->canAdmin()) { ?>
@@ -96,11 +86,7 @@ $utility = MiwoVideos::get('utility');
 				$img          = $row->featured ? 'featured.png' : 'disabled.png';
 				$featured     = MHtml::_('image', MURL_MIWOVIDEOS.'/admin/assets/images/'.$img, '', null, true);
 				?>
-				<tr class="<?php echo "row$k"; ?>">
-
-
-
-					<td style="vertical-align: middle">
+				<tr class="<?php echo "row$k"; ?>">					<td style="vertical-align: middle">
 						<?php echo $checked; ?>
 					</td>
 					<td style="vertical-align: middle">
@@ -143,10 +129,7 @@ $utility = MiwoVideos::get('utility');
 							<?php echo $featured; ?>
 						</td>
 					<?php } ?>
-					
-
-
-					<td style="text-align: center; vertical-align: middle;">
+										<td style="text-align: center; vertical-align: middle;">
 						<?php echo MHtml::_('date', $row->created, MText::_('DATE_FORMAT_LC4')); ?>
 					</td>
 					<?php if ($this->acl->canAdmin()) { ?>

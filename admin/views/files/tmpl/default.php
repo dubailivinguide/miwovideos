@@ -40,10 +40,7 @@ defined('MIWI') or die ;
 	<table class="wp-list-table widefat">
         <thead>
             <tr>
-                
-
-
-
+                
                 <th width="20" style="text-align: center;">
                     <input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)" />
                 </th>
@@ -105,8 +102,7 @@ defined('MIWI') or die ;
                         $file_path = MiwoVideos::get('utility')->getThumbPath($row->video_id, 'videos', $row->source, null, 'default');
                         $p_type = 'Thumbnail';
                     } elseif ($row->ext == 'mp4' or $row->ext == 'webm' or $row->ext == 'ogg' or $row->ext == 'ogv') {
-                        $file_path = MiwoVideos::get('utility')->getVideoFilePath($item->id, 'orig', $item->source, 'path');
-                        $default_size = MiwoVideos::get('utility')->getVideoSize($file_path);
+                        $default_size = MiwoVideos::get('utility')->getVideoSize($item->id, $item->source);
                         $file_path = MiwoVideos::get('utility')->getVideoFilePath($row->video_id, $default_size, $row->source);
                         $p_type .= " (".$default_size."p)";
                     }
@@ -128,11 +124,7 @@ defined('MIWI') or die ;
                 $checked = MHtml::_('grid.id', $i, $row->id);
 
                 ?>
-                <tr class="<?php echo "row$k"; ?>">
-
-
-
-                    <td style="text-align: center;">
+                <tr class="<?php echo "row$k"; ?>">                    <td style="text-align: center;">
                         <?php echo $checked; ?>
                     </td>
 

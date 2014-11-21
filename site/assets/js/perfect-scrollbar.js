@@ -58,10 +58,7 @@
       if ($this.data('perfect-scrollbar')) {
         // if there's already perfect-scrollbar
         return $this.data('perfect-scrollbar');
-      }
-
-
-      // Or generate new perfectScrollbar
+      }      // Or generate new perfectScrollbar
 
       // Set class to the container
       $this.addClass('ps-container');

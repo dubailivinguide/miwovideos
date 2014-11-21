@@ -60,11 +60,6 @@ class MiwovideosModelMiwovideos extends MiwovideosModel {
 		static $info;
 
 		if (!isset($info)) {
-			$cache = MFactory::getCache('com_miwovideos', 'output');
-			$cache->setCaching(1);
-
-			$info = $cache->get('mv_info', 'com_miwovideos');
-
 			if (empty($info)) {
 				$info = array();
 
@@ -84,51 +79,56 @@ class MiwovideosModelMiwovideos extends MiwovideosModel {
 
 				$info['pid'] = $this->config->get('pid');
 
-				$version = MiwoVideos::get('utility')->getFfmpegVersion();
+				$cache = MFactory::getCache('com_miwovideos', 'output');
+				$cache->setCaching(1);
 
-				$server   = array();
-				$server[] = array(
-					'name'  => 'FFmpeg',
-					'value' => $version ? $version : MText::_('MNO')
-				);
-				$server[] = array(
-					'name'  => 'allow_fileuploads',
-					'value' => ini_get('file_uploads') ? MText::_('MYES') : MText::_('MNO')
-				);
-				$server[] = array('name' => 'upload_max_filesize', 'value' => ini_get('upload_max_filesize'));
-				$server[] = array('name' => 'max_input_time', 'value' => ini_get('max_input_time'));
-				$server[] = array('name' => 'memory_limit', 'value' => ini_get('memory_limit'));
-				$server[] = array('name' => 'max_execution_time', 'value' => ini_get('max_execution_time'));
-				$server[] = array('name' => 'post_max_size', 'value' => ini_get('post_max_size'));
-				$server[] = array(
-					'name'  => 'upload_folder_permission',
-					'value' => (is_writable(MIWOVIDEOS_UPLOAD_DIR.'/')) ? MText::_('MYES') : MText::_('MNO')
-				);
-				$server[] = array(
-					'name'  => 'curl',
-					'value' => (extension_loaded('curl')) ? MText::_('MYES') : MText::_('MNO')
-				);
-				$server[] = array(
-					'name'  => 'exec',
-					'value' => (function_exists('exec')) ? MText::_('MYES') : MText::_('MNO')
-				);
-				$server[] = array(
-					'name'  => 'flvtool2',
-					'value' => $this->checkFlvtool2()
-				);
-				$server[] = array(
-					'name'  => 'yamdi',
-					'value' => $this->checkYamdi()
-				);
-				$server[] = array('name' => 'php-cli', 'value' => $this->checkPhpCli());
-				if ($this->config->get('perl_upload')) {
+				if (!$server = $cache->get('server_info', 'com_miwovideos')) {
+					$server   = array();
+					$version = MiwoVideos::get('utility')->getFfmpegVersion();
 					$server[] = array(
-						'name'  => 'ubr_upload script',
-						'value' => ($this->isUrlExist($this->config->get('uber_upload_perl_url'))) ? MText::_('MYES') : MText::_('MNO')
+						'name'  => 'FFmpeg',
+						'value' => $version ? $version : MText::_('MNO')
 					);
+					$server[] = array(
+						'name'  => 'allow_fileuploads',
+						'value' => ini_get('file_uploads') ? MText::_('MYES') : MText::_('MNO')
+					);
+					$server[] = array('name' => 'upload_max_filesize', 'value' => ini_get('upload_max_filesize'));
+					$server[] = array('name' => 'max_input_time', 'value' => ini_get('max_input_time'));
+					$server[] = array('name' => 'memory_limit', 'value' => ini_get('memory_limit'));
+					$server[] = array('name' => 'max_execution_time', 'value' => ini_get('max_execution_time'));
+					$server[] = array('name' => 'post_max_size', 'value' => ini_get('post_max_size'));
+					$server[] = array(
+						'name'  => 'upload_folder_permission',
+						'value' => (is_writable(MIWOVIDEOS_UPLOAD_DIR.'/')) ? MText::_('MYES') : MText::_('MNO')
+					);
+					$server[] = array(
+						'name'  => 'curl',
+						'value' => (extension_loaded('curl')) ? MText::_('MYES') : MText::_('MNO')
+					);
+					$server[] = array(
+						'name'  => 'exec',
+						'value' => (function_exists('exec')) ? MText::_('MYES') : MText::_('MNO')
+					);
+					$server[] = array(
+						'name'  => 'flvtool2',
+						'value' => $this->checkFlvtool2()
+					);
+					$server[] = array(
+						'name'  => 'yamdi',
+						'value' => $this->checkYamdi()
+					);
+					$server[] = array('name' => 'php-cli', 'value' => $this->checkPhpCli());
+					if ($this->config->get('perl_upload')) {
+						$server[] = array(
+							'name'  => 'ubr_upload script',
+							'value' => ($this->isUrlExist($this->config->get('uber_upload_perl_url'))) ? MText::_('MYES') : MText::_('MNO')
+						);
+					}
+					$cache->store($server, 'server_info', 'com_miwovideos');
 				}
+
 				$info['server'] = $server;
-				$cache->store($info, 'mv_info', 'com_miwovideos');
 			}
 		}
 

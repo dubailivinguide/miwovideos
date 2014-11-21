@@ -831,6 +831,11 @@ span.subs_count {
     display : inline-block;
     margin  : 0 !important;
     padding : 0 !important;
+    width : 70%;
+}
+
+.videos-items-grid-box-content .miwovideos_box_h3 {
+    width : 100%;
 }
 
 .miwovideos_box_h3 a:link {
@@ -2203,4 +2208,31 @@ fieldset.adminform {
 
 .jwrail.jwsmooth .jwoverlay {
     width : 15%;
+}
+
+.share-panel-url-container {
+    margin-bottom : 0;
+    margin-top    : 10px;
+    clear         : left;
+}
+
+#share_url {
+    width        : 100%;
+    margin-right : 15px;
+    padding      : 2px;
+}
+
+.start-time-checkbox {
+    border         : 1px solid #C6C6C6;
+    display        : inline-block;
+    vertical-align : middle;
+    cursor         : pointer;
+}
+
+#share_at_time {
+    width         : 50px;
+    padding       : 5px 10px 6px;
+    margin-top    : 0;
+    margin-bottom : 0;
+    font-size     : 13px;
 }

@@ -11,15 +11,12 @@ $utility = MiwoVideos::get('utility');
 ?>
 	<!-- categories -->
 <?php if (($this->params->get('show_page_heading', '0') == '1')) { ?>
-	<?php $page_title = $this->params->get('page_title', ''); ?>
-
-	<?php if (!empty($this->category->title)) { ?>
+	<?php $page_heading = $this->params->get('page_heading', ''); ?>
+	<?php if (!empty($page_heading)) { ?>
+		<h1><?php echo $page_heading; ?></h1>
+	<?php }
+	else if (!empty($this->category->title)) { ?>
 		<h1><?php echo $this->category->title; ?></h1>
-	<?php
-	}
-	else if (!empty($page_title)) {
-		?>
-		<h1><?php echo $page_title; ?></h1>
 	<?php } ?>
 <?php } ?>
 
@@ -27,7 +24,7 @@ $utility = MiwoVideos::get('utility');
 	<div class="miwovideos_cat">
 		<img class="category-item-thumb80" src="<?php echo $utility->getThumbPath($this->category->id, 'categories', $this->category->thumb); ?>" title="<?php echo $this->category->title; ?>" alt="<?php echo $this->category->title; ?>"/>
 		<?php if (!empty($this->category->introtext) or !empty($this->category->fulltext)) { ?>
-			<div class="miwi_description"><?php echo $this->category->introtext.$this->category->fulltext; ?></div>
+			<div class="miwi_description"><?php echo html_entity_decode($this->category->introtext.$this->category->fulltext, ENT_QUOTES); ?></div>
 		<?php } ?>
 	</div>
 	<div class="clr"></div>
@@ -66,25 +63,12 @@ if (!empty($this->categories)) {
 				</div>
 				<?php if (!empty($category->introtext)) { ?>
 					<div class="miwovideos_box_content">
-						<?php echo $this->escape(MHtmlString::truncate($category->introtext, $this->config->get('desc_truncation'), false, false)); ?>
+						<?php echo MHtmlString::truncate(html_entity_decode($category->introtext, ENT_QUOTES), $this->config->get('desc_truncation'), false, false); ?>
 					</div>
 				<?php } ?>
 			</div>
 		<?php } ?>
 	</div>
-	<?php if ($this->category->id == 0) { ?>
-		<?php if ($this->pagination->total > $this->pagination->limit) { ?>
-			<tfoot>
-			<tr>
-				<td colspan="5">
-					<div class="pagination">
-						<?php echo $this->pagination->getListFooter(); ?>
-					</div>
-				</td>
-			</tr>
-			</tfoot>
-		<?php } ?>
-	<?php } ?>
 	<div class="clr"></div>
 <?php
 }
@@ -115,15 +99,9 @@ if (!empty($this->categories)) {
 				?>
 			</div>
 			<?php if ($this->pagination->total > $this->pagination->limit) { ?>
-				<tfoot>
-				<tr>
-					<td colspan="5">
-						<div class="pagination">
-							<?php echo $this->pagination->getListFooter(); ?>
-						</div>
-					</td>
-				</tr>
-				</tfoot>
+				<div class="pagination">
+					<?php echo $this->pagination->getListFooter(); ?>
+				</div>
 			<?php } ?>
 		<?php
 		}
@@ -142,7 +120,6 @@ if (!empty($this->categories)) {
 		<input type="hidden" name="option" value="com_miwovideos"/>
 		<input type="hidden" name="view" value="category"/>
 		<input type="hidden" name="task" value=""/>
-		<input type="hidden" name="Itemid" value="<?php echo $this->Itemid; ?>"/>
 		<input type="hidden" name="id" value="0"/>
 	</form>
 <?php } ?>

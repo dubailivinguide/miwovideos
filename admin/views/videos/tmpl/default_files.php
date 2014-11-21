@@ -62,8 +62,7 @@ defined('MIWI') or die('Restricted access');
                         $file_path = MiwoVideos::get('utility')->getThumbPath($file->video_id, 'videos', $file->source, null, 'default');
                         $p_type = 'Thumbnail';
                     } elseif ($file->ext == 'mp4' or $file->ext == 'webm' or $file->ext == 'ogg' or $file->ext == 'ogv') {
-                        $file_path = MiwoVideos::get('utility')->getVideoFilePath($item->id, 'orig', $item->source, 'path');
-                        $default_size = MiwoVideos::get('utility')->getVideoSize($file_path);
+                        $default_size = MiwoVideos::get('utility')->getVideoSize($item->id, $item->source);
                         $file_path = MiwoVideos::get('utility')->getVideoFilePath($file->video_id, $default_size, $file->source);
                         $p_type .= " (".$default_size."p)";
                     }

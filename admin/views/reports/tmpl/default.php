@@ -48,10 +48,7 @@ MHtml::_('behavior.modal', 'a.reasons_message');
         <table class="wp-list-table widefat">
         <thead>
             <tr>
-                
-
-
-                <th width="20">
+                                <th width="20">
                     <input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)" />
                 </th>
                 <th class="title" style="text-align: left;">
@@ -103,11 +100,7 @@ MHtml::_('behavior.modal', 'a.reasons_message');
             $checked = MHtml::_('grid.id', $i, $row->id);
 
             ?>
-            <tr class="<?php echo "row$k"; ?>">
-
-
-
-                <td>
+            <tr class="<?php echo "row$k"; ?>">                <td>
                     <?php echo $checked; ?>
                 </td>
                 <td>

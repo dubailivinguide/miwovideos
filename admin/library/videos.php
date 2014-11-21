@@ -385,13 +385,13 @@ class MiwovideosVideos {
 		}
 
 		if (file_exists($new_location) && filesize($new_location) > 0) {
-			$model = MiwoVideos::get('controller')->getModel('videos');
-			MRequest::setVar('cid', $item->id, 'post');
-			MiwoVideos::get('controller')->updateField('videos', 'thumb', hash('haval256,5', $item->title) . ".jpg", $model);
 			if (isset($process->process_type)) {
 				MiwoVideos::get('files')->add($item, $fileType, $new_source, $size, $process->process_type);
 			}
 			else {
+				$model = MiwoVideos::get('controller')->getModel('videos');
+				MRequest::setVar('cid', $item->id, 'post');
+				MiwoVideos::get('controller')->updateField('videos', 'thumb', hash('haval256,5', $item->title) . ".jpg", $model);
 				MiwoVideos::get('files')->add($item, $fileType, $new_source, $size);
 			}
 
@@ -492,7 +492,13 @@ class MiwovideosVideos {
 			return false;
 		}
 
-		$bitrate = $input_bitrate;
+		$bitrate = min($input_bitrate, $this->config->get('max_video_bitrate'.$size, 1500));
+		if ($audio_bitrate = $this->config->get('audio_bitrate'.$size, 0)) {
+			$audio_codec = '-acodec aac -ac 2 -ab '.$audio_bitrate.'k';
+		}
+		else {
+			$audio_codec = '-acodec aac -ac 2 -ab 192k';
+		}
 
 		if (($input_height < $size) and $size != '240') {
 			MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_ORIGINAL_SMALLER_THAN_DEST'));
@@ -570,11 +576,11 @@ class MiwovideosVideos {
 					break;
 			}
 			if (substr(PHP_OS, 0, 3) == "WIN") {
-				$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -strict experimental -acodec aac -ac 2 -ab 192k -s $wxh -aspect 16:9 -r 24000/1001 -vcodec libx264 -b:v " . $vbit . "k -minrate " . $min . "k -maxrate " . $max . "k -bufsize " . $buff . "K -crf $crf -preset fast -f mp4 -threads 0 $new_location 2>&1";
+				$input = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -i $location -strict experimental $audio_codec -s $wxh -aspect 16:9 -r 24000/1001 -vcodec libx264 -b:v ".$vbit."k -minrate ".$min."k -maxrate ".$max."k -bufsize ".$buff."K -crf $crf -preset fast -f mp4 -threads 0 $new_location 2>&1";
 				exec($input, $output);
 			}
 			else {
-				$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -strict experimental -acodec aac -ac 2 -ab 192k -s $wxh -aspect 16:9 -r 24000/1001 -vcodec libx264 -b:v " . $vbit . "k -minrate " . $min . "k -maxrate " . $max . "k -bufsize " . $buff . "K -crf $crf -preset fast -f mp4 -threads 0 $new_location 2>&1";
+				$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -y -i $location -strict experimental $audio_codec -s $wxh -aspect 16:9 -r 24000/1001 -vcodec libx264 -b:v ".$vbit."k -minrate ".$min."k -maxrate ".$max."k -bufsize ".$buff."K -crf $crf -preset fast -f mp4 -threads 0 $new_location 2>&1";
 				exec($input, $output);
 			}
 
@@ -593,11 +599,11 @@ class MiwovideosVideos {
 		if (!file_exists($new_location)) {
 			try {
 				if (substr(PHP_OS, 0, 3) == "WIN") {
-					$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -strict experimental -acodec aac -ac 2 -ab 160k -s $wxh $pad -vcodec libx264 -vpre ipod640 -b:v " . $bitrate . "k -f mp4 -threads 0 $new_location 2>&1";
+					$input = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -i $location -strict experimental $audio_codec -s $wxh $pad -vcodec libx264 -vpre ipod640 -b:v ".$bitrate."k -f mp4 -threads 0 $new_location 2>&1";
 					exec($input, $output);
 				}
 				else {
-					$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -strict experimental -acodec aac -ac 2 -ab 160k -s $wxh $pad -vcodec libx264 -vpre ipod640 -b:v " . $bitrate . "k -f mp4 -threads 0 $new_location 2>&1";
+					$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -y -i $location -strict experimental $audio_codec -s $wxh $pad -vcodec libx264 -vpre ipod640 -b:v ".$bitrate."k -f mp4 -threads 0 $new_location 2>&1";
 					exec($input, $output);
 				}
 
@@ -620,11 +626,11 @@ class MiwovideosVideos {
 				$ffpreset_libx264_slow    = " -coder 1 -flags +loop -cmp +chroma -partitions +parti8x8+parti4x4+partp8x8+partb8x8 -me_method umh -subq 8 -me_range 16 -g 250 -keyint_min 25 -sc_threshold 40 -i_qfactor 0.71 -b_strategy 2 -qcomp 0.6 -qmin 10 -qmax 51 -qdiff 4 -bf 3 -refs 5 -directpred 3 -trellis 1 -flags2 +bpyramid+mixed_refs+wpred+dct8x8+fastpskip -wpredp 2 -rc_lookahead 50 ";
 				$ffpreset_libx264_ipod640 = " -coder 0 -bf 0 -refs 1 -flags2 -wpred-dct8x8 -level 30 -maxrate 10000000 -bufsize 10000000 -wpredp 0 ";
 				if (substr(PHP_OS, 0, 3) == "WIN") {
-					$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -strict experimental -acodec aac -ac 2 -ab 160k -s $wxh $pad -vcodec libx264 $ffpreset_libx264_slow $ffpreset_libx264_ipod640 -b:v " . $bitrate . "k -f mp4 -threads 0 $new_location 2>&1";
+					$input = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -i $location -strict experimental $audio_codec -s $wxh $pad -vcodec libx264 $ffpreset_libx264_slow $ffpreset_libx264_ipod640 -b:v ".$bitrate."k -f mp4 -threads 0 $new_location 2>&1";
 					exec($input, $output);
 				}
 				else {
-					$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -strict experimental -acodec aac -ac 2 -ab 160k -s $wxh $pad -vcodec libx264 $ffpreset_libx264_slow $ffpreset_libx264_ipod640 -b:v " . $bitrate . "k -f mp4 -threads 0 $new_location 2>&1";
+					$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -y -i $location -strict experimental $audio_codec -s $wxh $pad -vcodec libx264 $ffpreset_libx264_slow $ffpreset_libx264_ipod640 -b:v ".$bitrate."k -f mp4 -threads 0 $new_location 2>&1";
 					exec($input, $output);
 				}
 
@@ -656,6 +662,147 @@ class MiwovideosVideos {
 
 		MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_DESTINATION_VIDEO_NOT_EXIST'));
 		return false;
+	}
+
+	public function processWatermark($process, $fileType, $location) {
+		$config = $this->config;
+
+		if ($config->get('watermark') == 0 || $config->get('watermark_path') == '') {
+			MiwoVideos::log('Watermark disabled');
+			return false;
+		}
+
+		$item = MiwoVideos::getTable('MiwovideosVideos');
+		$item->load($process->video_id);
+
+		if (file_exists($location)) {
+			$logo = MPATH_SITE.'/'.$config->get('watermark_path');
+
+			$new_location = MIWOVIDEOS_UPLOAD_DIR."/videos/".$item->id."/".hash('haval256,5', $logo).".tmp";
+
+			switch ($fileType) {
+				case 'mp4':
+					$vcodec = 'libx264';
+					break;
+				case 'webm':
+					$vcodec = 'libvpx';
+					break;
+				case 'ogg':
+					$vcodec = 'libtheora';
+					break;
+				case 'ogv':
+					$vcodec = 'libtheora';
+					break;
+				default:
+					return false;
+			}
+
+			switch ($config->get('watermark_position')) {
+				case 1:
+					// Top left
+					$overlay = '10:10';
+					break;
+				case 2:
+					// Top right
+					$overlay = 'main_w-overlay_w-10:10';
+					break;
+				case 4:
+					// Bottom left
+					$overlay = '10:main_h-overlay_h-10';
+					break;
+				default:
+					// Bottom right
+					$overlay = 'main_w-overlay_w-10:main_h-overlay_h-10';
+					break;
+			}
+
+			// Get information on original
+			if (substr(PHP_OS, 0, 3) == "WIN") {
+				$command = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -i $location 2>&1";
+				exec($command, $output);
+			}
+			else {
+				$command = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -i $location 2>&1";
+				exec($command, $output);
+			}
+
+			MiwoVideos::log('FFmpeg : '.$command);
+			MiwoVideos::log($output);
+
+			$flatoutput = is_array($output) ? implode("\n", $output) : $output;
+			if (empty($flatoutput)) {
+				MiwoVideos::log('Flatoutput is empty');
+				return false;
+			}
+			else {
+				$pos = strpos($flatoutput, "No such file or directory");
+				if ($pos !== false) {
+					MiwoVideos::log('No such file or directory');
+					return false;
+				}
+
+				$pos = strpos($flatoutput, "not found");
+				if ($pos !== false) {
+					MiwoVideos::log('Not found');
+					return false;
+				}
+
+				$pos = strpos($flatoutput, "Permission denied");
+				if ($pos !== false) {
+					MiwoVideos::log('Permission denied');
+					return false;
+				}
+			}
+
+			// Get original size
+			if (preg_match('/Stream.*Video:.* (\d+)x(\d+).* (\d+\.\d+|\d+) tbr/', implode("\n", $output), $matches)) {
+				$width = $matches[1] / 2;
+			}
+			elseif (preg_match('/Stream.*Video:.* (\d+)x(\d+).* (\d+\.\d+|\d+) tb/', implode("\n", $output), $matches)) {
+				$width = $matches[1] / 2;
+			}
+
+			try {
+				if (isset($width)) {
+					if (substr(PHP_OS, 0, 3) == "WIN") {
+						$input = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -i $location -i $logo -filter_complex \"[1:v]scale=".$width.":-1 [ovrl], [0:v][ovrl]overlay=$overlay\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
+						exec($input, $output);
+					}
+					else {
+						$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -y -i $location -i $logo -filter_complex \"[1:v]scale=".$width.":-1 [ovrl], [0:v][ovrl]overlay=$overlay\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
+						exec($input, $output);
+					}
+				}
+				else {
+					if (substr(PHP_OS, 0, 3) == "WIN") {
+						$logo  = preg_replace('|^([a-z]{1}):|i', '', $logo); //Strip out windows drive letter if it's there.
+						$logo  = str_replace('\\', '/', $logo); //Windows path sanitisation
+						$input = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -i $location -vf \"movie=".$logo." [logo];[in][logo] overlay=".$overlay." [out]\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
+						exec($input, $output);
+					}
+					else {
+						$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -y -i $location -vf \"movie=".$logo." [logo];[in][logo] overlay=".$overlay." [out]\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
+						exec($input, $output);
+					}
+				}
+				MiwoVideos::log('FFmpeg : '.$input);
+				MiwoVideos::log($output);
+
+				mimport('framework.filesystem.file');
+				if (file_exists($new_location) && filesize($new_location) > 0) {
+					if (MFile::copy($new_location, $location)) {
+						MFile::delete($new_location);
+					}
+				}
+				else if (file_exists($new_location) && filesize($new_location) == 0) {
+					MFile::delete($new_location);
+				}
+			} catch (Exception $e) {
+				MiwoVideos::log($e->getMessage());
+			}
+		}
+
+		return true;
 	}
 
 	public function processWebm($process, $fileType, $size) {
@@ -748,7 +895,8 @@ class MiwovideosVideos {
 			return false;
 		}
 
-		$bitrate = $input_bitrate; //min($input_bitrate, $this->getVideoBitrate($size));
+		$bitrate = min($input_bitrate, $this->config->get('max_video_bitrate'.$size, 1500));
+		$audio_codec = '-acodec libvorbis -ab 90k';
 
 		if (($input_height < $size) and $size != '240') {
 			MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_ORIGINAL_SMALLER_THAN_DEST'));
@@ -823,13 +971,13 @@ class MiwovideosVideos {
 			if (substr(PHP_OS, 0, 3) == "WIN") {
 				$command1 = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -s $wxh $pad $ffpreset_libvpx_720p_pass1 -b:v " . $bitrate . "k -pass 1 -an -f webm $new_location 2>&1";
 				exec($command1, $output1);
-				$command2 = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -s $wxh $pad $ffpreset_libvpx_720p_pass2 -b:v " . $bitrate . "k -pass 2 -acodec libvorbis -ab 90k -f webm $new_location 2>&1";
+				$command2 = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -i $location -s $wxh $pad $ffpreset_libvpx_720p_pass2 -b:v ".$bitrate."k -pass 2 $audio_codec -f webm $new_location 2>&1";
 				exec($command2, $output2);
 			}
 			else {
 				$command1 = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -s $wxh $pad $ffpreset_libvpx_720p_pass1 -b:v " . $bitrate . "k -pass 1 -an -f webm $new_location 2>&1";
 				exec($command1, $output1);
-				$command2 = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -s $wxh $pad $ffpreset_libvpx_720p_pass2 -b:v " . $bitrate . "k -pass 2 -acodec libvorbis -ab 90k -f webm $new_location 2>&1";
+				$command2 = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -y -i $location -s $wxh $pad $ffpreset_libvpx_720p_pass2 -b:v ".$bitrate."k -pass 2 $audio_codec -f webm $new_location 2>&1";
 				exec($command2, $output2);
 			}
 
@@ -952,7 +1100,7 @@ class MiwovideosVideos {
 			return false;
 		}
 
-		$bitrate = $input_bitrate; //min($input_bitrate, $this->getVideoBitrate($size));
+		$bitrate = min($input_bitrate, $this->config->get('max_video_bitrate'.$size, 1500));
 
 		if (($input_height < $size) and $size != '240') {
 			MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_ORIGINAL_SMALLER_THAN_DEST'));
@@ -1129,7 +1277,13 @@ class MiwovideosVideos {
 			return false;
 		}
 
-		$bitrate = $input_bitrate; //min($input_bitrate, $this->getVideoBitrate($size));
+		$bitrate = min($input_bitrate, $this->config->get('max_video_bitrate'.$size, 1500));
+		if ($audio_bitrate = $this->config->get('audio_bitrate'.$size, 0)) {
+			$audio_codec = '-ab '.$audio_bitrate;
+		}
+		else {
+			$audio_codec = '-ab 128';
+		}
 
 		if (($input_height < $size) and $size != '240') {
 			MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_ORIGINAL_SMALLER_THAN_DEST'));
@@ -1186,11 +1340,11 @@ class MiwovideosVideos {
 
 		try {
 			if (substr(PHP_OS, 0, 3) == "WIN") {
-				$command = "\"".$this->config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -i $location -ab 128 -ar 22050 -b:v ".$bitrate."k -s $wxh $pad -g 25 -keyint_min 25 $new_location 2>&1";
+				$command = "\"".$this->config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -y -i $location $audio_codec -ar 22050 -b:v ".$bitrate."k -s $wxh $pad -g 25 -keyint_min 25 $new_location 2>&1";
 				exec($command, $output);
 			}
 			else {
-				$command = $this->config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -y -i $location -ab 128 -ar 22050 -b:v ".$bitrate."k -s $wxh $pad -g 25 -keyint_min 25 $new_location 2>&1";
+				$command = $this->config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -y -i $location $audio_codec -ar 22050 -b:v ".$bitrate."k -s $wxh $pad -g 25 -keyint_min 25 $new_location 2>&1";
 				exec($command, $output);
 			}
 
@@ -1226,7 +1380,7 @@ class MiwovideosVideos {
 		$files = MiwoVideos::get('files')->getVideoFiles($item->id);
 
 		if (empty($process->size)) {
-			$size = MiwoVideos::get('utility')->getVideoSize(MIWOVIDEOS_UPLOAD_DIR.'/videos/'.$item->id.'/orig/'.$item->source);
+			$size = MiwoVideos::get('utility')->getVideoSize($item->id, $item->source);
 		}
 		else {
 			$size = $process->size;
@@ -1294,7 +1448,7 @@ class MiwovideosVideos {
 		$item->load($process->video_id);
 		$files = MiwoVideos::get('files')->getVideoFiles($item->id);
 		if (empty($process->size)) {
-			$size = MiwoVideos::get('utility')->getVideoSize(MIWOVIDEOS_UPLOAD_DIR.'/videos/' . $item->id . '/orig/' . $item->source);
+			$size = MiwoVideos::get('utility')->getVideoSize($item->id, $item->source);
 		}
 		else {
 			$size = $process->size;
@@ -1399,6 +1553,7 @@ class MiwovideosVideos {
 			// Create an object to bind to the database
 			$data          = array();
 			$data['title'] = $meta['title'];
+			$data['alias'] = $meta['title'];
 
 			if (!$row->bind($data)) {
 				$this->setError($row->getError());
@@ -1415,188 +1570,6 @@ class MiwovideosVideos {
 		else {
 			return true;
 		}
-	}
-
-	public function processWatermark($process, $fileType, $location) {
-		$config = $this->config;
-
-		if ($config->get('watermark') == 0 || $config->get('watermark_path') == '') {
-			MiwoVideos::log('Watermark disabled');
-			return false;
-		}
-
-		$item = MiwoVideos::getTable('MiwovideosVideos');
-		$item->load($process->video_id);
-
-		if (file_exists($location)) {
-			$logo = MPATH_SITE . '/' . $config->get('watermark_path');
-
-			$new_location = MIWOVIDEOS_UPLOAD_DIR."/videos/" . $item->id . "/" . hash('haval256,5', $logo) . ".tmp";
-
-			switch ($fileType) {
-				case 'mp4':
-					$vcodec = 'libx264';
-					break;
-				case 'webm':
-					$vcodec = 'libvpx';
-					break;
-				case 'ogg':
-					$vcodec = 'libtheora';
-					break;
-				case 'ogv':
-					$vcodec = 'libtheora';
-					break;
-				default:
-					return false;
-			}
-
-			switch ($config->get('watermark_position')) {
-				case 1:
-					// Top left
-					$overlay = '10:10';
-					break;
-				case 2:
-					// Top right
-					$overlay = 'main_w-overlay_w-10:10';
-					break;
-				case 4:
-					// Bottom left
-					$overlay = '10:main_h-overlay_h-10';
-					break;
-				default:
-					// Bottom right
-					$overlay = 'main_w-overlay_w-10:main_h-overlay_h-10';
-					break;
-			}
-
-			// Get information on original
-			if (substr(PHP_OS, 0, 3) == "WIN") {
-				$command = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -i $location 2>&1";
-				exec($command, $output);
-			}
-			else {
-				$command = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -i $location 2>&1";
-				exec($command, $output);
-			}
-
-			MiwoVideos::log('FFmpeg : ' . $command);
-			MiwoVideos::log($output);
-
-			$flatoutput = is_array($output) ? implode("\n", $output) : $output;
-			if (empty($flatoutput)) {
-				MiwoVideos::log('Flatoutput is empty');
-				return false;
-			}
-			else {
-				$pos = strpos($flatoutput, "No such file or directory");
-				if ($pos !== false) {
-					MiwoVideos::log('No such file or directory');
-					return false;
-				}
-
-				$pos = strpos($flatoutput, "not found");
-				if ($pos !== false) {
-					MiwoVideos::log('Not found');
-					return false;
-				}
-
-				$pos = strpos($flatoutput, "Permission denied");
-				if ($pos !== false) {
-					MiwoVideos::log('Permission denied');
-					return false;
-				}
-			}
-
-			// Get original size
-			if (preg_match('/Stream.*Video:.* (\d+)x(\d+).* (\d+\.\d+|\d+) tbr/', implode("\n", $output), $matches)) {
-				$width  = $matches[1]/2;
-			}
-			elseif (preg_match('/Stream.*Video:.* (\d+)x(\d+).* (\d+\.\d+|\d+) tb/', implode("\n", $output), $matches)) {
-				$width  = $matches[1]/2;
-			}
-
-			try {
-				if (isset($width)) {
-					if (substr(PHP_OS, 0, 3) == "WIN") {
-						$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -i $logo -filter_complex \"[1:v]scale=".$width.":-1 [ovrl], [0:v][ovrl]overlay=$overlay\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
-						exec($input, $output);
-					}
-					else {
-						$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -i $logo -filter_complex \"[1:v]scale=".$width.":-1 [ovrl], [0:v][ovrl]overlay=$overlay\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
-						exec($input, $output);
-					}
-				}
-				else {
-					if (substr(PHP_OS, 0, 3) == "WIN") {
-						$logo = preg_replace('|^([a-z]{1}):|i', '', $logo); //Strip out windows drive letter if it's there.
-						$logo = str_replace('\\', '/', $logo); //Windows path sanitisation
-						$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -y -i $location -vf \"movie=" . $logo . " [logo];[in][logo] overlay=" . $overlay . " [out]\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
-						exec($input, $output);
-					}
-					else {
-						$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -y -i $location -vf \"movie=" . $logo . " [logo];[in][logo] overlay=" . $overlay . " [out]\" -vcodec $vcodec -acodec copy -f $fileType $new_location 2>&1";
-						exec($input, $output);
-					}
-				}
-				MiwoVideos::log('FFmpeg : ' . $input);
-				MiwoVideos::log($output);
-
-				mimport('framework.filesystem.file');
-				if (file_exists($new_location) && filesize($new_location) > 0) {
-					if (MFile::copy($new_location, $location)) {
-						MFile::delete($new_location);
-					}
-				}
-				else if (file_exists($new_location) && filesize($new_location) == 0) {
-					MFile::delete($new_location);
-				}
-			} catch (Exception $e) {
-				MiwoVideos::log($e->getMessage());
-			}
-		}
-
-		return true;
-	}
-
-	public function processFrames($process, $location) {
-		$config = $this->config;
-
-		if ($config->get('frames') == 0) {
-			MiwoVideos::log('Frames disabled');
-			return false;
-		}
-
-		$item = MiwoVideos::getTable('MiwovideosVideos');
-		$item->load($process->video_id);
-
-		if (!file_exists($location)) {
-			MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_DESTINATION_VIDEO_NOT_EXIST'));
-			return false;
-		}
-
-		MFolder::create(MIWOVIDEOS_UPLOAD_DIR."/images/videos/" . $item->id . "/frames/");
-		$frames_location = MIWOVIDEOS_UPLOAD_DIR."/images/videos/" . $item->id . "/frames/";
-
-		for ($i = 0; $i <= $item->duration; $i++) {
-			try {
-				if (substr(PHP_OS, 0, 3) == "WIN") {
-					$input = "\"" . $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . "\" -itsoffset -$i -y -i $location -vcodec mjpeg -vframes 1 -an -f rawvideo -s 100x100 " . $frames_location . "out" . $i . ".jpg 2>&1";
-					exec($input, $output);
-				}
-				else {
-					$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg') . " -itsoffset -$i -y -i $location -vcodec mjpeg -vframes 1 -an -f rawvideo -s 100x100 " . $frames_location . "out" . $i . ".jpg 2>&1";
-					exec($input, $output);
-				}
-
-				MiwoVideos::log('FFmpeg : ' . $input);
-				MiwoVideos::log($output);
-
-			} catch (Exception $e) {
-				MiwoVideos::log($e->getMessage());
-			}
-		}
-
-		return true;
 	}
 
 	public function convertToHtml5($video_id = null, $filename = null) {
@@ -1619,33 +1592,45 @@ class MiwovideosVideos {
 			return false;
 		}
 
-		$size       = MiwoVideos::get('utility')->getVideoSize(MIWOVIDEOS_UPLOAD_DIR."/videos/".$video_id."/orig/".$filename);
+		$size       = MiwoVideos::get('utility')->getVideoSize($video_id, $filename);
 		$thumb_size = MiwoVideos::get('utility')->getThumbSize($this->config->get('thumb_size'));
 
 		// Convert video to HTML5 mp4/ogg/webm
 		$process           = new stdClass();
 		$process->video_id = $video_id;
 
-		if (!$this->_runProcesses('processMp4', $process, 'mp4', $size)) return false;
-		if (!$this->_runProcesses('processWebm', $process, 'webm', $size)) return false;
-		if (!$this->_runProcesses('processOgg', $process, 'ogg', $size)) return false;
+		if (!$this->_runProcesses('getTitle', $process)) {
+			return false;
+		}
+		if (!$this->_runProcesses('processMp4', $process, 'mp4', $size)) {
+			return false;
+		}
+		if (!$this->_runProcesses('processWebm', $process, 'webm', $size)) {
+			return false;
+		}
+		if (!$this->_runProcesses('processOgg', $process, 'ogg', $size)) {
+			return false;
+		}
 		$this->_runProcesses('processThumb', $process, 'jpg', $thumb_size);
-		if (!$this->_runProcesses('getDuration', $process)) return false;
-		if (!$this->_runProcesses('getTitle', $process)) return false;
-		if (!$this->_runProcesses('checkMoovAtoms', $process)) return false;
+		if (!$this->_runProcesses('getDuration', $process)) {
+			return false;
+		}
+		if (!$this->_runProcesses('checkMoovAtoms', $process)) {
+			return false;
+		}
 
 		if ($this->config->get('frames')) {
 			if (!$this->processFrames($process, MIWOVIDEOS_UPLOAD_DIR."/videos/".$video_id."/orig/".$filename)) {
 				$json['error'] = MText::sprintf('COM_MIWOVIDEOS_ERROR_X_PROCESSING', 'frames');
 				MiwoVideos::log(MText::sprintf('COM_MIWOVIDEOS_ERROR_X_PROCESSING', 'frames'));
-				if($this->config->get('upload_script') == 'dropzone') {
+				if ($this->config->get('upload_script') == 'dropzone') {
 					echo json_encode($json);
 				}
 				return false;
 			}
 		}
 
-		if($this->config->get('upload_script') == 'dropzone') {
+		if ($this->config->get('upload_script') == 'dropzone') {
 			$json = array(
 				'success' => 1,
 				'href'    => MiwoVideos::get('utility')->route('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$video_id)
@@ -1659,7 +1644,8 @@ class MiwovideosVideos {
 	protected function _runProcesses($method, $process, $type = null, $size = null) {
 		if (empty($type) and empty($size)) {
 			$ret = $this->$method($process);
-		} else {
+		}
+		else {
 			$ret = $this->$method($process, $type, $size, 1);
 		}
 
@@ -1674,4 +1660,108 @@ class MiwovideosVideos {
 		return true;
 	}
 
+	public function processFrames($process, $location) {
+		$config = $this->config;
+
+		if ($config->get('frames') == 0) {
+			MiwoVideos::log('Frames disabled');
+			return false;
+		}
+
+		$item = MiwoVideos::getTable('MiwovideosVideos');
+		$item->load($process->video_id);
+
+		if (!file_exists($location)) {
+			MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_DESTINATION_VIDEO_NOT_EXIST'));
+			return false;
+		}
+
+		MFolder::create(MIWOVIDEOS_UPLOAD_DIR."/images/videos/".$item->id."/frames/");
+		$frames_location = MIWOVIDEOS_UPLOAD_DIR."/images/videos/".$item->id."/frames/";
+
+		for ($i = 0; $i <= $item->duration; $i++) {
+			try {
+				if (substr(PHP_OS, 0, 3) == "WIN") {
+					$input = "\"".$config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')."\" -itsoffset -$i -y -i $location -vcodec mjpeg -vframes 1 -an -f rawvideo -s 100x100 ".$frames_location."out".$i.".jpg 2>&1";
+					exec($input, $output);
+				}
+				else {
+					$input = $config->get('ffmpeg_path', '/usr/local/bin/ffmpeg')." -itsoffset -$i -y -i $location -vcodec mjpeg -vframes 1 -an -f rawvideo -s 100x100 ".$frames_location."out".$i.".jpg 2>&1";
+					exec($input, $output);
+				}
+
+				MiwoVideos::log('FFmpeg : '.$input);
+				MiwoVideos::log($output);
+
+			} catch (Exception $e) {
+				MiwoVideos::log($e->getMessage());
+			}
+		}
+
+		return true;
+	}
+
+	public function getVideoFile() {
+		$id     = MRequest::getInt('video_id', '');
+		$size   = MRequest::getCmd('size', 'orig');
+		$ext    = MRequest::getString('type', '');
+		$time   = MRequest::getCmd('time', '');
+		$expire = MRequest::getCmd('expire', '');
+
+		$timeIsValid = (md5(MFactory::getConfig()->get('secret').$time) == $expire ? true : false);
+
+		if (!$timeIsValid || (time() - $time > $this->config->get('protected_link_expire_time', 1800))) {
+			mexit();
+		}
+
+		$table = MiwoVideos::get('utility')->getTable('MiwovideosVideos');
+		$table->load($id);
+		$properties = $table->getProperties(true);
+		$video      = MArrayHelper::toObject($properties, 'MObject');
+
+		$path = MiwoVideos::get('utility')->getVideoFilePath($id, $size, hash('haval256,5', $video->title).'.'.$ext, 'path', false);
+
+		$fileTitle = $video->alias.".".$ext;
+		$type      = 'application/octet-stream';
+		switch ($ext) {
+			case 'flv':
+				$type = 'video/flv';
+				break;
+			case 'mp4':
+				$type = 'video/mp4';
+				break;
+		}
+
+		header('Content-Type: '.$type);
+		header('Content-Disposition: attachment; filename="'.$fileTitle.'"');
+		header('Content-Length: '.filesize($path));
+		$this->readFileChunked($path, true);
+		mexit();
+	}
+
+	public function readFileChunked($path, $retbytes = true) {
+		$chunksize = 1 * (1024 * 1024);
+		$cnt       = 0;
+
+		$handle = fopen($path, 'rb');
+		if ($handle === false) {
+			return false;
+		}
+
+		while (!feof($handle)) {
+			$buffer = fread($handle, $chunksize);
+			echo $buffer;
+			ob_flush();
+			flush();
+			if ($retbytes) {
+				$cnt += strlen($buffer);
+			}
+		}
+
+		$status = fclose($handle);
+		if ($retbytes && $status) {
+			return $cnt;
+		}
+		return $status;
+	}
 }

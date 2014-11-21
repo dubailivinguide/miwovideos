@@ -18,23 +18,7 @@ defined('MIWI') or die('Restricted access');
 <form name="adminForm" id="adminForm" action="<?php echo MRoute::getActiveUrl(); ?>" method="post">
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		</tr>
+							</tr>
 		<tr>
 			<th>
 				<?php

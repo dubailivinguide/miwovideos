@@ -85,8 +85,7 @@ class MiwovideosFiles {
                 if ($file->process_type == 100) { // HTML5 formats
                     $item = MiwoVideos::getTable('MiwovideosVideos');
                     $item->load($file->video_id);
-                    $file_path = MiwoVideos::get('utility')->getVideoFilePath($item->id, 'orig', $item->source, 'path');
-                    $default_size = MiwoVideos::get('utility')->getVideoSize($file_path);
+                    $default_size = MiwoVideos::get('utility')->getVideoSize($item->id, $item->source);
                     $file_path = MiwoVideos::get('utility')->getVideoFilePath($file->video_id, $default_size, $file->source, 'path');
 
                 } else {

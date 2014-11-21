@@ -62,30 +62,7 @@ class MiwovideosViewProcesses extends MiwovideosView {
 	protected function addToolbar() {
 		MToolBarHelper::title(MText::_('COM_MIWOVIDEOS_CPANEL_PROCESSES'), 'miwovideos');
 
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		
 		$this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/processes?tmpl=component', 650, 500);
 	}
 }

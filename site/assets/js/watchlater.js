@@ -12,8 +12,7 @@ jQuery(document).ready(function() {
             return;
         }
         if (selector == 'vjs-control vjs-watchlater-control vjs-menu-button') {
-            var regex = new RegExp("[\\?&]video_id=([^&#]*)"), result = regex.exec(location.search);
-            video_id = decodeURIComponent(result[1].replace(/\+/g, " "));
+            video_id = jQuery('video').attr('id').match(/\d+/)[0];
         } else {
             var match = jQuery(this).children().attr("class").match(/(\d+)/g);
             if (match) {

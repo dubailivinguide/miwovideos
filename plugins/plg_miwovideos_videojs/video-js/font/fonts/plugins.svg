@@ -44,7 +44,7 @@ DisplaySize: -24
 AntiAlias: 1
 FitToEm: 1
 WinInfo: 0 23 14
-BeginChars: 18 4
+BeginChars: 23 9
 
 StartChar: uniE001
 Encoding: 2 57345 0
@@ -92,7 +92,7 @@ SplineSet
  220.653 288 192 259.346 192 224 c 0
  192 188.653 220.653 160 256 160 c 0
 EndSplineSet
-Validated: 524293
+Validated: 5
 EndChar
 
 StartChar: uniE002
@@ -114,7 +114,7 @@ SplineSet
  374.628 150.628 l 1
  329.372 105.372 l 1
 EndSplineSet
-Validated: 524297
+Validated: 9
 EndChar
 
 StartChar: uniF058
@@ -157,7 +157,7 @@ SplineSet
  363.191 389.81 389.81 363.191 409.429 329.572 c 0
  429.048 295.953 438.857 259.238 438.857 219.429 c 0
 EndSplineSet
-Validated: 524321
+Validated: 33
 EndChar
 
 StartChar: uniF000
@@ -202,7 +202,66 @@ SplineSet
  0 23.012 3.163 30.667 9.513 36.996 c 2
  233.5 262.498 l 2
 EndSplineSet
-Validated: 524289
+Validated: 1
+EndChar
+
+StartChar: .notdef
+Encoding: 18 65533 4
+Width: 0
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: u0
+Encoding: 19 -1 5
+AltUni2: 000000.ffffffff.0
+Width: 0
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: u1
+Encoding: 20 1 6
+Width: 0
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: u20
+Encoding: 21 32 7
+Width: 256
+Flags: W
+LayerCount: 2
+EndChar
+
+StartChar: uE71C
+Encoding: 22 59164 8
+Width: 512
+Flags: W
+LayerCount: 2
+Fore
+SplineSet
+437 405 m 1
+ 512 480 l 1
+ 512 288 l 1
+ 320 288 l 1
+ 392 360 l 1
+ 357 395 309 416 256 416 c 0
+ 174 416 103 364 76 291 c 1
+ 16 314 l 1
+ 53 411 146 480 256 480 c 0
+ 327 480 391 451 437 405 c 1
+256 32 m 0
+ 338 32 409 84 436 157 c 1
+ 496 134 l 1
+ 459 37 366 -32 256 -32 c 0
+ 185 -32 121 -3 75 43 c 1
+ 0 -32 l 1
+ 0 160 l 1
+ 192 160 l 1
+ 120 88 l 1
+ 155 53 203 32 256 32 c 0
+EndSplineSet
 EndChar
 EndChars
 EndSplineFont

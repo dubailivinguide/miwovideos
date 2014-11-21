@@ -140,7 +140,7 @@ table.adminlist td.text_right, table.adminlist th.text_right {
     font-weight   : bold;
 }
 
-.miwovideos_remote_link_textarea {
+.miwovideos_remote_link_textarea, .miwovideos_embed_code_textarea {
     width      : 30%;
     height     : 100px;
     max-height : 500px;

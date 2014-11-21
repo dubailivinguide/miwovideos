@@ -33,14 +33,13 @@ if (count($this->items)) {
 							<span class="key"><?php echo MText::_('COM_MIWOVIDEOS_VIEWS'); ?></span>
 						</div>
 						<div class="date-created">
-							<span class="key"><?php echo MText::_('COM_MIWOVIDEOS_DATE_CREATED'); ?></span>
-							<span class="value"><?php echo MHtml::_('date', $item->created, MText::_('DATE_FORMAT_LC4')); ?></span>
+							<span class="value"><?php echo MiwoVideos::agoDateFormat($item->created); ?></span>
 						</div>
 					</div>
 				</div>
 				<div class="videos-description">
 					<?php if (!empty($item->introtext)) { ?>
-						<?php echo $this->escape(MHtmlString::truncate($item->introtext, $this->config->get('desc_truncation'), false, false)); ?>
+						<?php echo MHtmlString::truncate(html_entity_decode($item->introtext, ENT_QUOTES), $this->config->get('desc_truncation'), false, false); ?>
 					<?php } ?>
 				</div>
 			</div>

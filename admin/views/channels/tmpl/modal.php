@@ -23,33 +23,19 @@ $function	= 'jSelectChannel_'.$field;
             <button onclick="this.form.submit();" class="button"><?php echo MText::_( 'Go' ); ?></button>
             <button onclick="document.getElementById('search').value='';this.form.submit();" class="button"><?php echo MText::_('Reset'); ?></button>
 			<button type="button" onclick="if (window.parent) window.parent.<?php echo $this->escape($function);?>('', '<?php echo MText::_('MLIB_FORM_SELECT_USER') ?>');"><?php echo MText::_('MOPTION_NO_USER')?></button>
-			
-
-
-
-    <div id="editcell">
+			    <div id="editcell">
         <table class="wp-list-table widefat">
             <thead>
             <tr>
-                
-
-
-
-                <th width="20" style="text-align: center;">
+                                <th width="20" style="text-align: center;">
                     <input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)" />
                 </th>
 
                 <th style="text-align: left;">
                     <?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_TITLE'), 'c.title', $this->lists['order_Dir'], $this->lists['order']); ?>
-                </th>
-
-
-                <th width="10%" style="text-align: center;">
+                </th>                <th width="10%" style="text-align: center;">
                     <?php echo MHtml::_('grid.sort', MText::_('MGLOBAL_USERNAME'), 'u.user_login username', $this->lists['order_Dir'], $this->lists['order']); ?>
-                </th>
-
-
-                <th width="5%" style="text-align: center;">
+                </th>                <th width="5%" style="text-align: center;">
                     <?php echo MHtml::_('grid.sort', MText::_('MSTATUS'), 'c.published', $this->lists['order_Dir'], $this->lists['order']); ?>
                 </th>
 
@@ -57,12 +43,7 @@ $function	= 'jSelectChannel_'.$field;
                     <?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_FEATURE'), 'c.featured', $this->lists['order_Dir'], $this->lists['order']); ?>
                 </th>
 
-                
-
-
-
-
-                <th width="3%" style="text-align: center;">
+                                <th width="3%" style="text-align: center;">
                     <?php echo MHtml::_('grid.sort', 'MGLOBAL_HITS', 'c.hits', $this->lists['order_Dir'], $this->lists['order']); ?>
                 </th>
 
@@ -81,24 +62,13 @@ $function	= 'jSelectChannel_'.$field;
 
                     $link = MRoute::_('index.php?option=com_miwovideos&view=channels&task=edit&cid[]='.$row->id);
 
-                    $checked = MHtml::_('grid.id', $i, $row->id );
-
-
-
-                        $img = $row->published ? 'tick.png' : 'publish_x.png';
+                    $checked = MHtml::_('grid.id', $i, $row->id );                        $img = $row->published ? 'tick.png' : 'publish_x.png';
                         $alt = $row->published ? MText::_('MPUBLISHED') : MText::_('MUNPUBLISHED');
                         $published = MHtml::_('image', 'admin/' . $img, $alt, null, true);
 
                         $img = $row->featured ? 'featured.png' : 'disabled.png';
-                        $featured = MHtml::_('image', 'admin/' . $img, '', null, true);
-
-
-                    ?>
-                    <tr class="<?php echo "row$k"; ?>">
-
-
-
-                        <td style="text-align: center;">
+                        $featured = MHtml::_('image', 'admin/' . $img, '', null, true);                    ?>
+                    <tr class="<?php echo "row$k"; ?>">                        <td style="text-align: center;">
                             <?php echo $checked; ?>
                         </td>
 
@@ -122,11 +92,7 @@ $function	= 'jSelectChannel_'.$field;
                             <?php echo $featured; ?>
                         </td>
 
-                        
-
-
-
-                        <td class="text_center">
+                                                <td class="text_center">
                             <?php echo $row->hits; ?>
                         </td>
 

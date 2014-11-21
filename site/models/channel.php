@@ -54,7 +54,15 @@ class MiwovideosModelChannel extends MiwovideosModel {
 		         .' GROUP BY v.id ';
 
 		if (!empty($this->filter_order) and !empty($this->filter_order_Dir)) {
-			$query .= " ORDER BY {$this->filter_order} {$this->filter_order_Dir}";
+			switch ($this->filter_order) {
+				case 'v.week' :
+				case 'v.month' :
+					$query .= " ORDER BY v.created {$this->filter_order_Dir}";
+					break;
+				default :
+					$query .= " ORDER BY {$this->filter_order} {$this->filter_order_Dir}";
+					break;
+			}
 		}
 
 		return $query;
@@ -84,6 +92,17 @@ class MiwovideosModelChannel extends MiwovideosModel {
 		if (!empty($this->search)) {
 			$src     = parent::secureQuery($this->search, true);
 			$where[] = "(LOWER(v.title) LIKE {$src} OR LOWER(v.introtext) LIKE {$src})";
+		}
+
+		if (!empty($this->filter_order)) {
+			switch ($this->filter_order) {
+				case 'v.week' :
+					$where[] = 'YEARWEEK(v.created) = YEARWEEK(curdate())';
+					break;
+				case 'v.month' :
+					$where[] = 'MONTH(v.created) = MONTH(CURDATE()) AND YEAR(v.created) = YEAR(CURDATE())';
+					break;
+			}
 		}
 
 		$where = (count($where) ? ' WHERE '.implode(' AND ', $where) : '');

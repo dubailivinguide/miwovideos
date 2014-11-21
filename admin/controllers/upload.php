@@ -145,32 +145,4 @@ class MiwovideosControllerUpload extends MiwovideosController {
 		return $upload;
 	}
 
-	public function serverImport() {
-		$upload = MiwoVideos::get('upload');
-
-		$dashboard = '';
-		if (MiwoVideos::isDashboard()) {
-			$dashboard = '&dashboard=1';
 		}
-
-		$upload->serverImport();
-		if (!count($upload->getErrors())) {
-			if ($upload->_count > 1) {
-				$this->_mainframe->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_SUCCESSFULLY_UPLOADED'));
-				$this->_mainframe->redirect('index.php?option=com_miwovideos&view=videos'.$dashboard);
-			}
-			else {
-				$this->_mainframe->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_SUCCESSFULLY_UPLOADED_X', $upload->_title));
-				$redirect_url = MiwoVideos::get('utility')->route('index.php?option=com_miwovideos&view=videos&task=edit&cid[]='.$upload->_id.$dashboard);
-				$this->_mainframe->redirect($redirect_url);
-			}
-		}
-		else {
-			$this->_mainframe->enqueueMessage($upload->getError(0));
-			$redirect_url = MiwoVideos::get('utility')->route('index.php?option=com_miwovideos&view=upload'.$dashboard);
-			$this->_mainframe->redirect($redirect_url);
-		}
-
-		return $upload;
-	}
-}

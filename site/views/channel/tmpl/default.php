@@ -10,12 +10,12 @@ $url     = MRoute::_('index.php?option=com_miwovideos&view=channel&channel_id='.
 $utility = MiwoVideos::get('utility');
 ?>
 <?php if (($this->params->get('show_page_heading', '0') == '1')) { ?>
-	<?php $page_title = $this->params->get('page_title', ''); ?>
-	<?php if (!empty($this->item->title)) { ?>
-		<h1><?php echo $this->item->title; ?></h1>
+	<?php $page_heading = $this->params->get('page_heading', ''); ?>
+	<?php if (!empty($page_heading)) { ?>
+		<h1><?php echo $page_heading; ?></h1>
 	<?php }
-	else if (!empty($page_title)) { ?>
-		<h1><?php echo $page_title; ?></h1>
+	else if (!empty($this->item->title)) { ?>
+		<h1><?php echo $this->item->title; ?></h1>
 	<?php } ?>
 <?php } ?>
 <div id="notification"></div>
@@ -45,7 +45,7 @@ $utility = MiwoVideos::get('utility');
 			</div>
 			<?php if (MiwoVideos::get('channels')->getDefaultChannel()->id == $this->item->id or $this->item->share_others) { ?>
 				<span class="miwovideos_upload">
-                    <a href="<?php echo MiwoVideos::get('utility')->route(MUri::base().'index.php?option=com_miwovideos&view=upload&channel_id='.$this->item->id.'&dashboard=1') ?>" class="<?php echo MiwoVideos::getButtonClass(); ?>">
+                    <a href="<?php echo MRoute::_('index.php?option=com_miwovideos&view=upload&channel_id='.$this->item->id.'&dashboard=1'); ?>" class="<?php echo MiwoVideos::getButtonClass(); ?>">
 	                    <?php echo MText::_('COM_MIWOVIDEOS_UPLOAD'); ?>
                     </a>
                 </span>
@@ -115,7 +115,7 @@ $utility = MiwoVideos::get('utility');
 			<?php MiwoVideos::get('utility')->trigger('getComments', array($this->item->id, $this->item->title)); ?>
 		<?php } ?>
 		<?php echo MHtml::_('tabs.panel', MText::_('COM_MIWOVIDEOS_DESCRIPTION'), 'sl_description'); ?>
-		<div class="miwovideos_description"><?php echo $this->item->description; ?></div>
+		<div class="miwovideos_description"><?php echo html_entity_decode($this->item->description, ENT_QUOTES); ?></div>
 		<div class="miwovideos_description_stats">
 			<?php if ($this->config->get('custom_fields')) { ?>
 				<div class="miwovideos_custom_fields">

@@ -8,7 +8,16 @@
 defined('MIWI') or die ;
 
 $page_title = $this->params->get('page_title', '');
-if (($this->params->get('show_page_heading', '0') == '1') && !empty($page_title)) { $page_title; } ?>
+if (($this->params->get('show_page_heading', '0') == '1')) {
+	?>
+	<?php $page_heading = $this->params->get('page_heading', ''); ?>
+	<?php if (!empty($page_heading)) { ?>
+		<h1><?php echo $page_heading; ?></h1>
+	<?php }
+	else if (!empty($page_title)) { ?>
+		<h1><?php echo $page_title; ?></h1>
+	<?php } ?>
+<?php } ?>
 
 <div class="miwovideos_box">
 	<div class="miwovideos_box_heading">

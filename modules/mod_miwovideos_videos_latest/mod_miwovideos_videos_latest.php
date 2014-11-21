@@ -32,6 +32,16 @@ if (file_exists(MPATH_WP_CNT.'/themes/'.$tmpl.'/html/com_miwovideos/assets/css/m
 
 $numberVideos = $params->get('number_videos', 6);
 
+$sql = "SELECT GROUP_CONCAT(DISTINCT p.video_id SEPARATOR ',')
+        FROM #__miwovideos_processes p
+        WHERE p.status = 3 AND p.published = 1";
+$db->setQuery($sql);
+$rows = $db->loadResult();
+$not_in = '';
+if ($rows) {
+	$not_in = ' AND id NOT IN ('.$rows.')';
+}
+
 $extraWhere = '';
 if ($app->getLanguageFilter()) {
     $extraWhere = ' AND language IN (' . $db->Quote(MFactory::getLanguage()->getTag()) . ',' . $db->Quote('*') . ')';
@@ -39,6 +49,7 @@ if ($app->getLanguageFilter()) {
 
 $sql = 'SELECT * FROM #__miwovideos_videos'
 		.' WHERE published = 1'
+		.$not_in
 		.' AND access IN ('.implode(',', $user->getAuthorisedViewLevels()).')' . $extraWhere
 		.' ORDER BY created DESC '
 		.($numberVideos ? ' LIMIT '.$numberVideos : '');

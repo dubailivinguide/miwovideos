@@ -8,7 +8,7 @@
 defined('MIWI') or die;
 
 if (count($this->items)) {
-	foreach ($this->checksubscription AS $checksubscription) {
+	foreach ($this->checksubscription as $checksubscription) {
 		$subs[] = $checksubscription['item_id'];
 	}
 	$utility = MiwoVideos::get('utility');
@@ -31,44 +31,44 @@ if (count($this->items)) {
 						<div class="miwovideos_subscribe" id="<?php echo $item->id; ?>">
 							<?php if (isset($subs)) { ?>
 								<?php if (in_array($item->id, $subs)) { ?>
-									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribe" style="display:none" id="subscribe_button">
+									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribe" data-subs-toggle="subscribe" style="display:none">
 										<?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBE'); ?>
 									</a>
 									<div class="miwovideos_subscribe_count" style="display:none" id="subs_count<?php echo $item->id ?>">
 										<span class="subs_count"><?php echo is_null($item->subs) ? '0' : number_format($item->subs); ?></span>
 									</div>
 									<div style="visibility:hidden" class="subs_nub"><s></s><i></i></div>
-									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribed" id="unsubscribe_button"><?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBED'); ?></a>
+									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribed" data-subs-toggle="unsubscribe"><?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBED'); ?></a>
 								<?php
 								}
 								else {
 									?>
-									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribe" id="subscribe_button">
+									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribe" data-subs-toggle="subscribe">
 										<?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBE'); ?>
 									</a>
 									<div class="miwovideos_subscribe_count" id="subs_count<?php echo $item->id ?>">
 										<span class="subs_count"><?php echo is_null($item->subs) ? '0' : number_format($item->subs); ?></span>
 									</div>
 									<div class="subs_nub"><s></s><i></i></div>
-									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribed" style="display:none" id="unsubscribe_button"><?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBED'); ?></a>
+									<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribed" data-subs-toggle="unsubscribe" style="display:none"><?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBED'); ?></a>
 								<?php } ?>
 							<?php
 							}
 							else {
 								?>
-								<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribe" id="subscribe_button">
+								<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribe" data-subs-toggle="subscribe">
 									<?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBE'); ?>
 								</a>
 								<div class="miwovideos_subscribe_count" id="subs_count<?php echo $item->id ?>">
 									<span class="subs_count"><?php echo isset($item->subs) ? number_format($item->subs) : '0'; ?></span>
 								</div>
 								<div class="subs_nub"><s></s><i></i></div>
-								<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribed" style="display:none" id="unsubscribe_button"><?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBED'); ?></a>
+								<a class="<?php echo MiwoVideos::getButtonClass(); ?> subscribed" style="display:none" data-subs-toggle="unsubscribe"><?php echo MText::_('COM_MIWOVIDEOS_SUBSCRIBED'); ?></a>
 							<?php } ?>
 						</div>
 					<?php } ?>
 				</div>
-				<?php echo $this->escape(MHtmlString::truncate($item->introtext, $this->config->get('desc_truncation'), false, false)); ?>
+				<?php echo MHtmlString::truncate(html_entity_decode($item->introtext, ENT_QUOTES), $this->config->get('desc_truncation'), false, false); ?>
 				<div class="miwovideos_preview_videos">
 					<div class="miwovideos_preview_videos_title"><?php echo MText::_('COM_MIWOVIDEOS_PREVIEW_VIDEOS'); ?></div>
 					<?php foreach ($item->videos as $video) { ?>
@@ -86,9 +86,9 @@ if (count($this->items)) {
 	<?php } ?>
 <?php } ?>
 
-<script type="text/javascript"><!--
-	jQuery('#subscribe_button, #unsubscribe_button').click(function () {
-		var clicked_button = jQuery(this).attr('id').replace("_button", "");
+<script type="text/javascript">
+	jQuery('.subscribe, .subscribed').click(function () {
+		var clicked_button = jQuery(this).attr('data-subs-toggle');
 		var id = jQuery(this).parent().attr("id");
 		jQuery.ajax({
 			url : '<?php echo MURL_ADMIN; ?>/admin-ajax.php?action=miwovideos&view=channels&task=subscribeToItem&format=raw',
@@ -100,14 +100,14 @@ if (count($this->items)) {
 					var subs = jQuery('#subs_count'+id);
 					var count = subs.children().text();
 					if (clicked_button == "unsubscribe") {
-						jQuery('#'+id+' #unsubscribe_button').hide();
-						jQuery('#'+id+' #subscribe_button').show();
+						jQuery('#'+id+' .subscribed').hide();
+						jQuery('#'+id+' .subscribe').show();
 						subs.children().text(parseInt(count)-1);
 						subs.show();
 						subs.next().css('visibility', 'visible');
 					} else {
-						jQuery('#'+id+' #subscribe_button').hide();
-						jQuery('#'+id+' #unsubscribe_button').show();
+						jQuery('#'+id+' .subscribe').hide();
+						jQuery('#'+id+' .subscribed').show();
 						subs.children().text(parseInt(count)+1);
 						subs.hide();
 						subs.next().css('visibility', 'hidden');
@@ -134,4 +134,4 @@ if (count($this->items)) {
 			}
 		);
 	});
-	//--></script>
+</script>

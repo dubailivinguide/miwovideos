@@ -69,6 +69,13 @@
             <option value="amazons3">COM_MIWOVIDEOS_AMAZONS3</option>
         </field>
 
+        <field name="protect_files" type="radio" class="btn-group" default="0" label="COM_MIWOVIDEOS_PROTECT_FILES" description="COM_MIWOVIDEOS_PROTECT_FILES_DESC">
+            <option value="1">MYES</option>
+            <option value="0">MNO</option>
+        </field>
+
+        <field name="protected_link_expire_time" type="text" default="1800" label="COM_MIWOVIDEOS_PROTECTED_LINK_EXPIRE_TIME" description="COM_MIWOVIDEOS_PROTECTED_LINK_EXPIRE_TIME_DESC" />
+
     </fieldset>
 
     <!-- Frontend -->
@@ -83,13 +90,6 @@
             <option value="1">MYES</option>
             <option value="0">MNO</option>
         </field>
-
-        <field name="show_related_carousel" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_SHOW_RELATED_CAROUSEL" description="" >
-            <option value="1">MYES</option>
-            <option value="0">MNO</option>
-        </field>
-
-        <field name="total_related_videos" type="text" default="9" label="COM_MIWOVIDEOS_TOTAL_RELATED_VIDEOS" description="" ></field>
 
         <field name="show_empty_cat" type="radio" class="btn-group" default="0" label="COM_MIWOVIDEOS_SHOW_EMPTY_CATEGORIES" description="" >
             <option value="1">MYES</option>
@@ -184,7 +184,12 @@
             <option value="0">MNO</option>
         </field>
 
-        <field name="remote_upload" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_ENABLE_REMOTE_UPLOAD" description="">
+        <field name="remote_video_link" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_ENABLE_REMOTE_UPLOAD" description="">
+            <option value="1">MYES</option>
+            <option value="0">MNO</option>
+        </field>
+
+        <field name="remote_video_embed_code" type="radio" class="btn-group" default="1" label="COM_MIWOVIDEOS_ENABLE_REMOTE_EMBED" description="">
             <option value="1">MYES</option>
             <option value="0">MNO</option>
         </field>
@@ -234,6 +239,164 @@
         <field name="metadata_injector" type="list" default="1" label="COM_MIWOVIDEOS_METADATA_INJECTOR" description="" >
             <option value="yamdi">Yamdi</option>
             <option value="flvtool2">flvtool2</option>
+        </field>
+
+        <field name="bitrate" type="spacer" label="BITRATE"/>
+
+        <field name="max_video_bitrate240" type="list" default="300" label="COM_MIWOVIDEOS_MAX_VIDEO_BITRATE_240" description="">
+            <option value="300">COM_MIWOVIDEOS_300KBITS</option>
+            <option value="400">COM_MIWOVIDEOS_400KBITS</option>
+            <option value="500">COM_MIWOVIDEOS_500KBITS</option>
+            <option value="600">COM_MIWOVIDEOS_600KBITS</option>
+            <option value="700">COM_MIWOVIDEOS_700KBITS</option>
+            <option value="800">COM_MIWOVIDEOS_800KBITS</option>
+            <option value="900">COM_MIWOVIDEOS_900KBITS</option>
+            <option value="1000">COM_MIWOVIDEOS_1000KBITS</option>
+            <option value="1100">COM_MIWOVIDEOS_1100KBITS</option>
+            <option value="1200">COM_MIWOVIDEOS_1200KBITS</option>
+            <option value="1300">COM_MIWOVIDEOS_1300KBITS</option>
+            <option value="1400">COM_MIWOVIDEOS_1400KBITS</option>
+            <option value="1500">COM_MIWOVIDEOS_1500KBITS</option>
+            <option value="1600">COM_MIWOVIDEOS_1600KBITS</option>
+            <option value="1700">COM_MIWOVIDEOS_1700KBITS</option>
+            <option value="1800">COM_MIWOVIDEOS_1800KBITS</option>
+            <option value="1900">COM_MIWOVIDEOS_1900KBITS</option>
+            <option value="2000">COM_MIWOVIDEOS_2000KBITS</option>
+        </field>
+
+        <field name="audio_bitrate240" type="list" default="0" label="COM_MIWOVIDEOS_AUDIO_BITRATE_240" description="">
+            <option value="0">COM_MIWOVIDEOS_AUDIO_AUTO</option>
+            <option value="32">COM_MIWOVIDEOS_32KBITS</option>
+            <option value="64">COM_MIWOVIDEOS_64KBITS</option>
+            <option value="96">COM_MIWOVIDEOS_96KBITS</option>
+            <option value="192">COM_MIWOVIDEOS_192KBITS</option>
+            <option value="224">COM_MIWOVIDEOS_224KBITS</option>
+        </field>
+
+
+        <field name="max_video_bitrate360" type="list" default="500" label="COM_MIWOVIDEOS_MAX_VIDEO_BITRATE_360" description="">
+            <option value="300">COM_MIWOVIDEOS_300KBITS</option>
+            <option value="400">COM_MIWOVIDEOS_400KBITS</option>
+            <option value="500">COM_MIWOVIDEOS_500KBITS</option>
+            <option value="600">COM_MIWOVIDEOS_600KBITS</option>
+            <option value="700">COM_MIWOVIDEOS_700KBITS</option>
+            <option value="800">COM_MIWOVIDEOS_800KBITS</option>
+            <option value="900">COM_MIWOVIDEOS_900KBITS</option>
+            <option value="1000">COM_MIWOVIDEOS_1000KBITS</option>
+            <option value="1100">COM_MIWOVIDEOS_1100KBITS</option>
+            <option value="1200">COM_MIWOVIDEOS_1200KBITS</option>
+            <option value="1300">COM_MIWOVIDEOS_1300KBITS</option>
+            <option value="1400">COM_MIWOVIDEOS_1400KBITS</option>
+            <option value="1500">COM_MIWOVIDEOS_1500KBITS</option>
+            <option value="1600">COM_MIWOVIDEOS_1600KBITS</option>
+            <option value="1700">COM_MIWOVIDEOS_1700KBITS</option>
+            <option value="1800">COM_MIWOVIDEOS_1800KBITS</option>
+            <option value="1900">COM_MIWOVIDEOS_1900KBITS</option>
+            <option value="2000">COM_MIWOVIDEOS_2000KBITS</option>
+        </field>
+
+        <field name="audio_bitrate360" type="list" default="0" label="COM_MIWOVIDEOS_AUDIO_BITRATE_360" description="">
+            <option value="0">COM_MIWOVIDEOS_AUDIO_AUTO</option>
+            <option value="32">COM_MIWOVIDEOS_32KBITS</option>
+            <option value="64">COM_MIWOVIDEOS_64KBITS</option>
+            <option value="96">COM_MIWOVIDEOS_96KBITS</option>
+            <option value="192">COM_MIWOVIDEOS_192KBITS</option>
+            <option value="224">COM_MIWOVIDEOS_224KBITS</option>
+        </field>
+
+
+        <field name="max_video_bitrate480" type="list" default="700" label="COM_MIWOVIDEOS_MAX_VIDEO_BITRATE_480" description="">
+            <option value="300">COM_MIWOVIDEOS_300KBITS</option>
+            <option value="400">COM_MIWOVIDEOS_400KBITS</option>
+            <option value="500">COM_MIWOVIDEOS_500KBITS</option>
+            <option value="600">COM_MIWOVIDEOS_600KBITS</option>
+            <option value="700">COM_MIWOVIDEOS_700KBITS</option>
+            <option value="800">COM_MIWOVIDEOS_800KBITS</option>
+            <option value="900">COM_MIWOVIDEOS_900KBITS</option>
+            <option value="1000">COM_MIWOVIDEOS_1000KBITS</option>
+            <option value="1100">COM_MIWOVIDEOS_1100KBITS</option>
+            <option value="1200">COM_MIWOVIDEOS_1200KBITS</option>
+            <option value="1300">COM_MIWOVIDEOS_1300KBITS</option>
+            <option value="1400">COM_MIWOVIDEOS_1400KBITS</option>
+            <option value="1500">COM_MIWOVIDEOS_1500KBITS</option>
+            <option value="1600">COM_MIWOVIDEOS_1600KBITS</option>
+            <option value="1700">COM_MIWOVIDEOS_1700KBITS</option>
+            <option value="1800">COM_MIWOVIDEOS_1800KBITS</option>
+            <option value="1900">COM_MIWOVIDEOS_1900KBITS</option>
+            <option value="2000">COM_MIWOVIDEOS_2000KBITS</option>
+        </field>
+
+        <field name="audio_bitrate480" type="list" default="0" label="COM_MIWOVIDEOS_AUDIO_BITRATE_480" description="">
+            <option value="0">COM_MIWOVIDEOS_AUDIO_AUTO</option>
+            <option value="32">COM_MIWOVIDEOS_32KBITS</option>
+            <option value="64">COM_MIWOVIDEOS_64KBITS</option>
+            <option value="96">COM_MIWOVIDEOS_96KBITS</option>
+            <option value="192">COM_MIWOVIDEOS_192KBITS</option>
+            <option value="224">COM_MIWOVIDEOS_224KBITS</option>
+        </field>
+
+
+        <field name="max_video_bitrate720" type="list" default="900" label="COM_MIWOVIDEOS_MAX_VIDEO_BITRATE_720" description="">
+            <option value="300">COM_MIWOVIDEOS_300KBITS</option>
+            <option value="400">COM_MIWOVIDEOS_400KBITS</option>
+            <option value="500">COM_MIWOVIDEOS_500KBITS</option>
+            <option value="600">COM_MIWOVIDEOS_600KBITS</option>
+            <option value="700">COM_MIWOVIDEOS_700KBITS</option>
+            <option value="800">COM_MIWOVIDEOS_800KBITS</option>
+            <option value="900">COM_MIWOVIDEOS_900KBITS</option>
+            <option value="1000">COM_MIWOVIDEOS_1000KBITS</option>
+            <option value="1100">COM_MIWOVIDEOS_1100KBITS</option>
+            <option value="1200">COM_MIWOVIDEOS_1200KBITS</option>
+            <option value="1300">COM_MIWOVIDEOS_1300KBITS</option>
+            <option value="1400">COM_MIWOVIDEOS_1400KBITS</option>
+            <option value="1500">COM_MIWOVIDEOS_1500KBITS</option>
+            <option value="1600">COM_MIWOVIDEOS_1600KBITS</option>
+            <option value="1700">COM_MIWOVIDEOS_1700KBITS</option>
+            <option value="1800">COM_MIWOVIDEOS_1800KBITS</option>
+            <option value="1900">COM_MIWOVIDEOS_1900KBITS</option>
+            <option value="2000">COM_MIWOVIDEOS_2000KBITS</option>
+        </field>
+
+
+        <field name="audio_bitrate720" type="list" default="0" label="COM_MIWOVIDEOS_AUDIO_BITRATE_720" description="">
+            <option value="0">COM_MIWOVIDEOS_AUDIO_AUTO</option>
+            <option value="32">COM_MIWOVIDEOS_32KBITS</option>
+            <option value="64">COM_MIWOVIDEOS_64KBITS</option>
+            <option value="96">COM_MIWOVIDEOS_96KBITS</option>
+            <option value="192">COM_MIWOVIDEOS_192KBITS</option>
+            <option value="224">COM_MIWOVIDEOS_224KBITS</option>
+        </field>
+
+
+        <field name="max_video_bitrate1080" type="list" default="1200" label="COM_MIWOVIDEOS_MAX_VIDEO_BITRATE_1080" description="">
+            <option value="300">COM_MIWOVIDEOS_300KBITS</option>
+            <option value="400">COM_MIWOVIDEOS_400KBITS</option>
+            <option value="500">COM_MIWOVIDEOS_500KBITS</option>
+            <option value="600">COM_MIWOVIDEOS_600KBITS</option>
+            <option value="700">COM_MIWOVIDEOS_700KBITS</option>
+            <option value="800">COM_MIWOVIDEOS_800KBITS</option>
+            <option value="900">COM_MIWOVIDEOS_900KBITS</option>
+            <option value="1000">COM_MIWOVIDEOS_1000KBITS</option>
+            <option value="1100">COM_MIWOVIDEOS_1100KBITS</option>
+            <option value="1200">COM_MIWOVIDEOS_1200KBITS</option>
+            <option value="1300">COM_MIWOVIDEOS_1300KBITS</option>
+            <option value="1400">COM_MIWOVIDEOS_1400KBITS</option>
+            <option value="1500">COM_MIWOVIDEOS_1500KBITS</option>
+            <option value="1600">COM_MIWOVIDEOS_1600KBITS</option>
+            <option value="1700">COM_MIWOVIDEOS_1700KBITS</option>
+            <option value="1800">COM_MIWOVIDEOS_1800KBITS</option>
+            <option value="1900">COM_MIWOVIDEOS_1900KBITS</option>
+            <option value="2000">COM_MIWOVIDEOS_2000KBITS</option>
+        </field>
+
+
+        <field name="audio_bitrate1080" type="list" default="0" label="COM_MIWOVIDEOS_AUDIO_BITRATE_1080" description="">
+            <option value="0">COM_MIWOVIDEOS_AUDIO_AUTO</option>
+            <option value="32">COM_MIWOVIDEOS_32KBITS</option>
+            <option value="64">COM_MIWOVIDEOS_64KBITS</option>
+            <option value="96">COM_MIWOVIDEOS_96KBITS</option>
+            <option value="192">COM_MIWOVIDEOS_192KBITS</option>
+            <option value="224">COM_MIWOVIDEOS_224KBITS</option>
         </field>
 
         <field name="jpeg" type="spacer" label="JPEG" />

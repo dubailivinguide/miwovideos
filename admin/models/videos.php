@@ -267,15 +267,15 @@ class MiwovideosModelVideos extends MiwovideosModel {
 			return false;
 		}
 
-		if (!MiwoDB::query('DELETE FROM #__miwovideos_files WHERE id IN ('.implode(',', $ids).')')) {
+		if (!MiwoDB::query('DELETE FROM #__miwovideos_files WHERE video_id IN ('.implode(',', $ids).')')) {
 			return false;
 		}
 
-		if (!MiwoDB::query('DELETE FROM #__miwovideos_playlist_videos WHERE id IN ('.implode(',', $ids).')')) {
+		if (!MiwoDB::query('DELETE FROM #__miwovideos_playlist_videos WHERE video_id IN ('.implode(',', $ids).')')) {
 			return false;
 		}
 
-		if (!MiwoDB::query('DELETE FROM #__miwovideos_processes WHERE id IN ('.implode(',', $ids).')')) {
+		if (!MiwoDB::query('DELETE FROM #__miwovideos_processes WHERE video_id IN ('.implode(',', $ids).')')) {
 			return false;
 		}
 

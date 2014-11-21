@@ -23,30 +23,7 @@ class plgSystemMiwovideos extends MPlugin {
 
 				
 
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            }
 		if ($app->isSite()) {
 			$this->_checkRedirection();
 

@@ -117,27 +117,6 @@ class MiwovideosModelUpgrade extends MiwovideosModel {
 		    }
 	    }
 		
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		return true;
+				return true;
     }
 }

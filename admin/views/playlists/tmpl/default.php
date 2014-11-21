@@ -49,11 +49,7 @@ $ordering = ($this->lists['order'] == 'p.ordering');
                 &nbsp;&nbsp;&nbsp;
             <?php echo $this->lists['filter_published']; ?>
 
-            
-
-
-
-
+            
             <?php if ($this->acl->canAdmin()) { ?>
             <select name="filter_language" class="inputbox" onchange="this.form.submit()">
                 <option value=""><?php echo MText::_('MOPTION_SELECT_LANGUAGE');?></option>
@@ -68,10 +64,7 @@ $ordering = ($this->lists['order'] == 'p.ordering');
 	<table class="wp-list-table widefat">
         <thead>
             <tr>
-                
-
-
-
+                
                 <th width="20px" style="text-align: center;">
                     <input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)" />
                 </th>
@@ -101,10 +94,7 @@ $ordering = ($this->lists['order'] == 'p.ordering');
 					<?php } ?>
 				</th>
 
-                
-
-
-
+                
                 <?php if ($this->acl->canAdmin()) { ?>
 				<th width="5%" style="text-align: center;">
 					<?php echo MHtml::_('grid.sort', 'MGRID_HEADING_LANGUAGE', 'p.language', $this->lists['order_Dir'], $this->lists['order']); ?>
@@ -139,11 +129,7 @@ $ordering = ($this->lists['order'] == 'p.ordering');
             $featured = $this->getIcon($i, $task = $row->featured == '0' ? 'feature' : 'unfeature', $row->featured ? 'featured.png' : 'disabled.png', true);
 
             ?>
-            <tr class="<?php echo "row$k"; ?>">
-
-
-
-                <td style="text-align: center;">
+            <tr class="<?php echo "row$k"; ?>">                <td style="text-align: center;">
                     <?php echo $checked; ?>
                 </td>
 
@@ -186,10 +172,7 @@ $ordering = ($this->lists['order'] == 'p.ordering');
 					<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" style="text-align: center; width: 30px;" <?php echo $disabled; ?> />
 				</td>
 
-                
-
-
-
+                
                 <?php if ($this->acl->canAdmin()) { ?>
 				<td style="text-align: center;">
 					<?php if ($row->language == '*') { ?>

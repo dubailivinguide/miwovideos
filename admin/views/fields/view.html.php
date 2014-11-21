@@ -85,32 +85,7 @@ class MiwovideosViewFields extends MiwovideosView {
             MToolBarHelper::addNew();
         }
 
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
         $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/fields?tmpl=component', 650, 500);
     }
 }

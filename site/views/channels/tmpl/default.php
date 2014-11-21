@@ -8,9 +8,16 @@
 defined('MIWI') or die;
 
 $page_title = $this->params->get('page_title', '');
-if (($this->params->get('show_page_heading', '0') == '1') && !empty($page_title)) {
-	$page_title;
-} ?>
+if (($this->params->get('show_page_heading', '0') == '1')) {
+	?>
+	<?php $page_heading = $this->params->get('page_heading', ''); ?>
+	<?php if (!empty($page_heading)) { ?>
+		<h1><?php echo $page_heading; ?></h1>
+	<?php }
+	else if (!empty($page_title)) { ?>
+		<h1><?php echo $page_title; ?></h1>
+	<?php } ?>
+<?php } ?>
 <div id="notification"></div>
 <div class="miwovideos_box">
 	<div class="miwovideos_box_heading">
@@ -29,8 +36,8 @@ if (($this->params->get('show_page_heading', '0') == '1') && !empty($page_title)
 					else {
 						$list = 'active';
 					} ?>
-					<a class="<?php echo MiwoVideos::getButtonClass(); ?> <?php echo $grid; ?>" href="<?php echo MRoute::_('index.php?option=com_miwovideos&view=channels&display=grid'.$this->Itemid); ?>" class="v-detail" title="<?php echo MText::_('COM_MIWOVIDEOS_GRID'); ?>"><?php echo MText::_('COM_MIWOVIDEOS_GRID'); ?></a>
-					<a class="<?php echo MiwoVideos::getButtonClass(); ?> <?php echo $list; ?>" href="<?php echo MRoute::_('index.php?option=com_miwovideos&view=channels&display=list'.$this->Itemid); ?>" class="v-list" title="<?php echo MText::_('COM_MIWOVIDEOS_LIST'); ?>"><?php echo MText::_('COM_MIWOVIDEOS_LIST'); ?></a>
+					<a class="<?php echo MiwoVideos::getButtonClass(); ?> <?php echo $grid; ?> v-detail" href="<?php echo MRoute::_('index.php?option=com_miwovideos&view=channels&display=grid'.$this->Itemid); ?>" title="<?php echo MText::_('COM_MIWOVIDEOS_GRID'); ?>"><?php echo MText::_('COM_MIWOVIDEOS_GRID'); ?></a>
+					<a class="<?php echo MiwoVideos::getButtonClass(); ?> <?php echo $list; ?> v-list" href="<?php echo MRoute::_('index.php?option=com_miwovideos&view=channels&display=list'.$this->Itemid); ?>" title="<?php echo MText::_('COM_MIWOVIDEOS_LIST'); ?>"><?php echo MText::_('COM_MIWOVIDEOS_LIST'); ?></a>
 				</div>
 				<div class="miwovideos_searchbox">
 					<input type="text" name="miwovideos_search" id="miwovideos_search" placeholder="Search..." value="<?php echo empty($this->lists['search']) ? "" : $this->lists['search']; ?>" onchange="document.adminForm.submit();"/>

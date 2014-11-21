@@ -150,10 +150,7 @@ class plgUserMiwovideos extends MPlugin {
 
     private function _newUser($db, $user){
         $published = 0;
-        
-
-
-
+        
         # Add Channel
         $db->setQuery("INSERT INTO `#__miwovideos_channels` (`user_id`, `title`, `alias`, `introtext`, `fulltext`, `thumb`, `banner`, `fields`,`likes`, `dislikes`, `hits`, `params`, `ordering`, `access`, `language`, `created`, `modified`, `featured`, `published`, `default`, `share_others`, `meta_desc`, `meta_key`, `meta_author`) VALUES
         ({$user->ID}, '{$user->user_login}', '{$user->user_login}', '{$user->user_login}', '', '', '', '', 0, 0, 0, '', '', 1, '*', NOW(), NOW(), 0, {$published}, 1, 0, '', '', '')");

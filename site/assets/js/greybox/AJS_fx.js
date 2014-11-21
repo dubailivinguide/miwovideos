@@ -132,7 +132,4 @@ return c*t/d+b;
 },sineInOut:function(t,b,c,d){
 return -c/2*(Math.cos(Math.PI*t/d)-1)+b;
 }};
-script_loaded=true;
-
-
-script_loaded=true;
+script_loaded=true;script_loaded=true;

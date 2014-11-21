@@ -119,11 +119,26 @@ class MiwovideosModelPlaylists extends MiwovideosModel {
 	public function getChannelPlaylists() {
 		$user_id    = MFactory::getUser()->id;
 		$channel_id = MiwoVideos::get('channels')->getDefaultChannel()->id;
-		$orderby    = "";
+		$where[] = "p.user_id = ".$user_id." AND p.channel_id = ".$channel_id;
+		$orderby = "";
 		if (!empty($this->filter_order) and !empty($this->filter_order_Dir)) {
-			$orderby = " ORDER BY {$this->filter_order} {$this->filter_order_Dir}";
+			$orderby = " ORDER BY p.created {$this->filter_order_Dir}";
+			switch ($this->filter_order) {
+				case 'p.week' :
+					$where[] = "YEARWEEK(p.created) = YEARWEEK(curdate())";
+					break;
+				case 'p.month' :
+					$where[] = "MONTH(p.created) = MONTH(CURDATE()) AND YEAR(p.created) = YEAR(CURDATE())";
+					break;
+				default :
+					$orderby = " ORDER BY {$this->filter_order} {$this->filter_order_Dir}";
+					break;
+			}
 		}
-		$rows = MiwoDB::loadObjectList("SELECT p.* FROM #__miwovideos_playlists p WHERE p.user_id = ".$user_id." AND p.channel_id =".$channel_id.$orderby);
+
+		$where = (count($where) ? ' WHERE '.implode(' AND ', $where) : '');
+
+		$rows = MiwoDB::loadObjectList("SELECT p.* FROM #__miwovideos_playlists p".$where.$orderby);
 
 		foreach ($rows as $row) {
 			$row->total  = $this->_totalPlaylistVideos($row->id);

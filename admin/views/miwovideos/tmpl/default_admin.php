@@ -110,10 +110,7 @@ defined('MIWI') or die('Restricted access');
                 <table class="wp-list-table widefat">
                     <?php
                         $rowspan = 5;
-                        
-
-
-                    ?>
+                                            ?>
                     <tr height="70">
                         <td width="%25">
                             <?php
@@ -148,19 +145,7 @@ defined('MIWI') or die('Restricted access');
                             </a>
                         </td>
                     </tr>
-                    
-
-
-
-
-
-
-
-
-
-
-
-                    <tr height="40">
+                                        <tr height="40">
                         <td>
                             <?php
                                 if($this->info['version_status'] == 0 || $this->info['version_enabled'] == 0) {

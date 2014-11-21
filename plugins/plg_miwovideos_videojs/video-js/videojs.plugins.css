@@ -165,3 +165,220 @@
 }
 
 /* Related Carousel */
+
+/* Ads */
+
+/* Ad playback */
+.vjs-ad-playing.vjs-ad-playing .vjs-progress-control {
+    pointer-events : none;
+}
+
+.vjs-ad-playing.vjs-ad-playing .vjs-play-progress {
+    background-color : #FFE400;
+}
+
+/* Ad loading */
+.vjs-ad-playing.vjs-ad-loading .vjs-loading-spinner {
+    display : block;
+}
+
+/* Ads */
+
+/* Vast */
+
+.vast-skip-button {
+    display          : block;
+    position         : absolute;
+    top              : 5px;
+    right            : 0;
+    width            : auto;
+    background-color : #000000;
+    color            : #AAAAAA;
+    font-size        : 12px;
+    font-style       : italic;
+    line-height      : 12px;
+    padding          : 10px;
+    z-index          : 2;
+}
+
+.vast-skip-button.enabled {
+    cursor : pointer;
+    color  : #FFFFFF;
+}
+
+.vast-skip-button.enabled:hover {
+    cursor     : pointer;
+    background : #333333;
+}
+
+.vast-blocker {
+    display  : block;
+    position : absolute;
+    margin   : 0;
+    padding  : 0;
+    height   : 100%;
+    width    : 100%;
+    top      : 0;
+    left     : 0;
+    right    : 0;
+    bottom   : 0;
+}
+
+/* Vast */
+
+/* Google IMA */
+
+#ima-ad-container {
+    top      : 0px;
+    position : absolute;
+    display  : block;
+}
+
+#ima-controls-div {
+    bottom           : 0px;
+    height           : 37px;
+    position         : absolute;
+    opacity          : 1;
+    background-color : rgba(7, 20, 30, .7);
+    background       : -moz-linear-gradient(
+            bottom,
+            rgba(7, 20, 30, .7) 0%,
+            rgba(7, 20, 30, 0) 100%); /* FF3.6+ */
+    background       : -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0%, rgba(7, 20, 30, .7)),
+            color-stop(100%, rgba(7, 20, 30, 0))); /* Chrome,Safari4+ */
+    background       : -webkit-linear-gradient(
+            bottom,
+            rgba(7, 20, 30, .7) 0%,
+            rgba(7, 20, 30, 0) 100%); /* Chrome10+,Safari5.1+ */
+    background       : -o-linear-gradient(bottom,
+    rgba(7, 20, 30, .7) 0%,
+    rgba(7, 20, 30, 0) 100%); /* Opera 11.10+ */
+    background       : -ms-linear-gradient(bottom,
+    rgba(7, 20, 30, .7) 0%,
+    rgba(7, 20, 30, 0) 100%); /* IE10+ */
+    background       : linear-gradient(to top,
+    rgba(7, 20, 30, .7) 0%,
+    rgba(7, 20, 30, 0) 100%); /* W3C */
+    filter           : progid:DXImageTransform.Microsoft.gradient(
+            startColorstr='#0007141E',
+            endColorstr='#07141E', GradientType=0); /* IE6-9 */
+}
+
+#ima-countdown-div {
+    height      : 11px;
+    color       : #FFFFFF;
+    text-shadow : 0 0 0.2em #000000;
+}
+
+#ima-seek-bar-div {
+    top        : 12px;
+    height     : 3px;
+    position   : absolute;
+    background : rgba(255, 255, 255, .4);
+}
+
+#ima-progress-div {
+    width            : 0px;
+    height           : 3px;
+    background-color : #ECC546;
+}
+
+#ima-countdown-div {
+    height : 10px;
+}
+
+#ima-play-pause-div, #ima-mute-div, #ima-fullscreen-div {
+    width       : 35px;
+    height      : 20px;
+    top         : 11px;
+    left        : 0px;
+    position    : absolute;
+    color       : #CCCCCC;
+    font-family : VideoJS;
+    font-size   : 1.5em;
+    line-height : 2;
+    text-align  : center;
+}
+
+#ima-mute-div {
+    left  : 35px;
+    right : auto;
+}
+
+#ima-fullscreen-div {
+    left  : auto;
+    right : 0px;
+}
+
+.ima-playing:before {
+    content : "\e002";
+}
+
+.ima-paused:before {
+    content : "\e001";
+}
+
+.ima-playing:hover:before, .ima-paused:hover:before {
+    text-shadow : 0 0 1em #FFFFFF;
+}
+
+.ima-non-muted:before {
+    content : "\e006";
+}
+
+.ima-muted:before {
+    content : "\e003";
+}
+
+.ima-non-muted:hover:before, .ima-muted:hover:before {
+    text-shadow : 0 0 1em #FFFFFF;
+}
+
+.ima-non-fullscreen:before {
+    content : "\e000";
+}
+
+.ima-fullscreen:before {
+    content : "\e00b";
+}
+
+.ima-non-fullscreen:hover:before, .ima-fullscreen:hover:before {
+    text-shadow : 0 0 1em #FFFFFF;
+}
+
+/* Google IMA */
+
+/* Loop Button */
+.vjs-default-skin .vjs-loop-button:before {
+    font-family : 'plugins';
+    content     : "\e71c"; /* loop icon */
+    font-size   : 1.5em;
+    line-height : 2;
+    position    : absolute;
+    top         : 0;
+    left        : 0;
+    width       : 100%;
+    height      : 100%;
+    text-align  : center;
+}
+
+.vjs-control-active {
+    text-shadow : 0em 0em 1em #FFFFFF;
+}
+
+.vjs-loop-button {
+    outline    : none;
+    position   : relative;
+    float      : left;
+    text-align : center;
+    margin     : 0;
+    padding    : 0;
+    height     : 3.0em;
+    width      : 3.8em;
+}
+
+/* Loop Button */

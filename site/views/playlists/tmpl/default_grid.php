@@ -45,8 +45,7 @@ if (count($this->items)) {
                             </span>
 						</div>
 						<div class="date-created">
-							<span class="key"><?php echo MText::_('COM_MIWOVIDEOS_DATE_CREATED'); ?></span>
-                            <span class="value"><?php echo MHtml::_('date', $item->created, MText::_('DATE_FORMAT_LC4')); ?></span>
+                            <span class="value"><?php echo MiwoVideos::agoDateFormat($item->created); ?></span>
 						</div>
 					</div>
 				</div>

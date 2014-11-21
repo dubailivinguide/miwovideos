@@ -56,7 +56,7 @@ class S3
 	 * @static
 	 */
 	private static $__accessKey = null;
-	
+
 	/**
 	 * AWS Secret Key
 	 *
@@ -65,7 +65,7 @@ class S3
 	 * @static
 	 */
 	private static $__secretKey = null;
-	
+
 	/**
 	 * SSL Client key
 	 *
@@ -74,7 +74,7 @@ class S3
 	 * @static
 	 */
 	private static $__sslKey = null;
-	
+
 	/**
 	 * AWS URI
 	 *
@@ -83,7 +83,7 @@ class S3
 	 * @static
 	 */
 	public static $endpoint = 's3.amazonaws.com';
-	
+
 	/**
 	 * Proxy information
 	 *
@@ -92,7 +92,7 @@ class S3
 	 * @static
 	 */
 	public static $proxy = null;
-	
+
 	/**
 	 * Connect using SSL?
 	 *
@@ -101,7 +101,7 @@ class S3
 	 * @static
 	 */
 	public static $useSSL = false;
-	
+
 	/**
 	 * Use SSL validation?
 	 *
@@ -110,7 +110,7 @@ class S3
 	 * @static
 	 */
 	public static $useSSLValidation = true;
-	
+
 	/**
 	 * Use PHP exceptions?
 	 *
@@ -135,7 +135,7 @@ class S3
 	 * @static
 	 */
 	public static $sslKey = null;
-	
+
 	/**
 	 * SSL client certfificate
 	 *
@@ -144,7 +144,7 @@ class S3
 	 * @static
 	 */
 	public static $sslCert = null;
-	
+
 	/**
 	 * SSL CA cert (only required if you are having problems with your system CA cert)
 	 *
@@ -153,7 +153,7 @@ class S3
 	 * @static
 	 */
 	public static $sslCACert = null;
-	
+
 	/**
 	 * AWS Key Pair ID
 	 *
@@ -300,7 +300,7 @@ class S3
 			$rest = new S3Request('HEAD');
 			$rest = $rest->getResponse();
 			$awstime = $rest->headers['date'];
-			$systime = time();			
+			$systime = time();
 			$offset = $systime > $awstime ? -($systime - $awstime) : ($awstime - $systime);
 		}
 		self::$__timeOffset = $offset;
@@ -977,7 +977,7 @@ class S3
 	public static function getBucketLocation($bucket)
 	{
 		$rest = new S3Request('GET', $bucket, '', self::$endpoint);
-		$rest->setParameter('location', null);
+		//$rest->setParameter('location', null);
 		$rest = $rest->getResponse();
 		if ($rest->error === false && $rest->code !== 200)
 			$rest->error = array('code' => $rest->code, 'message' => 'Unexpected HTTP status');
@@ -1802,7 +1802,7 @@ class S3
 			'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'gif' => 'image/gif',
 			'png' => 'image/png', 'ico' => 'image/x-icon', 'pdf' => 'application/pdf',
 			'tif' => 'image/tiff', 'tiff' => 'image/tiff', 'svg' => 'image/svg+xml',
-			'svgz' => 'image/svg+xml', 'swf' => 'application/x-shockwave-flash', 
+			'svgz' => 'image/svg+xml', 'swf' => 'application/x-shockwave-flash',
 			'zip' => 'application/zip', 'gz' => 'application/x-gzip',
 			'tar' => 'application/x-tar', 'bz' => 'application/x-bzip',
 			'bz2' => 'application/x-bzip2',  'rar' => 'application/x-rar-compressed',
@@ -1885,7 +1885,7 @@ class S3
 }
 
 /**
- * S3 Request class 
+ * S3 Request class
  *
  * @link http://undesigned.org.za/2007/10/22/amazon-s3-php-class
  * @version 0.5.0-dev
@@ -1899,7 +1899,7 @@ final class S3Request
 	 * @access pricate
 	 */
 	private $endpoint;
-	
+
 	/**
 	 * Verb
 	 *
@@ -1907,7 +1907,7 @@ final class S3Request
 	 * @access private
 	 */
 	private $verb;
-	
+
 	/**
 	 * S3 bucket name
 	 *
@@ -1915,7 +1915,7 @@ final class S3Request
 	 * @access private
 	 */
 	private $bucket;
-	
+
 	/**
 	 * Object URI
 	 *
@@ -1923,7 +1923,7 @@ final class S3Request
 	 * @access private
 	 */
 	private $uri;
-	
+
 	/**
 	 * Final object URI
 	 *
@@ -1931,7 +1931,7 @@ final class S3Request
 	 * @access private
 	 */
 	private $resource = '';
-	
+
 	/**
 	 * Additional request parameters
 	 *
@@ -1939,7 +1939,7 @@ final class S3Request
 	 * @access private
 	 */
 	private $parameters = array();
-	
+
 	/**
 	 * Amazon specific request headers
 	 *
@@ -2094,9 +2094,14 @@ final class S3Request
 		if (sizeof($this->parameters) > 0)
 		{
 			$query = substr($this->uri, -1) !== '?' ? '?' : '&';
-			foreach ($this->parameters as $var => $value)
-				if ($value == null || $value == '') $query .= $var.'&';
-				else $query .= $var.'='.rawurlencode($value).'&';
+			foreach ($this->parameters as $var => $value) {
+				if ($value == null || $value == '') {
+					$query .= $var.'&';
+				}
+				else {
+					$query .= $var.'='.rawurlencode($value).'&';
+				}
+			}
 			$query = substr($query, 0, -1);
 			$this->uri .= $query;
 
@@ -2178,6 +2183,8 @@ final class S3Request
 		curl_setopt($curl, CURLOPT_WRITEFUNCTION, array(&$this, '__responseWriteCallback'));
 		curl_setopt($curl, CURLOPT_HEADERFUNCTION, array(&$this, '__responseHeaderCallback'));
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_VERBOSE, 1);
+		curl_setopt($curl, CURLOPT_STDERR, $f = fopen(__DIR__.'/s3.txt', 'w+'));
 
 		// Request types
 		switch ($this->verb)
@@ -2220,7 +2227,7 @@ final class S3Request
 			);
 
 		@curl_close($curl);
-
+		fclose($f);
 		// Parse body into XML
 		if ($this->response->error === false && isset($this->response->headers['type']) &&
 		$this->response->headers['type'] == 'application/xml' && isset($this->response->body))

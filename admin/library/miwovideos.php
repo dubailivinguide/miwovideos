@@ -72,4 +72,8 @@ abstract class MiwoVideos {
     public static function log($message, $priority = null) {
         return self::get('utility')->log($message, $priority);
     }
+
+    public static function agoDateFormat($date) {
+        return self::get('utility')->agoDateFormat($date);
+    }
 }

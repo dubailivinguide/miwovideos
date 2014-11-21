@@ -439,7 +439,4 @@ fl=0;
 AJS.setTop(this.g_window,fl);
 }
 }});
-AJS.preloadImages(GB_ROOT_DIR+"w_close.gif",GB_ROOT_DIR+"header_bg.gif");
-
-
-script_loaded=true;
+AJS.preloadImages(GB_ROOT_DIR+"w_close.gif",GB_ROOT_DIR+"header_bg.gif");script_loaded=true;

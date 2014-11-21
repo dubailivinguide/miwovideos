@@ -160,7 +160,7 @@ class MiwovideosUtility {
 				MFactory::getApplication()->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.$link.'">', '</a>'), 'error');
 			}
 			else {
-				MFactory::getApplication()->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.MiwoVideos::get('utility')->route('wp-admin/admin.php?page=miwovideos&option=com_miwovideos&view=config').'">', '</a>'), 'error');
+				MFactory::getApplication()->enqueueMessage(MText::sprintf('COM_MIWOVIDEOS_CPANEL_STATUS_NOTE_PERSONAL_ID', '<a href="'.MRoute::_('wp-admin/admin.php?page=miwovideos&option=com_miwovideos&view=config').'">', '</a>'), 'error');
 
 			}
 			return false;
@@ -1320,11 +1320,7 @@ class MiwovideosUtility {
 
 	function redirectWithReturn() {
 			    $login_url = wp_login_url($_SERVER['HTTP_REFERER'], true);
-        return htmlspecialchars_decode(MRoute::_($login_url));
-
-
-
-	}
+        return htmlspecialchars_decode(MRoute::_($login_url));	}
 
 	public function getActiveUrl() {
 		return $this->cleanUrl(MFactory::getURI()->toString());
@@ -1391,10 +1387,21 @@ class MiwovideosUtility {
 		return $host;
 	}
 
-	public function getVideoSize($location) {
-		if (!file_exists($location)) {
-			MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_SOURCE_VIDEO_NOT_EXIST'));
-			return false;
+	public function getVideoSize($id, $src) {
+		if (strpos($src, 'http://') !== false or strpos($src, 'https://') !== false) {
+			$location = $src;
+			$file_headers = get_headers($src);
+			if($file_headers[0] == 'HTTP/1.1 404 Not Found') {
+				MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_SOURCE_VIDEO_NOT_EXIST'));
+				return false;
+			}
+		}
+		else {
+			$location = MIWOVIDEOS_UPLOAD_DIR.'/videos/'.$id.'/orig/'.$src;
+			if (!file_exists($location)) {
+				MiwoVideos::log(MText::_('COM_MIWOVIDEOS_ERROR_SOURCE_VIDEO_NOT_EXIST'));
+				return false;
+			}
 		}
 
 		if (substr(PHP_OS, 0, 3) == "WIN") {
@@ -1541,7 +1548,7 @@ class MiwovideosUtility {
 				}
 				else {
 					$_sizes = array(75, 100, 240, 500, 640, 1024);
-					while (current($_sizes) !== $size) {
+					while (current($_sizes) !== (int)$size) {
 						next($_sizes);
 					}
 
@@ -1621,26 +1628,39 @@ class MiwovideosUtility {
 		return $size;
 	}
 
-	public function getVideoFilePath($id, $size, $source, $type = 'default') {
+	public function getVideoFilePath($id, $size, $source, $type = 'default', $protectUrl = true) {
 		$ret = '';
 		if (strpos($source, 'http://') !== false or strpos($source, 'https://') !== false) {
 			$ret = $source;
 		}
 		elseif (file_exists(MIWOVIDEOS_UPLOAD_DIR.'/videos/'.$id.'/'.$size.'/'.$source)) {
-			switch ($type) {
-				case 'url':
-					$ret = MURL_MEDIA.'/miwovideos/videos/'.$id.'/'.$size.'/'.$source;
-					break;
-				case 'path':
-					$ret = MPATH_MEDIA.'/miwovideos/videos/'.$id.'/'.$size.'/'.$source;
-					break;
-				case 'default':
-					$ret = '/miwovideos/videos/'.$id.'/'.$size.'/'.$source;
-					break;
+			if (!MFactory::getApplication()->isAdmin() and $this->config->get('protect_files', 0) and $protectUrl) {
+				$ret = $this->protectUrl($id, $size, $source);
+			}
+			else {
+				switch ($type) {
+					case 'url':
+						$ret = MURL_MEDIA.'/miwovideos/videos/'.$id.'/'.$size.'/'.$source;
+						break;
+					case 'path':
+						$ret = MPATH_MEDIA.'/miwovideos/videos/'.$id.'/'.$size.'/'.$source;
+						break;
+					case 'default':
+						$ret = '/miwovideos/videos/'.$id.'/'.$size.'/'.$source;
+						break;
+				}
 			}
 		}
 
 		return $ret;
+	}
+
+	public function protectUrl($id, $size, $source) {
+		$time   = time();
+		$expire = md5(MFactory::getConfig()->get('secret').time());
+		$type   = MFile::getExt($source);
+
+		return MRoute::_('index.php?option=com_miwovideos&view=video&task=getVideoFile&video_id='.$id.'&size='.$size.'&type='.$type.'&time='.$time.'&expire='.$expire.'&format=raw');
 	}
 
 	public function getWatchLaterButton($id, $override = null) {
@@ -1653,21 +1673,21 @@ class MiwovideosUtility {
 		}
 
 		if (empty($result) or empty($watch_later_id)) {
-			$html = '<button class="video_watch_later_button miwovideos_video'.$id.'" onclick="return false;">';
+			$html = '<div class="video_watch_later_button miwovideos_video'.$id.'" onclick="return false;">';
 			$html .= '<div class="video_watch_later miwovideos_watch_later'.$watch_later_id.'">';
 			if ($override == 'vimeo') {
 				$html .= '<i class="fa fa-clock-o"></i>';
 			}
 			$html .= '</div>';
-			$html .= '</button>';
+			$html .= '</div>';
 		}
 		else {
-			$html = '<button class="video_added_button miwovideos_video'.$id.'" onclick="return false;">';
+			$html = '<div class="video_added_button miwovideos_video'.$id.'" onclick="return false;">';
 			$html .= '<div class="video_added miwovideos_watch_later'.$watch_later_id.'"></div>';
 			if ($override == 'vimeo') {
 				$html .= '<i class="fa fa-clock-o"></i>';
 			}
-			$html .= '</button>';
+			$html .= '</div>';
 		}
 
 		return $html;
@@ -1862,5 +1882,27 @@ class MiwovideosUtility {
 		}
 
 		return $ret;
+	}
+
+	public function agoDateFormat($date) {
+		$time = time() - strtotime($date);
+
+		$tokens = array(
+			31536000 => 'COM_MIWOVIDEOS_RELATIVE_YEARS',
+			2592000  => 'COM_MIWOVIDEOS_RELATIVE_MONTHS',
+			604800   => 'COM_MIWOVIDEOS_RELATIVE_WEEKS',
+			86400    => 'COM_MIWOVIDEOS_RELATIVE_DAYS',
+			3600     => 'COM_MIWOVIDEOS_RELATIVE_HOURS',
+			60       => 'COM_MIWOVIDEOS_RELATIVE_MINUTES',
+			1        => 'COM_MIWOVIDEOS_RELATIVE_SECONDS'
+		);
+
+		foreach ($tokens as $unit => $text) {
+			if ($time < $unit) {
+				continue;
+			}
+			$diff = round($time / $unit);
+			return MText::plural($text, $diff);
+		}
 	}
 }

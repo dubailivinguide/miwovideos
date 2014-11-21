@@ -199,7 +199,7 @@ $utility = MiwoVideos::get('utility');
 		<?php }
 		else { ?>
 			<input type="hidden" name="published" value="<?php echo $this->item->published; ?>"/>
-			<input type="hidden" name="featured" value="<?php echo $this->item->featured; ?>"/>
+						<input type="hidden" name="featured" value="<?php echo $this->item->featured; ?>"/>
 		<?php } ?>
 		<tr>
 			<td class="key2">
@@ -218,36 +218,7 @@ $utility = MiwoVideos::get('utility');
 					</a>
 				</div>
 			</td>
-		</tr>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		</tr>
 		<tr>
 			<td class="key2">
 				<?php echo MText::_('COM_MIWOVIDEOS_LANGUAGE'); ?>
@@ -353,40 +324,7 @@ $utility = MiwoVideos::get('utility');
 		          <div class="miwi_paid">
                 <strong><?php echo MText::sprintf('MLIB_X_PRO_MEMBERS', 'Custom Fields'); ?></strong><br /><br />
                 <?php echo MText::sprintf('MLIB_PRO_MEMBERS_DESC', 'http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos#pricing', 'MiwoVideos'); ?>
-		    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		</table>
+		    </div>		</table>
 	<?php } ?>
 	<!-- Video Settings -->
 	<?php if ($this->acl->canEditOwn($this->item->user_id)) { ?>

@@ -91,82 +91,93 @@ class com_MiwovideosInstallerScript {
 
 		$config = new stdClass();
 		# General
-		$config->pid             = '';
-		$config->version_checker = '1';
-		$config->show_db_errors  = '0';
-		$config->log             = '0';
-		$config->jusersync       = '0';
-		$config->categories      = '1';
-		$config->playlists       = '1';
-		$config->tags            = '1';
-		$config->subscriptions   = '1';
-		$config->likes_dislikes  = '1';
-		$config->custom_fields   = '1';
-		$config->reports         = '1';
-		$config->comments        = '0';
-		$config->cdn             = '0';
+		$config->pid                        = '';
+		$config->version_checker            = '1';
+		$config->show_db_errors             = '0';
+		$config->log                        = '0';
+		$config->jusersync                  = '0';
+		$config->categories                 = '1';
+		$config->playlists                  = '1';
+		$config->tags                       = '1';
+		$config->subscriptions              = '1';
+		$config->likes_dislikes             = '1';
+		$config->custom_fields              = '1';
+		$config->reports                    = '1';
+		$config->comments                   = '0';
+		$config->cdn                        = '0';
+		$config->protect_files              = '0';
+		$config->protected_link_expire_time = '1800';
 		# Front-end
-		$config->button_class          = MiwoVideos::is30() ? 'btn button-primary' : 'miwovideos_button';
-		$config->override_color        = '#dc2f2c';
-		$config->videos_per_page       = '6';
-		$config->load_plugins          = '0';
-		$config->show_related_carousel = '0';
-		$config->total_related_videos  = '9';
-		$config->show_empty_cat        = '1';
-		$config->show_number_videos    = '1';
-		$config->order_videos          = 'v.ordering';
-		$config->listing_style         = 'grid';
-		$config->title_truncation      = '20';
-		$config->desc_truncation       = '150';
-		$config->thumb_size            = '3'; // Small Image
-		$config->thumb_aspect          = '43';
-		$config->items_per_column      = '3';
+		$config->button_class       = MiwoVideos::is30() ? 'btn button-primary' : 'miwovideos_button';
+		$config->override_color     = '#dc2f2c';
+		$config->videos_per_page    = '6';
+		$config->load_plugins       = '0';
+		$config->show_empty_cat     = '1';
+		$config->show_number_videos = '1';
+		$config->order_videos       = 'v.ordering';
+		$config->listing_style      = 'grid';
+		$config->title_truncation   = '20';
+		$config->desc_truncation    = '150';
+		$config->thumb_size         = '3'; // Small Image
+		$config->thumb_aspect       = '43';
+		$config->items_per_column   = '3';
 		# Player
 		$config->video_player  = 'videojs';
 		$config->fallback      = '0';
 		$config->video_quality = '480';
 		$config->autoplay      = '1';
 		# Upload
-		$config->video_upload        = '1';
-		$config->perl_upload         = '1';
-		$config->remote_upload       = '1';
-		$config->upload_script       = 'fancy';
-		$config->allow_file_types    = 'mov|mpeg|divx|flv|mpg|avi|mp4|mkv';
-		$config->upload_max_filesize = '128';
+		$config->video_upload            = '1';
+		$config->perl_upload             = '1';
+		$config->remote_video_link       = '1';
+		$config->remote_video_embed_code = '1';
+		$config->upload_script           = 'fancy';
+		$config->allow_file_types        = 'mov|mpeg|divx|flv|mpg|avi|mp4|mkv';
+		$config->upload_max_filesize     = '128';
 		# Processing
-		$config->process_videos      = '1';
-		$config->auto_process_videos = '1';
-		$config->frames              = '1';
-		$config->watermark           = '1';
-		$config->watermark_position  = '4';
-		$config->watermark_path      = 'wp-admin/images/wordpress-logo.png';
-		$config->metadata_injector   = 'yamdi';
-		$config->jpeg_75             = '1';
-		$config->jpeg_100            = '1';
-		$config->jpeg_240            = '1';
-		$config->jpeg_500            = '1';
-		$config->jpeg_640            = '1';
-		$config->jpeg_1024           = '1';
-		$config->mp4_240p            = '1';
-		$config->mp4_360p            = '1';
-		$config->mp4_480p            = '1';
-		$config->mp4_720p            = '1';
-		$config->mp4_1080p           = '1';
-		$config->webm_240p           = '1';
-		$config->webm_360p           = '1';
-		$config->webm_480p           = '1';
-		$config->webm_720p           = '1';
-		$config->webm_1080p          = '1';
-		$config->ogg_240p            = '1';
-		$config->ogg_360p            = '1';
-		$config->ogg_480p            = '1';
-		$config->ogg_720p            = '1';
-		$config->ogg_1080p           = '1';
-		$config->flv_240p            = '1';
-		$config->flv_360p            = '1';
-		$config->flv_480p            = '1';
-		$config->flv_720p            = '1';
-		$config->flv_1080p           = '1';
+		$config->process_videos        = '1';
+		$config->auto_process_videos   = '1';
+		$config->frames                = '1';
+		$config->watermark             = '1';
+		$config->watermark_position    = '4';
+		$config->watermark_path        = 'wp-admin/images/wordpress-logo.png';
+		$config->metadata_injector     = 'yamdi';
+		$config->max_video_bitrate240  = '300';
+		$config->audio_bitrate240      = '0';
+		$config->max_video_bitrate360  = '500';
+		$config->audio_bitrate360      = '0';
+		$config->max_video_bitrate480  = '700';
+		$config->audio_bitrate480      = '0';
+		$config->max_video_bitrate720  = '900';
+		$config->audio_bitrate720      = '0';
+		$config->max_video_bitrate1080 = '1200';
+		$config->audio_bitrate1080     = '0';
+		$config->jpeg_75               = '1';
+		$config->jpeg_100              = '1';
+		$config->jpeg_240              = '1';
+		$config->jpeg_500              = '1';
+		$config->jpeg_640              = '1';
+		$config->jpeg_1024             = '1';
+		$config->mp4_240p              = '1';
+		$config->mp4_360p              = '1';
+		$config->mp4_480p              = '1';
+		$config->mp4_720p              = '1';
+		$config->mp4_1080p             = '1';
+		$config->webm_240p             = '1';
+		$config->webm_360p             = '1';
+		$config->webm_480p             = '1';
+		$config->webm_720p             = '1';
+		$config->webm_1080p            = '1';
+		$config->ogg_240p              = '1';
+		$config->ogg_360p              = '1';
+		$config->ogg_480p              = '1';
+		$config->ogg_720p              = '1';
+		$config->ogg_1080p             = '1';
+		$config->flv_240p              = '1';
+		$config->flv_360p              = '1';
+		$config->flv_480p              = '1';
+		$config->flv_720p              = '1';
+		$config->flv_1080p             = '1';
 		# Server
 		$config->php_path             = '/usr/bin/php';
 		$config->ffmpeg_path          = '/usr/local/bin/ffmpeg';
@@ -184,28 +195,7 @@ class com_MiwovideosInstallerScript {
 		$db->query();
 
 		# SAMPLE DATA
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		
 		# Playlist
 		$db->setQuery("INSERT IGNORE  INTO `#__miwovideos_playlists` (`id`, `user_id`, `channel_id`, `type`, `title`, `alias`, `introtext`, `fulltext` ,`thumb` ,`fields` ,`likes` ,`dislikes` ,`hits` ,`subscriptions` ,`params` ,`ordering` ,`access` ,`language` ,`created` ,`modified` ,`meta_desc` ,`meta_key` ,`meta_author` ,`share_others` ,`featured` ,`published`) VALUES
 			(1, ".$user_id.", 0, 0, 'My Playlist', 'my-playlist', 'My Playlist', NULL , 'http://i1.ytimg.com/vi/KAi2QIq1SUs/mqdefault.jpg', NULL , '1445', '23', '45147', '0', NULL , 1, 1, '*', NOW(), NOW(), NULL, NULL, NULL, 0, 0, 1);");
@@ -304,6 +294,10 @@ class com_MiwovideosInstallerScript {
 
 		if ($this->_current_version < '1.1.2') {
 			MiwoDB::query("ALTER TABLE `#__miwovideos_videos` ADD ordering INT(0) DEFAULT '0' AFTER published");
+		}
+
+		if ($this->_current_version < '1.2.0') {
+			MiwoDB::query("ALTER TABLE `#__miwovideos_videos` CHANGE `source` `source` TEXT NOT NULL ;");
 		}
 	}
 

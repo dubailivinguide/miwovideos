@@ -35,11 +35,7 @@ class MiwovideosViewFiles extends MiwovideosView {
 		$options = array();
 		$options[] = MHtml::_('select.option', '', MText::_('Bulk Actions'));
 
-		
-
-
-
-		$lists['bulk_actions'] = MHtml::_('select.genericlist', $options, 'bulk_actions', ' class="inputbox"', 'value', 'text', '');
+				$lists['bulk_actions'] = MHtml::_('select.genericlist', $options, 'bulk_actions', ' class="inputbox"', 'value', 'text', '');
 			
 
         MHtml::_('behavior.tooltip');
@@ -56,11 +52,7 @@ class MiwovideosViewFiles extends MiwovideosView {
     protected function addToolbar() {
         MToolBarHelper::title(MText::_('COM_MIWOVIDEOS_CPANEL_FILES'), 'miwovideos');
 
-        
-
-
-
-
+        
         $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/files?tmpl=component', 650, 500);
     }
 }

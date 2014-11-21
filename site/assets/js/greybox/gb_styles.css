@@ -29,10 +29,7 @@
     padding: 0;
     overflow: auto;
     white-space: nowrap;
-}
-
-
-.GB_Gallery {
+}.GB_Gallery {
     margin: 0 22px 0 22px;
 }
 
@@ -82,10 +79,7 @@
 .GB_header .middle {
     white-space: nowrap;
     text-align: center;
-}
-
-
-#GB_middle {
+}#GB_middle {
     color: #eee;
 }
 
@@ -104,10 +98,7 @@
 
 #GB_middle .right {
     padding-left: 10px;
-}
-
-
-.GB_Window .content {
+}.GB_Window .content {
     background-color: #fff;
     border: 3px solid #ccc;
     border-top: none;

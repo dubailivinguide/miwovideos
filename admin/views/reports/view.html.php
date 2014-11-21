@@ -44,11 +44,7 @@ class MiwovideosViewReports extends MiwovideosView {
 		$options = array();
 		$options[] = MHtml::_('select.option', '', MText::_('Bulk Actions'));
 
-		
-
-
-
-		$lists['bulk_actions'] = MHtml::_('select.genericlist', $options, 'bulk_actions', ' class="inputbox"', 'value', 'text', '');
+				$lists['bulk_actions'] = MHtml::_('select.genericlist', $options, 'bulk_actions', ' class="inputbox"', 'value', 'text', '');
 			
 
 
@@ -78,10 +74,7 @@ class MiwovideosViewReports extends MiwovideosView {
 
 		$this->toolbar->appendButton('link', $reasons_icon, MText::_('COM_MIWOVIDEOS_REASONS'), MRoute::_('index.php?option=com_miwovideos&view=reasons'));
 
-        
-
-
-
+        
         $this->toolbar->appendButton('Popup', 'help1', MText::_('Help'), 'http://miwisoft.com/support/docs/wordpress/miwovideos/user-manual/fields?tmpl=component', 650, 500);
     }
 }

@@ -25,19 +25,19 @@ if (file_exists(MPATH_WP_CNT.'/themes/'.$tmpl.'/html/com_miwovideos/assets/css/m
 $numberVideos = $params->get('number_videos', 5);
 $filterby = $params->get('filterby');
 if(!$filterby){
-    $filterbywhere = 'created';
+    $filterbywhere = 'p.created';
 }else{
-    $filterbywhere = 'ordering';
+    $filterbywhere = 'p.ordering';
 }
 	
 if ($app->getLanguageFilter()) {
-	$extraWhere = ' AND language IN (' . $db->Quote(MFactory::getLanguage()->getTag()) . ',' . $db->Quote('*') . ')';
+	$extraWhere = ' AND p.language IN (' . $db->Quote(MFactory::getLanguage()->getTag()) . ',' . $db->Quote('*') . ')';
 } else {
 	$extraWhere = '' ;
 }
 
-$sql = 'SELECT id, title FROM #__miwovideos_playlists WHERE published=1'
-	.' AND access IN ('.implode(',', $user->getAuthorisedViewLevels()).')'.$extraWhere.' ORDER BY '.$filterbywhere.''.($numberVideos ? ' LIMIT '.$numberVideos : '');
+$sql = 'SELECT p.id, p.title FROM #__miwovideos_playlists p RIGHT JOIN #__miwovideos_playlist_videos pv ON (pv.playlist_id = p.id)WHERE p.published = 1 AND p.type = 0'
+	.' AND p.access IN ('.implode(',', $user->getAuthorisedViewLevels()).')'.$extraWhere.' GROUP BY p.id ORDER BY '.$filterbywhere.''.($numberVideos ? ' LIMIT '.$numberVideos : '');
    
 $db->setQuery($sql) ;	
 $rows = $db->loadObjectList() ;

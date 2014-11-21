@@ -15,36 +15,7 @@ $config = MiwoVideos::getConfig();
           <div class="miwi_paid">
                 <strong><?php echo MText::sprintf('MLIB_X_PRO_MEMBERS', 'Frontend Management'); ?></strong><br /><br />
                 <?php echo MText::sprintf('MLIB_PRO_MEMBERS_DESC', 'http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos#pricing', 'MiwoVideos'); ?>
-		    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		    </div>
 <td valign="top" width="42%" style="padding: 15px 0 0 5px">
     <?php echo MHtml::_('sliders.start', 'miwovideos'); ?>
     <?php echo MHtml::_('sliders.panel', MText::_('COM_MIWOVIDEOS_WELLCOME') . ' ' . $channel->title, 'welcome'); ?>

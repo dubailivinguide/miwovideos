@@ -10,9 +10,8 @@ if (count($rows)) {
     ?>
     <?php if($params->get('position') == 1) { ?>
         <div class="miwovideos_player">
-            <?php echo MiwoVideos::get('videos')->getPlayer($rows[0]);
-            unset($rows[0]); ?>
-        </div>
+                        <?php echo MiwoVideos::get('videos')->getPlayer($rows[0]);
+            unset($rows[0]); ?>        </div>
         <div class="miwovideos-top-module-wrap">
             <?php foreach ($rows as $row) {
                 $Itemid = MiwoVideos::get('router')->getItemid(array('view' => 'video', 'video_id' => $row->id), null, true);
@@ -39,8 +38,8 @@ if (count($rows)) {
                     <div class="videos-meta">
                         <div class="miwovideos-meta-info">
                             <div class="videos-view">
-                            <span class="value"><?php echo number_format($row->hits); ?><span>
-                            <span class="key"><?php echo MText::_('COM_MIWOVIDEOS_VIEWS'); ?><span>
+                                <span class="value"><?php echo number_format($row->hits); ?></span>
+                                <span class="key"><?php echo MText::_('COM_MIWOVIDEOS_VIEWS'); ?></span>
                             </div>
                         </div>
                     </div>

@@ -40,7 +40,7 @@ class MiwovideosCdn extends MPlugin {
         $db = MFactory::getDBO();
 
         // Select locally videos from the table.
-        $query = 'SELECT v.* FROM #__miwovideos_videos AS v WHERE v.source NOT LIKE \'http%\' AND v.published = 1 ORDER BY v.created ASC';
+        $query = 'SELECT v.* FROM #__miwovideos_videos AS v WHERE v.source NOT LIKE \'http%\' AND v.source NOT LIKE \'<iframe%\' AND v.source NOT LIKE \'<object%\' AND v.published = 1 ORDER BY v.created ASC';
 
         $db->setQuery($query);
 

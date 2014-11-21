@@ -258,7 +258,7 @@ $this->document->addScriptDeclaration($html);
                 <label></label>
                 <button class="button btn-success" type="button" id="upload_button" name="upload_button" value="Upload"
                         onClick="linkUpload();">
-                    <?php echo MText::_('COM_MIWOVIDEOS_UPLOAD') ?>
+                    <?php echo MText::_('COM_MIWOVIDEOS_NEXT') ?>
                 </button>
             </li>
         </ul>
@@ -282,7 +282,7 @@ $this->document->addScriptDeclaration($html);
         <div class="formelm-buttons">
             <button class="miwovideos_button" type="button" id="upload_button" name="upload_button" value="Upload"
                     onClick="linkUpload();">
-                <?php echo MText::_('COM_MIWOVIDEOS_UPLOAD') ?>
+                <?php echo MText::_('COM_MIWOVIDEOS_NEXT') ?>
             </button>
         </div>
     </fieldset>

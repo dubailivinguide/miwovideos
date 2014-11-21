@@ -47,11 +47,7 @@ defined('MIWI') or die ;
                 &nbsp;&nbsp;&nbsp;
                 <?php echo $this->lists['filter_published']; ?>
 
-                
-
-
-
-
+                
                 <select name="filter_language" class="inputbox" onchange="this.form.submit()">
                     <option value=""><?php echo MText::_('MOPTION_SELECT_LANGUAGE');?></option>
                     <?php echo MHtml::_('select.options', MHtml::_('contentlanguage.existing', true, true), 'value', 'text', $this->filter_language);?>
@@ -64,10 +60,7 @@ defined('MIWI') or die ;
         <table class="wp-list-table widefat">
             <thead>
                 <tr>
-                    
-
-
-                    <th width="20">
+                                        <th width="20">
                         <input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)" />
                     </th>
                     <th class="title" style="text-align: left;">
@@ -76,10 +69,7 @@ defined('MIWI') or die ;
                     <th width="10%" style="text-align: center;">
                         <?php echo MHtml::_('grid.sort', MText::_( 'COM_MIWOVIDEOS_PUBLISHED'), 'rs.published', $this->lists['order_Dir'], $this->lists['order'] ); ?>
                     </th>
-                    
-
-
-                    <th width="15%" style="text-align: center;">
+                                        <th width="15%" style="text-align: center;">
                         <?php echo MHtml::_('grid.sort', 'MGRID_HEADING_LANGUAGE', 'rs.language', $this->lists['order_Dir'], $this->lists['order']); ?>
                     </th>
                     <th width="5%" style="text-align: center;">
@@ -101,11 +91,7 @@ defined('MIWI') or die ;
 
                 $published = $this->getIcon($i, $task = $row->published == '0' ? 'publish' : 'unpublish', $row->published ? 'publish_y.png' : 'publish_x.png', true);
                 ?>
-                <tr class="<?php echo "row$k"; ?>">
-
-
-
-                    <td>
+                <tr class="<?php echo "row$k"; ?>">                    <td>
                         <?php echo $checked; ?>
                     </td>
                     <td>
@@ -120,10 +106,7 @@ defined('MIWI') or die ;
                     <td class="text_center">
                         <?php echo $published; ?>
                     </td>
-                    
-
-
-                    <td class="text_center">
+                                        <td class="text_center">
                         <?php if ($row->language == '*') { ?>
                         <?php echo MText::alt('MALL', 'language'); ?>
                         <?php } else { ?>

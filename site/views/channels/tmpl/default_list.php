@@ -51,7 +51,7 @@ if (count($this->items)) {
 					<a href="<?php echo $url; ?>" title="<?php echo $item->title; ?>">
 						<?php echo $this->escape(MHtmlString::truncate($item->title, $this->config->get('title_truncation'), false, false)); ?>
 					</a><br>
-					<?php echo $this->escape(MHtmlString::truncate($item->introtext, $this->config->get('desc_truncation'), false, false)); ?>
+					<?php echo MHtmlString::truncate(html_entity_decode($item->introtext, ENT_QUOTES), $this->config->get('desc_truncation'), false, false); ?>
 				</td>
 				<td style="text-align: center">
 					<?php echo isset($item->subs) ? number_format($item->subs) : '0'; ?>

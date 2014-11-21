@@ -64,4 +64,9 @@ class MiwovideosControllerVideo extends MiwoVideosController {
 		exit();
 
 	}
+
+	public function getVideoFile() {
+		MiwoVideos::get('videos')->getVideoFile();
+		return;
+	}
 }

@@ -47,8 +47,7 @@ if (count($this->items)) {
 				<div class="playlists-meta">
 					<div class="miwovideos-meta-info">
 						<div class="date-created">
-							<span class="key"><?php echo MText::_('COM_MIWOVIDEOS_DATE_CREATED'); ?></span>
-							<span class="value"><?php echo MHtml::_('date', $item->created, MText::_('DATE_FORMAT_LC4')); ?></span>
+							<span class="value"><?php echo MiwoVideos::agoDateFormat($item->created); ?></span>
 						</div>
 					</div>
 				</div>
@@ -62,10 +61,10 @@ if (count($this->items)) {
 								<?php echo $this->escape(MHtmlString::truncate($video->title, $this->config->get('title_truncation'), false, false)); ?>
 							</a>
 							<span class="miwovideos-duration"><?php echo $utility->secondsToTime($video->duration); ?></span>
-							<?php if ($i == 2) {
-								break;
-							} ?>
 						</div>
+						<?php if ($i == 2) {
+							break;
+						} ?>
 					<?php } ?>
 				</div>
 				<div class="playlists-meta">

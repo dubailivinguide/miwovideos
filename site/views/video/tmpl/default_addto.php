@@ -26,7 +26,7 @@ defined('MIWI') or die; ?>
 						echo "type1";
 					} ?>"><?php echo $item->title; ?>&nbsp;(<span id="total_videos"><?php echo $item->total; ?></span>)</span>
 					<span class="miwovideos_playlist_access"><?php echo $this->levels[ $item->access ]->title; ?></span>
-					<span class="miwovideos_playlist_created"><?php echo MHtml::_('date', $item->created, MText::_('DATE_FORMAT_LC4')); ?></span>
+					<span class="miwovideos_playlist_created"><?php echo MiwoVideos::agoDateFormat($item->created); ?></span>
 				</a>
 			</li>
 		<?php } ?>
@@ -76,6 +76,16 @@ defined('MIWI') or die; ?>
 		var token = jQuery("#adminForm input[type='hidden']")[0].name;
 		var tokenval = jQuery("#adminForm input[type='hidden']")[0].value;
 		var playlist_title = jQuery('.miwovideos_playlist_name').val();
+		if (!playlist_title) {
+			jQuery('.miwovideos_playlist_name').css({"border-color": "rgba(255, 0, 0, 0.8)",
+													"outline": "0",
+													"outline": "thin dotted \9",
+													"-webkit-box-shadow": "rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset, rgba(255, 0, 0, 0.6) 0px 0px 8px",
+													"-moz-box-shadow": "inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(255, 0, 0, 0.6)",
+													"box-shadow": "rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset, rgba(255, 0, 0, 0.6) 0px 0px 8px"
+			});
+			return;
+		}
 		var access = 1;
 		jQuery.ajax({
 			url : '<?php echo MURL_ADMIN; ?>/admin-ajax.php?action=miwovideos&view=playlists&task=save&format=raw',
@@ -89,7 +99,7 @@ defined('MIWI') or die; ?>
 					html += '       <img src="<?php echo MURL_MIWOVIDEOS; ?>/site/assets/images/tick.png" style="visibility: hidden"/>';
 					html += '       <span class="miwovideos_playlist_title">'+playlist_title+'&nbsp;(<span id="total_videos">0</span>)</span>';
 					
-					html += '       <span class="miwovideos_playlist_created"><?php echo MHtml::_('date', '', MText::_('DATE_FORMAT_LC4')); ?></span>';
+					html += '       <span class="miwovideos_playlist_created">-</span>';
 					html += '   </a>';
 					html += '</li>';
 					jQuery('.miwovideos_playlist_items').append(html);
@@ -129,6 +139,11 @@ defined('MIWI') or die; ?>
 			}
 		});
 	});
+
+	jQuery('.miwovideos_playlist_name').on('focus', function () {
+		jQuery('.miwovideos_playlist_name').removeAttr('style');
+	});
+
 	//--></script>
 <script type="text/javascript"><!--
 	jQuery('.playlist_item').on('click', function () {

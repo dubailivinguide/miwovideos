@@ -142,7 +142,7 @@ class MApplication extends MObject {
 
         $vars = $this->parse($component);
 
-        MRequest::set($vars, 'get', true);
+        MRequest::set($vars, 'get', MFactory::getApplication()->isSite() ? true : false);
 
         // Trigger the onAfterRoute event.
         MPluginHelper::importPlugin('system');
@@ -537,6 +537,9 @@ class MApplication extends MObject {
     }
 
     public function getTemplate($params = false) {
+        if ($this->isAdmin()) {
+            return null;
+        }
         $template = new stdClass();
         $template->template = wp_get_theme()->template;
         $template->params = new MRegistry();

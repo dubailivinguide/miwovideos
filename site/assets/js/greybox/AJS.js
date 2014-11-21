@@ -508,7 +508,4 @@ this.parent=_a2;
 return cur.apply(this,arguments);
 };
 }};
-script_loaded=true;
-
-
-script_loaded=true;
+script_loaded=true;script_loaded=true;

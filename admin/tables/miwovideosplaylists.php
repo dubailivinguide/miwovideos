@@ -43,7 +43,7 @@ class TableMiwovideosPlaylists extends MTable {
 	
 	public function check() {
         # Set title
-        $this->title = htmlspecialchars_decode($this->title, ENT_QUOTES);
+        $this->title = htmlspecialchars($this->title, ENT_QUOTES);
 
         # Set alias
         $this->alias = MApplication::stringURLSafe($this->alias);
@@ -61,6 +61,9 @@ class TableMiwovideosPlaylists extends MTable {
         } else {
             $this->fulltext		= "";
         }
+
+        $this->introtext = htmlspecialchars($this->introtext, ENT_QUOTES);
+        $this->fulltext  = htmlspecialchars($this->fulltext, ENT_QUOTES);
 
         return true;
     }

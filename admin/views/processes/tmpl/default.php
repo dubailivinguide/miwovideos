@@ -54,10 +54,7 @@ if (!empty($Itemid)) {
 	<table class="wp-list-table widefat">
         <thead>
             <tr>
-                
-
-
-
+                
                 <th width="20" style="text-align: center;">
                     <input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)" />
                 </th>
@@ -107,11 +104,7 @@ if (!empty($Itemid)) {
             }
 
             ?>
-            <tr class="<?php echo "row$k"; ?>">
-
-
-
-                <td style="text-align: center;">
+            <tr class="<?php echo "row$k"; ?>">                <td style="text-align: center;">
                     <?php echo $checked; ?>
                 </td>
 

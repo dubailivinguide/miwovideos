@@ -16,13 +16,12 @@ foreach ($this->items as $videos) {
 $utility = MiwoVideos::get('utility');
 ?>
 <?php if (($this->params->get('show_page_heading', '0') == '1')) { ?>
-	<?php $page_title = $this->params->get('page_title', ''); ?>
-
-	<?php if (!empty($this->item->title)) { ?>
-		<h1><?php echo $this->item->title; ?></h1>
+	<?php $page_heading = $this->params->get('page_heading', ''); ?>
+	<?php if (!empty($page_heading)) { ?>
+		<h1><?php echo $page_heading; ?></h1>
 	<?php }
-	else if (!empty($page_title)) { ?>
-		<h1><?php echo $page_title; ?></h1>
+	else if (!empty($this->channelitem->title)) { ?>
+		<h1><?php echo $this->channelitem->title; ?></h1>
 	<?php } ?>
 <?php } ?>
 <div id="notification"></div>
@@ -91,9 +90,9 @@ $utility = MiwoVideos::get('utility');
 					<span class="dislikes_count"><span id="miwovideos_like2"><?php echo $this->item->dislikes; ?></span> <?php echo MText::_('COM_MIWOVIDEOS_DISLIKES'); ?></span>
 				</div>
 			</div>
-			<div class="miwovideos_expander_collapsed"><?php echo $this->item->introtext; ?></div>
+			<div class="miwovideos_expander_collapsed"><?php echo html_entity_decode($this->item->introtext, ENT_QUOTES); ?></div>
 			<div class="miwovideos_expander" style="display: none">
-				<?php echo $this->item->introtext.$this->item->fulltext; ?>
+				<?php echo html_entity_decode($this->item->introtext.$this->item->fulltext, ENT_QUOTES); ?>
 				<?php if ($this->config->get('custom_fields')) { ?>
 					<div class="miwovideos_custom_fields">
 						<?php
@@ -193,7 +192,7 @@ $utility = MiwoVideos::get('utility');
 									</div>
 								</div>
 								<div class="video_description">
-									<?php echo $this->escape(MHtmlString::truncate($item->introtext, $this->config->get('desc_truncation'), false, false)); ?>
+									<?php echo MHtmlString::truncate(htmlspecialchars_decode($item->introtext, ENT_QUOTES), $this->config->get('desc_truncation'), false, false); ?>
 								</div>
 							</div>
 						</div>

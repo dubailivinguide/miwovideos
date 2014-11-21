@@ -302,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `#__miwovideos_videos` (
   `alias`       VARCHAR(255) DEFAULT NULL,
   `introtext`   MEDIUMTEXT DEFAULT NULL,
   `fulltext`    MEDIUMTEXT DEFAULT NULL,
-  `source`      VARCHAR(255)        NOT NULL,
+  `source`      TEXT        NOT NULL,
   `duration`    VARCHAR(255)        NOT NULL,
   `likes`       INT(11)             NOT NULL DEFAULT '0',
   `dislikes`    INT(11)             NOT NULL DEFAULT '0',

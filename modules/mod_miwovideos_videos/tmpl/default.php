@@ -30,7 +30,7 @@ if (count($rows)) {
                             <?php echo htmlspecialchars(MHtmlString::truncate($row->title, $config->get('title_truncation'), false, false)); ?>
                         </a>
 						<br />
-						<span class="created"><?php echo MHtml::_('date', $row->created, $config->get('date_format'), null); ?></span>
+						<span class="created"><?php echo MiwoVideos::agoDateFormat($row->created); ?></span>
 						<?php
 							if ($showCategory and !empty($row->categories)) {
 							?>
@@ -57,7 +57,7 @@ if (count($rows)) {
 							<?php if ($showDescription and !empty($row->introtext)) {
 							?>
 								<br />
-                                <span><?php echo htmlspecialchars(MHtmlString::truncate($row->introtext, $config->get('desc_truncation'), false, false), ENT_COMPAT, 'UTF-8'); ?></span>
+								<span><?php echo MHtmlString::truncate(html_entity_decode($row->introtext, ENT_QUOTES), $config->get('desc_truncation'), false, false); ?></span>
 							<?php
 							}
 						?>

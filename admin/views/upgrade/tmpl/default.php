@@ -129,44 +129,7 @@ if (MiwoVideos::get('utility')->is30()) {
 					<input type="hidden" name="task" value="upgrade" />
 					<input type="hidden" name="type" value="server" />
 					<?php echo MHtml::_('form.token'); ?>
-				</form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			</fieldset>
+				</form>			</fieldset>
 		</td>
 
 		<td width="%50">

@@ -12,6 +12,15 @@ class MiwovideosModelCategory extends MiwovideosModel {
 	public function __construct() {
 		parent::__construct('category', 'videos');
 
+		$limit      = $this->_mainframe->getUserStateFromRequest($this->_option.'.'.$this->_context.'.limit', 'limit', $this->config->get('videos_per_page'), 'int');
+		$limitstart = $this->_mainframe->getUserStateFromRequest($this->_option.'.'.$this->_context.'.limitstart', 'limitstart', 0, 'int');
+
+		# Limit has been changed, adjust it
+		$limitstart = ($limit != 0 ? (floor($limitstart / $limit) * $limit) : 0);
+
+		$this->setState($this->_option.'.'.$this->_context.'.limit', $limit);
+		$this->setState($this->_option.'.'.$this->_context.'.limitstart', $limitstart);
+
 		$this->_buildViewQuery();
 	}
 
@@ -59,7 +68,7 @@ class MiwovideosModelCategory extends MiwovideosModel {
 
 	public function getVideos() {
 		if (empty($this->_data)) {
-			$this->_data = parent::getItems();
+			$this->_data = MiwoDB::loadObjectList($this->_query, '', $this->getState($this->_option.'.'.$this->_context.'.limitstart'), $this->getState($this->_option.'.'.$this->_context.'.limit'));
 		}
 
 		return $this->_data;
@@ -113,7 +122,7 @@ class MiwovideosModelCategory extends MiwovideosModel {
 	public function getCategories() {
 		$c_id = MRequest::getCmd('category_id');
 		if (empty($c_id)) {
-			$rows = MiwoDB::loadObjectList($this->_buildCategoriesQuery(), '', $this->getState($this->_option.'.'.$this->_context.'.limitstart'), $this->getState($this->_option.'.'.$this->_context.'.limit'));
+			$rows = MiwoDB::loadObjectList($this->_buildCategoriesQuery()/*, '', $this->getState($this->_option.'.'.$this->_context.'.limitstart'), $this->getState($this->_option.'.'.$this->_context.'.limit')*/);
 		}
 		else {
 			$rows = MiwoDB::loadObjectList($this->_buildCategoriesQuery());

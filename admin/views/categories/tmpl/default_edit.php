@@ -115,18 +115,7 @@ $utility = MiwoVideos::get('utility');
             </tr>
             <?php } else { ?>
                 <input type="hidden" name="published" value="<?php echo $this->item->published; ?>" />
-            <?php } ?>
-
-
-
-
-
-
-
-
-
-
-            <tr>
+            <?php } ?>            <tr>
                 <td class="key2">
                     <?php echo MText::_('COM_MIWOVIDEOS_LANGUAGE'); ?>
                 </td>

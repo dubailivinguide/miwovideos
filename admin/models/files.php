@@ -36,7 +36,7 @@ class MiwovideosModelFiles extends MiwovideosModel {
 
     public function getTotal() {
         if (empty($this->_total)) {
-            $this->_total = MiwoDB::loadResult("SELECT COUNT(f.id) FROM #__miwovideos_files AS f, #__miwovideos_videos AS v ".$this->_buildViewWhere());
+            $this->_total = MiwoDB::loadResult("SELECT COUNT(f.id) FROM #__miwovideos_files AS f");
         }
 
         return $this->_total;

@@ -49,10 +49,7 @@ MHtml::_('behavior.tooltip');
         <table class="wp-list-table widefat">
             <thead>
                 <tr>
-                    
-
-
-
+                    
                     <th width="20" style="text-align: center;">
                         <input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)" />
                     </th>
@@ -79,11 +76,7 @@ MHtml::_('behavior.tooltip');
                     $checked = MHtml::_('grid.id', $i, $row->id);
 
                     ?>
-                    <tr class="<?php echo "row$k"; ?>">
-
-
-
-                        <td style="text-align: center;">
+                    <tr class="<?php echo "row$k"; ?>">                        <td style="text-align: center;">
                             <?php echo $checked; ?>
                         </td>
 

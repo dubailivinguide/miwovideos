@@ -56,13 +56,6 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
 	        if ($config->get('video_player') == 'videojs') {
 		        MFactory::getDocument()->addScript(MURL_WP_CNT.'/miwi/plugins/plg_miwovideos_videojs/video-js/media.youtube.js');
 	        }
-            // Stretch the YouTube poster
-            // Keep the iframeblocker in front of the player when the user is inactive
-            // (ONLY way because the iframe is so selfish with events)
-            MFactory::getDocument()->addStyleDeclaration('.vjs-youtube .vjs-poster { background-size: cover; }
-                        .iframeblocker { display:none;position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer;z-index:2; }
-                        .vjs-youtube.vjs-user-inactive .iframeblocker { display:block; }
-                        .vjs-quality-button > div:first-child > span:first-child { position:relative;top:7px }');
             return $ret;
         } elseif (MRequest::getString('view') == 'video' and MRequest::getInt('playlist_id', 0) > 0) {
             $document = MFactory::getDocument();
@@ -77,23 +70,6 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
         <?php
         $output = ob_get_contents();
         ob_end_clean();
-    }
-
-    public function getDuration() {
-        $duration = '';
-
-        preg_match("/\"length_seconds\": (.*),/siU", $this->buffer, $match);
-
-        if (!empty($match[1])) {
-            $duration = (int)$match[1];
-        }
-
-        return $duration;
-    }
-
-    public function getThumbnail() {
-        $thumbnail = $this->getContent('image');
-        return $thumbnail;
     }
 
     protected function parse($url, $return = 'embed', $width = '', $height = '', $rel = 0) {
@@ -117,17 +93,34 @@ class plgMiwovideosYoutube extends MiwovideosRemote {
 
         // Return embed iframe
         if ($return == 'embed') {
-            return '<iframe width="' . ($width ? $width : 560) . '" height="' . ($height ? $height : 349) . '" src="http://www.youtube.com/embed/' . $id . '?rel=' . $rel . '" frameborder="0" allowfullscreen></iframe>';
+            return '<iframe width="'.($width ? $width : 560).'" height="'.($height ? $height : 349).'" src="http://www.youtube.com/embed/'.$id.'?rel='.$rel.'" frameborder="0" allowfullscreen></iframe>';
         } // Return normal thumb
         else if ($return == 'thumb') {
-            return 'http://i1.ytimg.com/vi/' . $id . '/default.jpg';
+            return 'http://i1.ytimg.com/vi/'.$id.'/default.jpg';
         } // Return hqthumb
         else if ($return == 'hqthumb') {
-            return 'http://i1.ytimg.com/vi/' . $id . '/hqdefault.jpg';
+            return 'http://i1.ytimg.com/vi/'.$id.'/hqdefault.jpg';
         } // Return id
         else {
             return $id;
         }
+    }
+
+    public function getDuration() {
+        $duration = '';
+
+        preg_match("/\"length_seconds\": \"(.*)\",/siU", $this->buffer, $match);
+
+        if (!empty($match[1])) {
+            $duration = (int)$match[1];
+        }
+
+        return $duration;
+    }
+
+    public function getThumbnail() {
+        $thumbnail = $this->getContent('image');
+        return $thumbnail;
     }
 
     public function getOgVideoTag($item) {

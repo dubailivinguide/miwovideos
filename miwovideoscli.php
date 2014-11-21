@@ -10,19 +10,7 @@ define('MPATH_BASE', dirname(dirname(__FILE__)));
 
 require_once MPATH_BASE.'/framework/environment/request.php';
 require_once dirname(dirname(dirname(dirname(__FILE__)))).'/wp-load.php';
-require_once MPATH_BASE . '/initialise.php';
-
-
-
-
-
-
-
-
-
-
-
-
+require_once MPATH_BASE . '/initialise.php';
 define('MPATH_COMPONENT', MPATH_WP_PLG . '/miwovideos/admin');
 define('MPATH_COMPONENT_SITE', MPATH_WP_PLG.'/miwovideos/site');
 define('MPATH_COMPONENT_ADMINISTRATOR', MPATH_WP_PLG.'/miwovideos/admin');
@@ -49,22 +37,7 @@ class MiwovideosCli {
 		MLoader::register('MControllerLegacy', MPATH_MIWI.'/framework/application/component/view.php');
 		MLoader::register('MComponentHelper', MPATH_MIWI.'/framework/application/component/helper.php');
 		MFactory::getApplication('administrator');
-		MLoader::register('MiwoVideos', MPATH_WP_PLG.'/miwovideos/admin/library/miwovideos.php');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	}
+		MLoader::register('MiwoVideos', MPATH_WP_PLG.'/miwovideos/admin/library/miwovideos.php');	}
 
 	public function process() {
 
@@ -91,15 +64,13 @@ class MiwovideosCli {
 
 	public function cdn() {
 		$config      = MiwoVideos::getConfig();
-		$pluginClass = 'plgMiwovideos' . $config->get('cdn', 'amazons3');
-		$pluginPath  = MPATH_MIWI.'/plugins/plg_miwovideos_' . $config->get('cdn', 'amazons3') . '/' . $config->get('cdn', 'amazons3') . '.php';
-
-		if (file_exists($pluginPath)) {
-			MLoader::register($pluginClass, $pluginPath);
-			$cdn = call_user_func(array($pluginClass, 'getInstance'));
-
-			return $cdn->maintenance();
+		$cdn = MiwoVideos::getPlugin($config->get('cdn', 'amazons3'));
+		if (empty($cdn)) {
+			return false;
 		}
+
+		return $cdn->maintenance();
+
 	}
 
 	public function convertToHtml5() {

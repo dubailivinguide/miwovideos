@@ -24,7 +24,15 @@ defined('MIWI') or die ; ?>
     </div>
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
     <!-- AddThis Button END -->
-
+    <div class="share-panel-url-container">
+        <span>
+            <input type="text" value="<?php echo htmlspecialchars(MiwoVideos::get('utility')->getActiveUrl()); ?>" id="share_url"/>
+        </span>
+        <span>
+            <input type="checkbox" id="start-time-checkbox"></span>
+        <?php echo MText::_('COM_MIWOVIDEOS_START_AT') ?>
+        <input type="text" value="" id="share_at_time"/>
+    </div>
 <?php echo MHtml::_('tabs.panel', MText::_('COM_MIWOVIDEOS_EMBED'), 'sl_embed'); ?>
     <textarea class="miwovideos_embed">
         <?php echo "<iframe width=\"600\" height=\"360\" src=\"".rtrim(MUri::root(), '/').MRoute::_("index.php?option=com_miwovideos&view=video&video_id=".$this->item->id.$this->Itemid."&layout=player&tmpl=component")."\" frameborder=\"0\" allowfullscreen></iframe>"; ?>

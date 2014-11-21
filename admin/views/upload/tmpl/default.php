@@ -11,6 +11,14 @@ $maxUpload    = (int)$this->config->get('upload_max_filesize');
 $maxPhpUpload = min((int)ini_get('post_max_size'), (int)ini_get('upload_max_filesize'), (int)$maxUpload);
 $isVideoPage  = false;
 $utility      = MiwoVideos::get('utility');
+$cache = MFactory::getCache('com_miwovideos', 'output');
+$cache->setCaching(1);
+if(!$server_info = $cache->get('server_info', 'com_miwovideos')) {
+	$ffmpeg_version = $utility->getFfmpegVersion();
+}
+else {
+	$ffmpeg_version = $server_info[0]['value'];
+}
 if (MRequest::getWord('task') == 'edit' and MRequest::getWord('view') == 'videos') {
 	$isVideoPage = true;
 }
@@ -44,7 +52,7 @@ if (MiwoVideos::isDashboard()) {
                     <li>
                         <label></label>
                         <button type="button" class="button btn-success" onclick="Miwi.submitbutton('upload')">
-                            <?php echo MText::_('COM_MIWOVIDEOS_UPLOAD') ?>
+                            <?php echo MText::_('COM_MIWOVIDEOS_NEXT') ?>
                         </button>
                     </li>
                 </ul>
@@ -92,42 +100,41 @@ if (MiwoVideos::isDashboard()) {
                 <input type="hidden" name="dashboard" value="1"/>
                 <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>"/>
             <?php } ?>
-
         </form>
     <?php } ?>
-<?php echo MHtml::_('sliders.panel', MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO'), 'remote'); ?>
-    <form action="<?php echo $utility->route('index.php?option=com_miwovideos&view=upload&task=remoteLink'); ?>" method="post" target="_parent" name="remote_links" id="remote_links" class="form-validate" enctype="multipart/form-data">
-        <fieldset class="adminform">
+<?php if ($this->config->get('remote_video_link', 1) == 1) { ?>
+	<?php echo MHtml::_('sliders.panel', MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO'), 'remote'); ?>
+	    <form action="<?php echo $utility->route('index.php?option=com_miwovideos&view=upload&task=remoteLink'); ?>" method="post" target="_parent" name="remote_links" id="remote_links" class="form-validate" enctype="multipart/form-data">
+	        <fieldset class="adminform">
 
-            <?php if ($isVideoPage) { ?>
-                <div class="miwovideos_remote_links"><?php echo MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO_LINK'); ?></div>
-                <input type="text" name="remote_links" style="width: 20%">
-            <?php }
-            else { ?>
-                <div class="miwovideos_remote_links"><?php echo MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO_LINKS'); ?></div>
-                <textarea name="remote_links" class="miwovideos_remote_link_textarea"></textarea>
-            <?php } ?>
-            <button class="button btn-success" onclick="Miwi.submitbutton('remoteLink')"><?php echo MText::_('COM_MIWOVIDEOS_UPLOAD'); ?></button>
-            <?php if (MiwoVideos::isDashboard()) { ?>
-                <input type="hidden" name="dashboard" value="1"/>
-                <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>"/>
-            <?php } ?>
-        </fieldset>
-    </form>
-<?php if (!MiwoVideos::isDashboard()) { ?>
-	
-
-
-
-
-
-
-
-
-
-
-
+	            <?php if ($isVideoPage) { ?>
+	                <div class="miwovideos_remote_links"><?php echo MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO_LINK'); ?></div>
+	                <input type="text" name="remote_links" style="width: 20%">
+	            <?php }
+	            else { ?>
+	                <div class="miwovideos_remote_links"><?php echo MText::_('COM_MIWOVIDEOS_REMOTE_VIDEO_LINKS'); ?></div>
+	                <textarea name="remote_links" class="miwovideos_remote_link_textarea"></textarea>
+	            <?php } ?>
+	            <button class="button btn-success" onclick="Miwi.submitbutton('remoteLink')"><?php echo MText::_('COM_MIWOVIDEOS_NEXT'); ?></button>
+	            <?php if (MiwoVideos::isDashboard()) { ?>
+	                <input type="hidden" name="dashboard" value="1"/>
+	                <input type="hidden" name="Itemid" value="<?php echo MiwoVideos::getInput()->getInt('Itemid', 0); ?>"/>
+	            <?php } ?>
+	        </fieldset>
+	    </form>
 <?php } ?>
+<?php if ($this->config->get('remote_video_embed_code' , 1) == 1) { ?>
+	  <?php echo MHtml::_('sliders.panel', MText::_('COM_MIWOVIDEOS_UPLOAD_EMBED_CODE'), 'embed_code'); ?>
+	<div class="miwi_paid">
+		<strong><?php echo MText::sprintf('MLIB_X_PRO_MEMBERS', 'Remote video embed code'); ?></strong><br /><br />
+	<?php echo MText::sprintf('MLIB_PRO_MEMBERS_DESC', 'http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos#pricing', 'MiwoVideos'); ?>
+	</div><?php } ?>
+<?php if (!MiwoVideos::isDashboard()) { ?>
+	  <?php echo MHtml::_('sliders.panel', MText::_('COM_MIWOVIDEOS_BULK_IMPORT_FROM_SERVER'), 'import'); ?>
+    <div class="miwi_paid">
+		<strong><?php echo MText::sprintf('MLIB_X_PRO_MEMBERS', 'Bulk Import From Server'); ?></strong><br /><br />
+	<?php echo MText::sprintf('MLIB_PRO_MEMBERS_DESC', 'http://miwisoft.com/wordpress-plugins/miwovideos-share-your-videos#pricing', 'MiwoVideos'); ?>
+	</div><?php } ?>
 <?php echo MHtml::_('sliders.end'); ?>
 
 <div class="clr"></div>
@@ -140,92 +147,7 @@ if (MiwoVideos::isDashboard()) {
 	</style>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		});
+				});
 	</script>
 <?php } ?>
 <script type="text/javascript">

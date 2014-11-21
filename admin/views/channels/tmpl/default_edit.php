@@ -218,19 +218,7 @@ $utility = MiwoVideos::get('utility');
                 <td class="value2">
                     <?php echo $this->lists['share_others']; ?>
                 </td>
-            </tr>
-
-
-
-
-
-
-
-
-
-
-
-
+            </tr>
             <tr>
                 <td class="key2">
                     <?php echo MText::_('COM_MIWOVIDEOS_LANGUAGE'); ?>

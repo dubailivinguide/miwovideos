@@ -21,6 +21,9 @@ class MiwovideosViewVideo extends MiwovideosView {
 
 		$item = $this->get('Data');
 
+		# OpenGraph Tag
+		MFactory::getDocument()->addCustomTag('<meta property="og:image" content="'.MiwoVideos::get('utility')->getThumbPath($item->id, 'videos', $item->thumb).'" />');
+
 		if (is_object($item) and !$this->acl->canAccess($item->access)) {
 			$this->_mainframe->redirect(MRoute::_('index.php?option=com_miwovideos&view=category'), MText::_('JERROR_ALERTNOAUTHOR'), 'error');
 		}
@@ -173,7 +176,7 @@ class MiwovideosViewVideo extends MiwovideosView {
 					$html .= "       <img src=\"".MURL_MIWOVIDEOS."/site/assets/images/tick.png\" style=\"".$style."\"/>\r";
 					$html .= "       <span class=\"miwovideos_playlist_title\" id=\"".$id."\">".$item->title."&nbsp;(<span id=\"total_videos\">".$item->total."</span>)</span>\r";
 					
-					$html .= "       <span class=\"miwovideos_playlist_created\">".MHtml::_('date', $item->created, MText::_('DATE_FORMAT_LC4'))."</span>\r";
+					$html .= "       <span class=\"miwovideos_playlist_created\">".MiwoVideos::agoDateFormat($item->created)."</span>\r";
 					$html .= "    </a>\r";
 					$html .= "</li>\r";
 				}

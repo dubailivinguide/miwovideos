@@ -23,7 +23,7 @@ class TableMiwovideosProcesstype extends MTable {
 
     public function check() {
         # Set title
-        $this->title = htmlspecialchars_decode($this->title, ENT_QUOTES);
+        $this->title = htmlspecialchars($this->title, ENT_QUOTES);
 
         # Set alias
         $this->alias = MApplication::stringURLSafe($this->alias);

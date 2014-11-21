@@ -85,6 +85,8 @@ class MiwovideosViewChannel extends MiwovideosView {
 				$options[]         = MHtml::_('select.option', 'v.created_desc', MText::_('COM_MIWOVIDEOS_DATE_CREATED_N_O'));
 				$options[]         = MHtml::_('select.option', 'v.hits_desc', MText::_('COM_MIWOVIDEOS_MOST_POPULAR'));
 				$options[]         = MHtml::_('select.option', 'v.likes_desc', MText::_('COM_MIWOVIDEOS_MOST_FAVORITE'));
+				$options[] = MHtml::_('select.option', 'v.week_desc', MText::_('COM_MIWOVIDEOS_THIS_WEEK'));
+				$options[] = MHtml::_('select.option', 'v.month_desc', MText::_('COM_MIWOVIDEOS_THIS_MONTH'));
 				break;
 			case 'playlists' :
 				$this->getModel('playlists')->setState('limitstart', $offset);
@@ -99,6 +101,8 @@ class MiwovideosViewChannel extends MiwovideosView {
 				$options[]         = MHtml::_('select.option', 'p.created_desc', MText::_('COM_MIWOVIDEOS_DATE_CREATED_N_O'));
 				$options[]         = MHtml::_('select.option', 'p.hits_desc', MText::_('COM_MIWOVIDEOS_MOST_POPULAR'));
 				$options[]         = MHtml::_('select.option', 'p.likes_desc', MText::_('COM_MIWOVIDEOS_MOST_FAVORITE'));
+				$options[] = MHtml::_('select.option', 'p.week_desc', MText::_('COM_MIWOVIDEOS_THIS_WEEK'));
+				$options[] = MHtml::_('select.option', 'p.month_desc', MText::_('COM_MIWOVIDEOS_THIS_MONTH'));
 				break;
 		}
 

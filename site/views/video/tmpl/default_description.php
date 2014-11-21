@@ -9,9 +9,9 @@ defined('MIWI') or die; ?>
 <div class="miwovideos_description">
 	<p class="video_published_date"><?php echo MText::_('COM_MIWOVIDEOS_PUBLISHED'); ?> <?php echo MHtml::_('date', $this->item->created, MText::_('DATE_FORMAT_LC4')); ?></p>
 
-	<div class="miwovideos_expander_collapsed"><?php echo $this->item->introtext; ?></div>
+	<div class="miwovideos_expander_collapsed"><?php echo html_entity_decode($this->item->introtext, ENT_QUOTES); ?></div>
 	<div class="miwovideos_expand" style="display: none">
-		<div class="video_description"><?php echo $this->item->description; ?></div>
+		<div class="video_description"><?php echo html_entity_decode($this->item->description); ?></div>
 		<br/>
 
 		<div class="miwovideos_custom_fields">

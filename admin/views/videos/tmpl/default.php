@@ -59,11 +59,7 @@ $ordering = ($this->lists['order'] == 'v.ordering');
 				<?php //echo $this->lists['filter_channel']; ?>
 				<?php echo $this->lists['filter_published']; ?>
 
-				
-
-
-
-
+				
 				<?php if ($this->acl->canAdmin()) { ?>
 					<select name="filter_language" class="inputbox" onchange="this.form.submit()">
 						<option value=""><?php echo MText::_('MOPTION_SELECT_LANGUAGE'); ?></option>
@@ -78,10 +74,7 @@ $ordering = ($this->lists['order'] == 'v.ordering');
 		<table class="wp-list-table widefat">
 			<thead>
 			<tr>
-				
-
-
-				<th width="20px">
+								<th width="20px">
 					<input type="checkbox" name="checkall-toggle" value="" title="<?php echo MText::_('MGLOBAL_CHECK_ALL'); ?>" onclick="Miwi.checkAll(this)"/>
 				</th>
 				<th width="80px" style="text-align: center;">
@@ -112,10 +105,7 @@ $ordering = ($this->lists['order'] == 'v.ordering');
 						<?php echo MHtml::_('grid.order', $this->items, 'filesave.png', 'saveOrder'); ?>
 					<?php } ?>
 				</th>
-				
-
-
-				<th width="90px" style="text-align: center;">
+								<th width="90px" style="text-align: center;">
 					<?php echo MHtml::_('grid.sort', MText::_('COM_MIWOVIDEOS_DATE_CREATED'), 'v.created', $this->lists['order_Dir'], $this->lists['order']); ?>
 				</th>
 				<?php if ($this->acl->canAdmin()) { ?>
@@ -153,11 +143,7 @@ $ordering = ($this->lists['order'] == 'v.ordering');
 				$published = $this->getIcon($i, $task = $row->published == '0' ? 'publish' : 'unpublish', $row->published ? 'publish_y.png' : 'publish_x.png', true);
 				$featured  = $this->getIcon($i, $task = $row->featured == '0' ? 'feature' : 'unfeature', $row->featured ? 'featured.png' : 'disabled.png', true);
 				?>
-				<tr class="<?php echo "row$k"; ?>">
-
-
-
-					<td style="vertical-align: middle">
+				<tr class="<?php echo "row$k"; ?>">					<td style="vertical-align: middle">
 						<?php echo $checked; ?>
 					</td>
 					<td style="vertical-align: middle">
@@ -204,10 +190,7 @@ $ordering = ($this->lists['order'] == 'v.ordering');
 						<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>
 						<input type="text" name="order[]" size="5" value="<?php echo $row->ordering;?>" style="text-align: center; width: 30px;" <?php echo $disabled; ?> />
 					</td>
-					
-
-
-					<td style="text-align: center; vertical-align: middle;">
+										<td style="text-align: center; vertical-align: middle;">
 						<?php echo MHtml::_('date', $row->created, MText::_('DATE_FORMAT_LC4')); ?>
 					</td>
 					<?php if ($this->acl->canAdmin()) { ?>

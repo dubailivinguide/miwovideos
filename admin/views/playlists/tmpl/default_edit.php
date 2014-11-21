@@ -204,18 +204,7 @@ MHtml::_('behavior.modal', 'a.modal_linked_videos');
 		else {
 			?>
 			<input type="hidden" name="featured" value="<?php echo $this->item->featured; ?>"/>
-            <?php } ?>
-
-
-
-
-
-
-
-
-
-
-
+            <?php } ?>
 		<tr>
 			<td class="key2">
 				<?php echo MText::_('COM_MIWOVIDEOS_LANGUAGE'); ?>
