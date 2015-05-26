@@ -118,7 +118,7 @@ class MiwovideosModelMiwovideos extends MiwovideosModel {
 						'name'  => 'yamdi',
 						'value' => $this->checkYamdi()
 					);
-					$server[] = array('name' => 'php-cli', 'value' => $this->checkPhpCli());
+					$server[] = array('name' => 'php-cli', 'value' => false);
 					if ($this->config->get('perl_upload')) {
 						$server[] = array(
 							'name'  => 'ubr_upload script',
