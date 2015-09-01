@@ -3,7 +3,7 @@ Contributors: miwisoft, gilbertlici
 Tags: video player, video sharing, html5 player, html5 video, video, videos, channel, playlist, admin, plugin, youtube, vimeo, dailymotion
 Donate link: http://miwisoft.com
 Requires at least: 3.5
-Tested up to: 4.2
+Tested up to: 4.3
 Stable tag: trunk
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
